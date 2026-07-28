@@ -1,0 +1,2002 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Hello You Labs — Reference-Grade Peptides for Laboratory Research</title>
+<meta name="description" content="Direct-to-researcher peptide supply. Reference-grade synthetic peptides, lot-level HPLC and LC-MS verified, shipped from the US within 24 hours. No distributor markup. For laboratory research use only." />
+<meta name="theme-color" content="#0a0908" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: {
+            1000:'#050403',
+            950: '#0a0908',
+            900: '#141210',
+            850: '#1a1714',
+            800: '#221e18',
+            700: '#302a22',
+            600: '#4a4136',
+            500: '#6b6250',
+            400: '#8f8571',
+            300: '#b3a992',
+            200: '#d0c7ae',
+            100: '#e8dfc7',
+            50:  '#f5efdf',
+          },
+          indigo2: {
+            DEFAULT: '#c9a664',
+            deep: '#a68847',
+            soft: '#e6cc8f',
+          },
+          ember: {
+            DEFAULT: '#d4a574',
+            soft: '#e6c69a',
+            deep: '#a67e50',
+          },
+          cream: '#f6efe4',
+        },
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          serif: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        },
+        borderRadius: {
+          'xl2': '14px',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root {
+    --bg: #0a0908;
+    --bg-2: #050403;
+    --panel: #141210;
+    --panel-2: #1a1714;
+    --panel-warm: #1e1913;
+    --ink-1: #f5efdf;
+    --ink-2: #d0c7ae;
+    --ink-3: #8f8571;
+    --ink-4: #6b6250;
+    --line: rgba(245,239,223,0.09);
+    --line-strong: rgba(245,239,223,0.16);
+    --indigo: #c9a664;
+    --indigo-deep: #a68847;
+    --indigo-soft: #e6cc8f;
+    --ember: #d4a574;
+    --ember-soft: #e6c69a;
+    --ember-deep: #a67e50;
+    --cream: #f6efe4;
+    --danger: #ff9a86;
+  }
+
+  * { -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    background: var(--bg);
+    color: var(--ink-1);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg-2); }
+  ::-webkit-scrollbar-thumb { background: #1a1714; border: 2px solid var(--bg-2); border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #302a22; }
+
+  ::selection { background: var(--indigo); color: #fff; }
+
+  .mono {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-feature-settings: "zero";
+  }
+  .serif {
+    font-family: 'Fraunces', ui-serif, Georgia, serif;
+    font-optical-sizing: auto;
+  }
+
+  .container-x { max-width: 1360px; margin: 0 auto; padding-left: 22px; padding-right: 22px; }
+  @media (min-width: 768px) { .container-x { padding-left: 40px; padding-right: 40px; } }
+  @media (min-width: 1280px) { .container-x { padding-left: 64px; padding-right: 64px; } }
+
+  .hairline { border-color: var(--line); }
+  .hairline-strong { border-color: var(--line-strong); }
+
+  /* Soft ambient background wash */
+  .ambient-wash {
+    background:
+      radial-gradient(1000px 500px at 85% -10%, rgba(201,166,100,0.18), transparent 60%),
+      radial-gradient(700px 380px at 10% 20%, rgba(212,165,116,0.08), transparent 60%);
+  }
+
+  /* Labels */
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+  }
+  .eyebrow.hi { color: var(--indigo-soft); }
+  .eyebrow.warm { color: var(--ember); }
+
+  /* Type */
+  .display {
+    font-family: 'Fraunces', ui-serif, Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+    line-height: 1.02;
+  }
+  .display .accent {
+    color: var(--ember-soft);
+    font-style: italic;
+    font-weight: 300;
+  }
+  .display .cross {
+    color: var(--ink-2);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .h-warm {
+    font-family: 'Fraunces', ui-serif, Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .btn:focus-visible { outline: 2px solid var(--indigo-soft); outline-offset: 3px; }
+  .btn-primary {
+    background: var(--indigo);
+    color: #fff;
+    border-color: var(--indigo);
+    box-shadow: 0 6px 18px rgba(201,166,100,0.28);
+  }
+  .btn-primary:hover { background: var(--indigo-deep); border-color: var(--indigo-deep); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-1);
+    border-color: var(--line-strong);
+  }
+  .btn-ghost:hover { border-color: var(--ink-3); background: rgba(245,239,223,0.03); }
+  .btn-ember {
+    background: transparent;
+    color: var(--ember-soft);
+    border-color: rgba(243,201,174,0.35);
+  }
+  .btn-ember:hover { border-color: var(--ember-soft); background: rgba(243,201,174,0.05); color: var(--cream); }
+  .btn-small {
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+
+  /* Cards */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .panel-2 {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .panel-warm {
+    background: linear-gradient(180deg, #1e1913 0%, #17130f 100%);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+  }
+
+  .product-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    position: relative;
+    transition: border-color .25s ease, background .25s ease, transform .25s ease, box-shadow .25s ease;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .product-card:hover {
+    border-color: rgba(201,166,100,0.45);
+    background: #171d3a;
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -12px rgba(5,4,3,0.55);
+  }
+  .product-card:focus-within { border-color: var(--indigo-soft); }
+  .product-card:hover .vial-silhouette { color: var(--indigo-soft); opacity: 0.55; }
+  .product-card:hover .vial-fill { opacity: 0.18; }
+
+  /* Vial image placeholder */
+  .vial-slot {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background:
+      radial-gradient(140% 90% at 50% 0%, rgba(201,166,100,0.10), transparent 60%),
+      linear-gradient(180deg, #1a1613 0%, #100e0c 100%);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .vial-slot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(245,239,223,0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(245,239,223,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: center center;
+    pointer-events: none;
+  }
+  .vial-slot .vial-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 55%;
+    transform: scale(1.18);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+    z-index: 3;
+  }
+  .product-card:hover .vial-slot .vial-img { transform: scale(1.24); }
+  .vial-silhouette {
+    position: relative; z-index: 2;
+    width: 44%;
+    color: var(--indigo-soft);
+    opacity: 0.35;
+    transition: opacity .3s ease, color .3s ease;
+  }
+  .vial-fill {
+    opacity: 0.1;
+    transition: opacity .3s ease;
+  }
+  .vial-placeholder-label {
+    position: absolute;
+    left: 12px; bottom: 12px;
+    z-index: 2;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--ink-4);
+    background: rgba(5,4,3,0.55);
+    padding: 3px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    backdrop-filter: blur(4px);
+  }
+  .vial-ratio-tag {
+    position: absolute;
+    right: 12px; top: 12px;
+    z-index: 2;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    color: var(--ink-4);
+    background: rgba(5,4,3,0.55);
+    padding: 3px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    backdrop-filter: blur(4px);
+  }
+  /* Once a real image loads, hide the placeholder chrome */
+  .vial-slot.has-image .vial-silhouette,
+  .vial-slot.has-image .vial-placeholder-label,
+  .vial-slot.has-image .vial-ratio-tag,
+  .vial-slot.has-image::after { display: none; }
+
+  /* Chip / tag */
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    background: rgba(201,166,100,0.12);
+    color: var(--indigo-soft);
+    border: 1px solid rgba(201,166,100,0.28);
+    border-radius: 999px;
+  }
+  .chip.neutral {
+    background: rgba(245,239,223,0.04);
+    color: var(--ink-2);
+    border-color: var(--line-strong);
+  }
+  .chip.warm {
+    background: rgba(212,165,116,0.10);
+    color: var(--ember-soft);
+    border-color: rgba(212,165,116,0.32);
+  }
+  .chip.warn {
+    background: rgba(255,154,134,0.08);
+    color: var(--danger);
+    border-color: rgba(255,154,134,0.28);
+  }
+
+  /* Ruo strip */
+  .ruo-strip {
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-2);
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+  }
+
+  /* Nav */
+  .nav {
+    background: rgba(10,9,8,0.85);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-2);
+    padding: 6px 2px;
+    position: relative;
+    transition: color .2s ease;
+  }
+  .nav-link:hover, .nav-link:focus-visible { color: var(--ink-1); outline: none; }
+  .nav-link::after {
+    content:''; position: absolute; left:0; right:0; bottom: -3px; height: 1.5px;
+    background: var(--ember-soft); transform: scaleX(0); transform-origin: left;
+    transition: transform .2s ease;
+    border-radius: 2px;
+  }
+  .nav-link:hover::after, .nav-link:focus-visible::after { transform: scaleX(1); }
+
+  /* Filter bar */
+  .filter-pill {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-2);
+    transition: all .2s ease;
+    cursor: pointer;
+    border-radius: 999px;
+  }
+  .filter-pill:hover { color: var(--ink-1); border-color: var(--ink-4); }
+  .filter-pill.on { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+  .filter-pill:focus-visible { outline: 2px solid var(--indigo-soft); outline-offset: 2px; }
+
+  /* Faq */
+  details.faq-item {
+    border-bottom: 1px solid var(--line);
+  }
+  details.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 26px 0;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px;
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 400;
+    color: var(--ink-1);
+    transition: color .2s ease;
+    letter-spacing: -0.01em;
+  }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary:hover { color: var(--ember-soft); }
+  details.faq-item summary .plus {
+    width: 26px; height: 26px; position: relative; flex-shrink: 0;
+    color: var(--ink-3);
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+  }
+  details.faq-item summary .plus::before,
+  details.faq-item summary .plus::after {
+    content:''; position: absolute; background: currentColor;
+  }
+  details.faq-item summary .plus::before { left: 6px; right: 6px; top: 12px; height: 1px; }
+  details.faq-item summary .plus::after { top: 6px; bottom: 6px; left: 12px; width: 1px; transition: transform .2s ease; }
+  details.faq-item[open] summary .plus::after { transform: scaleY(0); }
+  details.faq-item[open] summary { color: var(--ember-soft); }
+  details.faq-item .faq-body {
+    padding: 0 0 28px 0;
+    color: var(--ink-2);
+    max-width: 68ch;
+    line-height: 1.75;
+    font-size: 15.5px;
+  }
+
+  /* Sticky cart */
+  .sticky-cart {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(120%);
+    z-index: 40;
+    background: var(--panel-2);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-1);
+    padding: 12px 18px;
+    border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+    transition: transform .3s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
+    opacity: 0;
+  }
+  .sticky-cart.shown { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .sticky-cart a { color: var(--ember-soft); text-decoration: none; font-weight: 500; }
+  .sticky-cart a:hover { color: var(--cream); }
+
+  /* WhatsApp floating button */
+  .wa-fab {
+    position: fixed;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    right: calc(24px + env(safe-area-inset-right, 0px));
+    z-index: 41;
+    min-width: 56px; height: 56px;
+    padding: 0 20px 0 16px;
+    border-radius: 999px;
+    background: var(--indigo);
+    color: var(--bg);
+    display: inline-flex; align-items: center; gap: 10px;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: -0.005em;
+    box-shadow:
+      0 14px 36px -10px rgba(201,166,100,0.55),
+      0 6px 16px rgba(0,0,0,0.45);
+    transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease, background .2s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .wa-fab:hover {
+    transform: translateY(-2px);
+    background: var(--indigo-soft);
+    box-shadow:
+      0 20px 44px -10px rgba(201,166,100,0.7),
+      0 8px 20px rgba(0,0,0,0.5);
+  }
+  .wa-fab:active { transform: translateY(0) scale(0.97); }
+  .wa-fab:focus-visible {
+    outline: 2px solid var(--indigo-soft);
+    outline-offset: 3px;
+  }
+  .wa-fab svg { flex-shrink: 0; display: block; }
+  .wa-fab .wa-fab-label { white-space: nowrap; }
+  .wa-fab .wa-pulse {
+    position: absolute; top: -2px; right: -2px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--indigo-soft);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 0 rgba(230,204,143,0.7);
+    animation: waPulse 2.4s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes waPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(230,204,143,0.7); }
+    70%  { box-shadow: 0 0 0 10px rgba(230,204,143,0); }
+    100% { box-shadow: 0 0 0 0 rgba(230,204,143,0); }
+  }
+  /* Tablet-ish: keep the label but tighten */
+  @media (max-width: 900px) {
+    .wa-fab { padding: 0 18px 0 14px; font-size: 13.5px; }
+  }
+  /* Phone: icon-only, larger touch target, lifted above sticky-cart if it appears */
+  @media (max-width: 640px) {
+    .wa-fab {
+      min-width: 54px; height: 54px; width: 54px;
+      padding: 0;
+      justify-content: center;
+      bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+      right: calc(16px + env(safe-area-inset-right, 0px));
+    }
+    .wa-fab .wa-fab-label { display: none; }
+    .wa-fab svg { width: 24px; height: 24px; }
+  }
+  /* Landscape phone — keep it out of the way */
+  @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+    .wa-fab {
+      bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      min-width: 48px; height: 48px; width: 48px;
+    }
+    .wa-fab .wa-pulse { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wa-fab .wa-pulse { animation: none; }
+    .wa-fab { transition: none; }
+  }
+
+  /* Newsletter input */
+  .field {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-1);
+    padding: 14px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    border-radius: 999px;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .field::placeholder { color: var(--ink-4); }
+  .field:focus { outline: none; border-color: var(--indigo-soft); background: var(--panel-2); }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* Coa mock chart */
+  .coa-chart {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px 14px;
+    align-items: center;
+  }
+  .coa-chart .bar {
+    height: 8px; background: rgba(245,239,223,0.06);
+    position: relative;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .coa-chart .bar > span {
+    display: block; height: 100%;
+    background: linear-gradient(90deg, var(--indigo) 0%, var(--ember-soft) 100%);
+    border-radius: 999px;
+  }
+  .coa-chart .lbl {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+  .coa-chart .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-1);
+  }
+
+  /* Cursor logo mark */
+  .logo-mark {
+    width: 26px; height: 26px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--indigo-soft);
+    color: var(--indigo-soft);
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+  }
+
+  /* About visual placeholder */
+  .about-visual {
+    aspect-ratio: 4 / 5;
+    border-radius: 14px;
+    background:
+      radial-gradient(120% 80% at 30% 20%, rgba(212,165,116,0.22), transparent 55%),
+      radial-gradient(120% 80% at 80% 90%, rgba(201,166,100,0.22), transparent 55%),
+      linear-gradient(160deg, #1e1913 0%, #100e0c 100%);
+    border: 1px solid var(--line-strong);
+    position: relative;
+    overflow: hidden;
+  }
+  .about-video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 1;
+    background: #0a0908;
+  }
+  .about-visual .about-label {
+    position: absolute; left: 16px; bottom: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-2);
+    background: rgba(5,4,3,0.55);
+    border: 1px solid var(--line);
+    padding: 5px 10px;
+    border-radius: 999px;
+    z-index: 3;
+    backdrop-filter: blur(4px);
+    letter-spacing: 0.08em;
+  }
+  .about-visual .about-live {
+    position: absolute; right: 16px; top: 16px;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-1);
+    background: rgba(5,4,3,0.55);
+    border: 1px solid var(--line);
+    padding: 4px 9px 4px 8px;
+    border-radius: 999px;
+    z-index: 3;
+    backdrop-filter: blur(4px);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .about-visual .about-live::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ember-soft);
+    box-shadow: 0 0 0 0 rgba(212,165,116,0.6);
+    animation: aboutPulse 2s ease-out infinite;
+  }
+  @keyframes aboutPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(212,165,116,0.6); }
+    70%  { box-shadow: 0 0 0 8px rgba(212,165,116,0); }
+    100% { box-shadow: 0 0 0 0 rgba(212,165,116,0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-video { animation: none; }
+    .about-visual .about-live::before { animation: none; }
+  }
+
+  /* Section separator ornament */
+  .ornament {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--ember-soft);
+  }
+  .ornament::before, .ornament::after {
+    content: ''; height: 1px; width: 42px; background: currentColor; opacity: 0.4;
+  }
+
+  /* Spec chips inside cards */
+  .spec-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+    padding: 4px 9px;
+    background: rgba(245,239,223,0.04);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .spec-chip strong { color: var(--ink-1); font-weight: 500; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+    .reveal { opacity: 1; transform: none; }
+    .product-card:hover { transform: none; }
+  }
+</style>
+</head>
+
+<body class="min-h-screen">
+
+<!-- ============ SVG DEFINITIONS ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Vial silhouette used by all product placeholders -->
+    <symbol id="vialSilhouette" viewBox="0 0 60 120">
+      <!-- Cap -->
+      <rect x="21" y="6" width="18" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <rect x="22" y="10" width="16" height="4" fill="currentColor" opacity="0.5"/>
+      <!-- Neck -->
+      <path d="M23 15 L23 22 L18 26 L18 108 Q18 114 24 114 L36 114 Q42 114 42 108 L42 26 L37 22 L37 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <!-- Liquid fill (softly filled) -->
+      <path class="vial-fill" d="M19 68 L19 108 Q19 113 24 113 L36 113 Q41 113 41 108 L41 68 Z" fill="currentColor"/>
+      <!-- Label band -->
+      <rect x="20" y="55" width="20" height="26" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+      <line x1="24" y1="62" x2="36" y2="62" stroke="currentColor" stroke-width="0.6" opacity="0.5"/>
+      <line x1="24" y1="67" x2="34" y2="67" stroke="currentColor" stroke-width="0.6" opacity="0.5"/>
+      <line x1="24" y1="72" x2="36" y2="72" stroke="currentColor" stroke-width="0.6" opacity="0.5"/>
+    </symbol>
+
+    <!-- Molecule mark used in about section -->
+    <symbol id="moleculeMark" viewBox="0 0 100 100">
+      <circle cx="50" cy="20" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="20" cy="50" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="80" cy="50" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="35" cy="80" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="65" cy="80" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="50" cy="50" r="8" fill="currentColor" opacity="0.35"/>
+      <line x1="50" y1="26" x2="50" y2="42" stroke="currentColor" stroke-width="1.2"/>
+      <line x1="26" y1="50" x2="42" y2="50" stroke="currentColor" stroke-width="1.2"/>
+      <line x1="58" y1="50" x2="74" y2="50" stroke="currentColor" stroke-width="1.2"/>
+      <line x1="46" y1="57" x2="38" y2="74" stroke="currentColor" stroke-width="1.2"/>
+      <line x1="54" y1="57" x2="62" y2="74" stroke="currentColor" stroke-width="1.2"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============ ANNOUNCEMENT BAR ============ -->
+<div id="ruoBar" class="ruo-strip">
+  <div class="container-x flex items-center justify-between py-2.5 gap-4">
+    <p>
+      <span class="hidden sm:inline text-indigo2-soft mono text-[11px] tracking-[0.12em] uppercase mr-2">RUO Notice ·</span>
+      <span class="text-ink-200">All products sold for laboratory research use only. Not for human or veterinary consumption.</span>
+    </p>
+    <button id="ruoDismiss" aria-label="Dismiss notice" class="text-ink-400 hover:text-ink-100 transition text-lg leading-none">×</button>
+  </div>
+</div>
+
+<!-- ============ HEADER / NAV ============ -->
+<header class="nav sticky top-0 z-40">
+  <div class="container-x flex items-center justify-between h-20 md:h-24">
+    <a href="#top" class="flex items-center gap-3 group" aria-label="Hello You Labs — home">
+      <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-14 md:h-16 w-auto select-none" draggable="false" />
+      <span class="hidden md:inline mono text-[10.5px] tracking-[0.14em] uppercase text-ink-400 border-l border-ink-800 pl-3">Labs · Research</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-7 lg:gap-9" aria-label="Primary">
+      <a href="#catalog" class="nav-link">Catalog</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#ordering" class="nav-link">Ordering</a>
+      <a href="#testing" class="nav-link">Testing</a>
+      <a href="#shipping" class="nav-link">Shipping</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <span class="hidden lg:inline mono text-[10px] tracking-[0.14em] uppercase text-ink-400 border border-ink-800 rounded-full px-2.5 py-1">RUO · 21 CFR</span>
+      <button aria-label="Open cart, 0 items" class="flex items-center gap-2 text-[13px] text-ink-100 hover:text-ember-soft transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember-soft focus-visible:outline-offset-2 rounded-full px-3 py-1.5 border border-ink-800">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M3 4h2.5l2.4 12.3a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 8H6"/>
+          <circle cx="10" cy="21" r="1.2"/>
+          <circle cx="18" cy="21" r="1.2"/>
+        </svg>
+        <span id="cartCount" class="tabular-nums mono text-[12px]">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+
+<!-- ============ HERO ============ -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 ambient-wash pointer-events-none"></div>
+
+  <div class="container-x relative pt-16 md:pt-24 pb-16 md:pb-24">
+    <!-- meta row -->
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 md:mb-14">
+      <span class="eyebrow hi">Catalog · Lot cycle 26 Q3</span>
+      <span class="eyebrow">Domestic US shipping · Verified inventory</span>
+    </div>
+
+    <h1 class="display text-[46px] sm:text-[64px] md:text-[86px] lg:text-[104px] max-w-[15ch]">
+      Reference-grade peptides,
+      <span class="accent">delivered like<br/>a good friend would.</span>
+    </h1>
+
+    <p class="mt-8 md:mt-10 max-w-[58ch] text-ink-200 text-[16.5px] md:text-[18px] leading-[1.7]">
+      Hello You Labs ships lot-traceable synthetic peptides straight from our US
+      fulfillment center to your door. Ordered like any other lab reagent —
+      no distributor markup, no institutional gatekeeping, no wait-list.
+      Every vial arrives with the lot-specific HPLC and LC-MS certificate
+      that released it.
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center gap-3">
+      <a href="#catalog" class="btn btn-primary">
+        Browse catalog
+        <span aria-hidden="true">→</span>
+      </a>
+      <a href="#about" class="btn btn-ghost">
+        About the lab
+      </a>
+    </div>
+
+    <!-- trust row -->
+    <div class="mt-16 md:mt-20 border-t border-b hairline py-6">
+      <ul class="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-8 text-[14px] text-ink-200">
+        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft"></span>≥ 99% HPLC purity</li>
+        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft"></span>Direct-to-researcher</li>
+        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft"></span>24h US dispatch</li>
+        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft"></span>No account approval</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EARLY ACCESS / LAUNCH ANNOUNCEMENT ============ -->
+<section id="early-access" class="relative border-t border-b hairline overflow-hidden" style="background: linear-gradient(180deg, #0e0b07 0%, #14100a 100%);">
+  <div class="absolute inset-0 pointer-events-none opacity-70" style="background: radial-gradient(700px 200px at 50% 0%, rgba(201,166,100,0.10), transparent 60%);"></div>
+  <div class="container-x py-10 md:py-14 relative">
+    <div class="grid md:grid-cols-12 gap-6 md:gap-10 items-center">
+      <div class="md:col-span-8">
+        <div class="mono text-[10.5px] tracking-[0.18em] uppercase text-indigo-soft mb-3 flex items-center gap-2.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo"></span>
+          Launch update · Early access
+        </div>
+        <h3 class="serif text-[26px] md:text-[34px] leading-[1.15] text-ink-100 tracking-[-0.015em]">
+          Credit-card checkout <span class="text-indigo-soft">launches soon.</span>
+          <br class="hidden md:block"/>
+          Message us on WhatsApp for early orders.
+        </h3>
+        <p class="mt-4 text-ink-300 text-[14.5px] md:text-[15px] leading-[1.7] max-w-[64ch]">
+          We're finalizing our payment infrastructure. In the meantime, ping us on WhatsApp for
+          inventory questions, lot-specific certificates of analysis, or to hold a vial for
+          when checkout opens.
+        </p>
+      </div>
+      <div class="md:col-span-4 flex md:justify-end">
+        <a
+          href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs."
+          target="_blank"
+          rel="noopener"
+          class="btn btn-ember"
+          style="padding: 14px 22px; font-size: 13.5px; gap: 10px;">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+          Message on WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT (§ 02) — welcoming moment ============ -->
+<section id="about" class="relative py-16 md:py-24 border-t hairline">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+      <!-- Visual -->
+      <div class="md:col-span-5">
+        <figure class="about-visual" aria-label="Hello You Labs — inside the lab">
+          <video
+            class="about-video"
+            autoplay muted loop playsinline
+            preload="metadata"
+            aria-hidden="true">
+            <source src="ElevenLabs_video_google-veo-3-1-fast_can%20you%20make%20th_2026-07-28T19_45_32.mp4" type="video/mp4">
+          </video>
+        </figure>
+      </div>
+
+      <!-- Copy -->
+      <div class="md:col-span-6 md:col-start-7">
+        <div class="ornament mb-6"><span class="mono text-[11px] tracking-[0.16em] uppercase">About</span></div>
+        <h2 class="display text-[36px] md:text-[52px] leading-[1.05]">
+          A small team,<br/>
+          <span class="accent">running clean chemistry.</span>
+        </h2>
+        <p class="mt-8 text-ink-200 text-[16.5px] md:text-[17.5px] leading-[1.75]">
+          Hello You Labs is a direct-to-researcher supplier operating out of a single
+          US fulfillment center. We source from vetted synthesis partners,
+          release nothing without an independent third-party assay, and
+          keep the paperwork boring so the science can be interesting.
+        </p>
+        <p class="mt-5 text-ink-300 text-[15.5px] leading-[1.75]">
+          When you order, a real person packs your vials the same day.
+          When you email, a real person answers. That is roughly the whole
+          pitch.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <span class="chip warm">Independent testing</span>
+          <span class="chip warm">Same-day dispatch</span>
+          <span class="chip warm">Human support</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATALOG (§ 03) ============ -->
+<section id="catalog" class="relative py-16 md:py-24 border-t hairline">
+  <div class="container-x">
+
+    <!-- Section header -->
+    <div class="grid md:grid-cols-12 gap-8 md:gap-10 mb-10 md:mb-14">
+      <div class="md:col-span-6">
+        <div class="eyebrow hi mb-3">Catalog</div>
+        <h2 class="display text-[38px] md:text-[56px] leading-[1.02]">
+          Current inventory.<br/><span class="cross">Live lots.</span>
+        </h2>
+      </div>
+      <div class="md:col-span-5 md:col-start-8 self-end">
+        <p class="text-ink-200 text-[15.5px] md:text-[16.5px] max-w-[52ch] leading-[1.75]">
+          Every listing links to a lot-specific certificate of analysis with
+          identity, purity, and residual solvent data. Prices shown per vial,
+          lyophilized.
+        </p>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="panel-2 flex flex-wrap items-center gap-3 md:gap-4 p-4 mb-10" role="toolbar" aria-label="Catalog filters">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-[12px] uppercase tracking-[0.12em] text-ink-400 mr-2 mono">Filter</span>
+        <button class="filter-pill on" aria-pressed="true">All</button>
+        <button class="filter-pill" aria-pressed="false">GLP-1</button>
+        <button class="filter-pill" aria-pressed="false">Repair</button>
+        <button class="filter-pill" aria-pressed="false">GHS</button>
+      </div>
+      <div class="hidden md:flex items-center gap-2 ml-auto">
+        <span class="text-[12px] uppercase tracking-[0.12em] text-ink-400 mr-2 mono">Sort</span>
+        <button class="filter-pill">Purity ↓</button>
+        <button class="filter-pill">Price ↑</button>
+        <button class="filter-pill">Lot ↓</button>
+      </div>
+    </div>
+
+    <!-- Category A: GLP-1 -->
+    <div class="mb-16 md:mb-24">
+      <div class="flex items-end justify-between pb-5 mb-8">
+        <div>
+          <div class="eyebrow warm">Category A</div>
+          <h3 class="mt-2 h-warm text-[26px] md:text-[32px]">GLP-1 Research Peptides</h3>
+        </div>
+        <span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">5 SKUs</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+
+        <!-- Semaglutide 5mg -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/semaglutide-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · semaglutide-5mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GLP-1 · Semaglutide</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">Semaglutide</h4>
+              </div>
+              <span class="chip">99.4%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>SEM-2607</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$65<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20to%20reserve%20Semaglutide%205mg%20(Lot%20SEM-2607)." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order Semaglutide 5mg via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tirzepatide 10mg -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/tirzepatide-10mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · tirzepatide-10mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GLP-1 / GIP · Tirzepatide</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">Tirzepatide</h4>
+              </div>
+              <span class="chip">99.6%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>10 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>TIR-2612</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$85<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tirzepatide 30mg -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/tirzepatide-30mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · tirzepatide-30mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GLP-1 / GIP · Tirzepatide</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">Tirzepatide</h4>
+              </div>
+              <span class="chip">99.6%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>30 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>TIR-2613</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$189<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Retatrutide 5mg -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/retatrutide-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · retatrutide-5mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Tri-agonist · Retatrutide</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">Retatrutide</h4>
+              </div>
+              <span class="chip">99.2%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>RET-2604</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$95<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Retatrutide 10mg -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/retatrutide-10mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · retatrutide-10mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Tri-agonist · Retatrutide</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">Retatrutide</h4>
+              </div>
+              <span class="chip">99.2%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>10 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>RET-2605</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$175<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- Category B: Repair & Recovery -->
+    <div class="mb-16 md:mb-24">
+      <div class="flex items-end justify-between pb-5 mb-8">
+        <div>
+          <div class="eyebrow warm">Category B</div>
+          <h3 class="mt-2 h-warm text-[26px] md:text-[32px]">Repair &amp; Recovery Peptides</h3>
+        </div>
+        <span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">3 SKUs</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+
+        <!-- BPC-157 -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/bpc157-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · bpc157-5mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Pentadecapeptide · BPC</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">BPC-157</h4>
+              </div>
+              <span class="chip">99.5%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>BPC-2609</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$42<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- GHK-Cu -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/ghkcu-50mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · ghkcu-50mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Copper peptide · GHK</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">GHK-Cu</h4>
+              </div>
+              <span class="chip">99.7%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>50 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>GHK-2610</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$48<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- Category C: GHS -->
+    <div>
+      <div class="flex items-end justify-between pb-5 mb-8">
+        <div>
+          <div class="eyebrow warm">Category C</div>
+          <h3 class="mt-2 h-warm text-[26px] md:text-[32px]">Growth Hormone Secretagogues</h3>
+        </div>
+        <span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">5 SKUs</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+
+        <!-- Ipamorelin -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/ipamorelin-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · ipamorelin-5mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRP · Ipamorelin</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">Ipamorelin</h4>
+              </div>
+              <span class="chip">99.4%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>IPA-2608</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$38<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CJC-1295 no DAC -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/cjc1295-nodac-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · cjc1295-nodac-5mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRH analog · CJC</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">CJC-1295 <span class="text-ink-300 text-[18px]">(no DAC)</span></h4>
+              </div>
+              <span class="chip">99.5%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>CJC-2607</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$45<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CJC-1295 DAC -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/cjc1295-dac-2mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · cjc1295-dac-2mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRH analog · CJC-DAC</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">CJC-1295 DAC</h4>
+              </div>
+              <span class="chip">99.3%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>2 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>CJD-2606</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$52<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Sermorelin -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/sermorelin-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · sermorelin-5mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRH fragment · Sermorelin</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">Sermorelin</h4>
+              </div>
+              <span class="chip">99.4%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>SER-2605</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$40<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tesamorelin -->
+        <article class="product-card">
+          <div class="vial-slot">
+            <span class="vial-ratio-tag">4:5</span>
+            <img class="vial-img" alt="" src="img/vials/tesamorelin-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
+            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
+            <span class="vial-placeholder-label">img · tesamorelin-5mg.png</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRH analog · Tesamorelin</div>
+                <h4 class="mt-1.5 serif text-[24px] leading-tight">Tesamorelin</h4>
+              </div>
+              <span class="chip">99.2%</span>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
+              <span class="spec-chip">Lot <strong>TES-2604</strong></span>
+            </div>
+            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
+                <div class="serif text-[28px] text-ink-100 mt-0.5">$88<span class="text-ink-400 text-[14px] mono">.00</span></div>
+              </div>
+              <div class="flex flex-col items-end gap-2">
+                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- RUO reminder mid-page -->
+    <div class="mt-16 panel-2 p-6 md:p-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex items-start gap-4">
+        <span class="chip warn shrink-0">RUO</span>
+        <p class="text-ink-200 text-[14.5px] leading-[1.7] max-w-[64ch]">
+          All listings are supplied for in-vitro laboratory research. Not for
+          human or veterinary use. No product page implies suitability for any
+          therapeutic, diagnostic, or clinical purpose.
+        </p>
+      </div>
+      <a href="#ruo-footer" class="text-[13px] text-ember-soft hover:text-cream transition self-start md:self-auto whitespace-nowrap">Read full policy →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ ORDERING (§ 04) ============ -->
+<section id="ordering" class="relative py-16 md:py-24 border-t hairline" style="background: linear-gradient(180deg, #0a0908 0%, #0f0c09 100%);">
+  <div class="container-x">
+
+    <div class="grid md:grid-cols-12 gap-8 md:gap-10 mb-14 md:mb-16">
+      <div class="md:col-span-6">
+        <div class="eyebrow hi mb-3">Ordering</div>
+        <h2 class="display text-[38px] md:text-[56px] leading-[1.02]">
+          Ordered like any<br/><span class="accent">lab reagent.</span>
+        </h2>
+      </div>
+      <div class="md:col-span-5 md:col-start-8 self-end">
+        <p class="text-ink-200 text-[15.5px] md:text-[16.5px] leading-[1.75] max-w-[52ch]">
+          No account approval. No wait-list. No distributor between you and
+          the lot. Browse, add vials, check out — dispatch is same day for
+          orders in before 14:00 ET.
+        </p>
+      </div>
+    </div>
+
+    <!-- 3-step flow -->
+    <ol class="grid md:grid-cols-3 gap-4 md:gap-5" role="list">
+      <li class="panel p-7 md:p-9">
+        <div class="flex items-baseline justify-between mb-8">
+          <span class="serif text-[68px] leading-none text-ember-soft">01</span>
+          <span class="mono text-[10.5px] tracking-[0.14em] uppercase text-ink-400">Select</span>
+        </div>
+        <h3 class="serif text-[24px] mb-3">Browse the catalog.</h3>
+        <p class="text-ink-300 text-[14.5px] leading-[1.7]">
+          Every listing shows the current lot's purity, release date, and price
+          per vial. Cart-based checkout — no minimum order, no institutional
+          verification, no gatekeeper form.
+        </p>
+      </li>
+
+      <li class="panel p-7 md:p-9">
+        <div class="flex items-baseline justify-between mb-8">
+          <span class="serif text-[68px] leading-none text-ember-soft">02</span>
+          <span class="mono text-[10.5px] tracking-[0.14em] uppercase text-ink-400">Checkout</span>
+        </div>
+        <h3 class="serif text-[24px] mb-3">Pay by card.</h3>
+        <p class="text-ink-300 text-[14.5px] leading-[1.7]">
+          Standard Visa, Mastercard, and Amex. No crypto-only workaround, no
+          bank-wire-only workaround. Chargeback protection intact — because
+          you're not being funneled into an unreversible payment rail.
+        </p>
+      </li>
+
+      <li class="panel p-7 md:p-9">
+        <div class="flex items-baseline justify-between mb-8">
+          <span class="serif text-[68px] leading-none text-ember-soft">03</span>
+          <span class="mono text-[10.5px] tracking-[0.14em] uppercase text-ink-400">Dispatched</span>
+        </div>
+        <h3 class="serif text-[24px] mb-3">Ships same day.</h3>
+        <p class="text-ink-300 text-[14.5px] leading-[1.7]">
+          Orders in before 14:00 ET dispatch that afternoon. Domestic US 2-day
+          carrier service. Cold-pack when the lot requires it. Neutral outer
+          packaging.
+        </p>
+      </li>
+    </ol>
+
+    <!-- Value callouts -->
+    <div class="mt-10 md:mt-12 grid md:grid-cols-2 gap-4 md:gap-5">
+      <div class="panel-warm p-7 md:p-8">
+        <div class="eyebrow warm mb-3">Direct</div>
+        <p class="text-[16px] md:text-[17px] leading-[1.7]">
+          <span class="serif text-ink-100 text-[19px] block mb-2">No distributor markup.</span>
+          <span class="text-ink-300">The catalog price is the lab price plus fulfillment — not a middleman margin stacked on top of a middleman margin. The community-reported 10× reseller premium doesn't apply here.</span>
+        </p>
+      </div>
+      <div class="panel-warm p-7 md:p-8">
+        <div class="eyebrow warm mb-3">Verified</div>
+        <p class="text-[16px] md:text-[17px] leading-[1.7]">
+          <span class="serif text-ink-100 text-[19px] block mb-2">Certificate travels with the lot.</span>
+          <span class="text-ink-300">The COA for your exact vial is downloadable from the order confirmation and printed on the shipment insert. Verify against the batch on the packaging before you use it.</span>
+        </p>
+      </div>
+    </div>
+
+    <p class="mt-10 text-[13px] text-ink-400 max-w-[80ch] leading-[1.75]">
+      All products sold for laboratory research use only. Not for human or
+      veterinary consumption. See <a href="#ruo-footer" class="text-ember-soft hover:text-cream transition">full RUO policy</a>.
+    </p>
+
+  </div>
+</section>
+
+<!-- ============ TESTING (§ 05) ============ -->
+<section id="testing" class="relative py-16 md:py-24 border-t hairline">
+  <div class="container-x">
+
+    <div class="grid md:grid-cols-12 gap-8 md:gap-12 mb-12">
+      <div class="md:col-span-6">
+        <div class="eyebrow hi mb-3">Verification</div>
+        <h2 class="display text-[38px] md:text-[56px] leading-[1.02]">
+          Every lot.<br/>Every product.<br/><span class="accent">Verified.</span>
+        </h2>
+      </div>
+      <div class="md:col-span-5 md:col-start-8">
+        <p class="text-ink-200 text-[15.5px] md:text-[16.5px] leading-[1.75]">
+          Each batch is analyzed for identity and purity before release. Data
+          is generated by an independent third-party analytical lab and
+          attached to every shipment as a batch-specific certificate. Buyers
+          verify the same lot number they receive.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <span class="chip">HPLC</span>
+          <span class="chip">LC-MS</span>
+          <span class="chip">Bacterial endotoxin (LAL)</span>
+          <span class="chip">Residual solvents</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 columns: methodology -->
+    <div class="grid md:grid-cols-3 gap-5 md:gap-6 mt-8">
+
+      <div class="panel p-7">
+        <div class="eyebrow warm mb-4">Method 01</div>
+        <h3 class="serif text-[24px] mb-3">HPLC</h3>
+        <p class="text-ink-300 text-[14.5px] leading-[1.75] mb-5">
+          High-Performance Liquid Chromatography quantifies peptide purity by
+          separating the target compound from synthesis-related impurities.
+          Every lot is analyzed with a reverse-phase C18 method.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="spec-chip">C18 · 250×4.6 mm</span>
+          <span class="spec-chip">UV 214 nm</span>
+          <span class="spec-chip">≥ 98.0%</span>
+        </div>
+      </div>
+
+      <div class="panel p-7">
+        <div class="eyebrow warm mb-4">Method 02</div>
+        <h3 class="serif text-[24px] mb-3">LC-MS</h3>
+        <p class="text-ink-300 text-[14.5px] leading-[1.75] mb-5">
+          Liquid Chromatography–Mass Spectrometry confirms identity by
+          matching the observed molecular ion mass against the calculated
+          value for the target peptide sequence.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="spec-chip">ESI+</span>
+          <span class="spec-chip">± 0.5 Da</span>
+          <span class="spec-chip">Deconvoluted</span>
+        </div>
+      </div>
+
+      <div class="panel p-7">
+        <div class="eyebrow warm mb-4">Method 03</div>
+        <h3 class="serif text-[24px] mb-3">Independent Lab</h3>
+        <p class="text-ink-300 text-[14.5px] leading-[1.75] mb-5">
+          All analytical data is generated by an independent third-party
+          laboratory unaffiliated with Hello You Labs. This separates supply from
+          verification and eliminates in-house conflict of interest.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="spec-chip">3P lab</span>
+          <span class="spec-chip">ISO 17025 (ref.)</span>
+          <span class="spec-chip">Per lot</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sample COA -->
+    <div class="mt-14 md:mt-16">
+      <div class="eyebrow hi mb-3">Sample document</div>
+      <h3 class="serif text-[26px] md:text-[34px] mb-8">Certificate of Analysis — sample</h3>
+
+      <div class="panel-2 overflow-hidden">
+        <div class="grid grid-cols-2 md:grid-cols-4 border-b hairline">
+          <div class="p-5 md:p-6 border-r hairline">
+            <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Product</div>
+            <div class="mt-1 serif text-[19px]">Tirzepatide</div>
+          </div>
+          <div class="p-5 md:p-6 md:border-r hairline">
+            <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Lot</div>
+            <div class="mt-1 mono text-[16px]">TIR-2612</div>
+          </div>
+          <div class="p-5 md:p-6 border-r border-t md:border-t-0 hairline">
+            <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Released</div>
+            <div class="mt-1 mono text-[16px]">2026-06-02</div>
+          </div>
+          <div class="p-5 md:p-6 border-t md:border-t-0">
+            <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Status</div>
+            <div class="mt-1 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-ember-soft"></span>
+              <span class="text-[14px]">Released for sale</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-0">
+          <!-- Purity chart -->
+          <div class="p-6 md:p-8 border-b md:border-b-0 md:border-r hairline">
+            <div class="eyebrow warm mb-5">HPLC purity profile</div>
+            <div class="coa-chart">
+              <span class="lbl">Target peak</span>
+              <div class="bar"><span style="width: 99.6%"></span></div>
+              <span class="val">99.60%</span>
+
+              <span class="lbl">Related A</span>
+              <div class="bar"><span style="width: 3%"></span></div>
+              <span class="val">0.18%</span>
+
+              <span class="lbl">Related B</span>
+              <div class="bar"><span style="width: 2%"></span></div>
+              <span class="val">0.11%</span>
+
+              <span class="lbl">Unknown</span>
+              <div class="bar"><span style="width: 1.5%"></span></div>
+              <span class="val">0.11%</span>
+            </div>
+            <div class="mt-6 mono text-[11.5px] text-ink-400 leading-[1.75]">
+              Method: RP-HPLC, C18 250×4.6, gradient 20→60% MeCN / 0.1% TFA<br/>
+              Detection: UV 214 nm · Run time: 30 min
+            </div>
+          </div>
+
+          <!-- Identity block -->
+          <div class="p-6 md:p-8">
+            <div class="eyebrow warm mb-5">Identity &amp; specifications</div>
+            <ul class="space-y-2.5 text-[14px]">
+              <li class="flex justify-between gap-4"><span class="text-ink-300">Appearance</span><span class="text-ink-100">White lyo powder</span></li>
+              <li class="flex justify-between gap-4"><span class="text-ink-300">Net peptide</span><span class="text-ink-100 mono">10 mg / vial</span></li>
+              <li class="flex justify-between gap-4"><span class="text-ink-300">Calc. MW</span><span class="text-ink-100 mono">4813.53 Da</span></li>
+              <li class="flex justify-between gap-4"><span class="text-ink-300">Obs. MW (LC-MS)</span><span class="text-ink-100 mono">4813.4 Da</span></li>
+              <li class="flex justify-between gap-4"><span class="text-ink-300">Water content</span><span class="text-ink-100 mono">≤ 8%</span></li>
+              <li class="flex justify-between gap-4"><span class="text-ink-300">Acetate</span><span class="text-ink-100 mono">≤ 12%</span></li>
+              <li class="flex justify-between gap-4"><span class="text-ink-300">Endotoxin (LAL)</span><span class="text-ink-100">Pass</span></li>
+              <li class="flex justify-between gap-4"><span class="text-ink-300">Storage</span><span class="text-ink-100">Sealed, 2–8 °C</span></li>
+            </ul>
+            <div class="mt-6">
+              <a href="#" class="btn btn-ghost btn-small">Download full PDF ↓</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-6 text-[12.5px] text-ink-400 max-w-[72ch] leading-[1.75]">
+        Reference document only. Values shown are representative of lot
+        TIR-2612 and not a claim regarding any other lot. Verify the lot number
+        printed on your vial matches the COA supplied at delivery.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ SHIPPING & SUPPORT (§ 06) ============ -->
+<section id="shipping" class="relative py-16 md:py-24 border-t hairline">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-8 md:gap-10 mb-12">
+      <div class="md:col-span-6">
+        <div class="eyebrow hi mb-3">Logistics</div>
+        <h2 class="display text-[38px] md:text-[56px] leading-[1.02]">
+          Fast, quiet,<br/><span class="accent">cold-shipped.</span>
+        </h2>
+      </div>
+      <div class="md:col-span-5 md:col-start-8">
+        <p class="text-ink-200 text-[15.5px] md:text-[16.5px] leading-[1.75]">
+          Hello You Labs ships domestically within the United States only. Orders placed
+          before 14:00 ET are dispatched same day. Temperature-sensitive lots
+          ship with ice packs and insulated liners; all products are packed in
+          discreet outer cartons with no product-identifying marks.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+      <div class="panel p-7">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-ember-soft mb-5" aria-hidden="true">
+          <rect x="1" y="7" width="15" height="10" rx="1"/>
+          <path d="M16 10h4l3 3v4h-7z"/>
+          <circle cx="5.5" cy="18.5" r="1.6"/>
+          <circle cx="18.5" cy="18.5" r="1.6"/>
+        </svg>
+        <div class="serif text-[19px] mb-2">US 2-day shipping</div>
+        <p class="text-ink-300 text-[14px] leading-[1.7]">Standard 2-day carrier service from a US fulfillment center.</p>
+      </div>
+      <div class="panel p-7">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-ember-soft mb-5" aria-hidden="true">
+          <path d="M4 8l8-4 8 4v8l-8 4-8-4z"/>
+          <path d="M4 8l8 4 8-4"/>
+          <path d="M12 12v8"/>
+        </svg>
+        <div class="serif text-[19px] mb-2">Discreet packaging</div>
+        <p class="text-ink-300 text-[14px] leading-[1.7]">Neutral outer cartons. No product name or category on the label.</p>
+      </div>
+      <div class="panel p-7">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-ember-soft mb-5" aria-hidden="true">
+          <rect x="2" y="6" width="20" height="13" rx="2"/>
+          <path d="M2 10h20"/>
+          <path d="M6 15h4"/>
+        </svg>
+        <div class="serif text-[19px] mb-2">Card checkout</div>
+        <p class="text-ink-300 text-[14px] leading-[1.7]">Standard Visa / Mastercard / Amex. No crypto-only requirement.</p>
+      </div>
+      <div class="panel p-7">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-ember-soft mb-5" aria-hidden="true">
+          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+        </svg>
+        <div class="serif text-[19px] mb-2">Human support</div>
+        <p class="text-ink-300 text-[14px] leading-[1.7]">Real replies within 48 hours, Monday through Friday.</p>
+      </div>
+    </div>
+
+    <p class="mt-8 text-[13px] text-ink-400 max-w-[80ch] leading-[1.75]">
+      Cold-chain shipping is applied to lots requiring 2–8 °C transit. Buyers
+      are notified before dispatch. Hello You Labs does not ship internationally; orders
+      to non-US addresses are declined at checkout.
+    </p>
+
+  </div>
+</section>
+
+<!-- ============ FAQ (§ 07) ============ -->
+<section id="faq" class="relative py-16 md:py-24 border-t hairline">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-8 md:gap-10">
+      <div class="md:col-span-4">
+        <div class="eyebrow hi mb-3">FAQ</div>
+        <h2 class="display text-[38px] md:text-[52px] leading-[1.02]">
+          Straight<br/><span class="accent">answers.</span>
+        </h2>
+        <p class="mt-6 text-ink-200 text-[15.5px] leading-[1.75] max-w-[36ch]">
+          If a question isn't answered here, email
+          <a href="#contact" class="text-ember-soft hover:text-cream transition">support@helloyoulabs.example</a>.
+        </p>
+      </div>
+
+      <div class="md:col-span-7 md:col-start-6">
+        <details class="faq-item">
+          <summary>Are these products for human use?<span class="plus" aria-hidden="true"></span></summary>
+          <div class="faq-body">
+            No. All products sold by Hello You Labs are supplied strictly for in-vitro
+            laboratory research and development use. Products are not intended
+            for human or veterinary consumption, are not approved by the FDA
+            for any medicinal purpose, and are not sold as drugs, dietary
+            supplements, or cosmetics.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do I verify a COA?<span class="plus" aria-hidden="true"></span></summary>
+          <div class="faq-body">
+            Each shipment includes a printed or PDF certificate of analysis
+            corresponding to the exact lot number on your vial. Cross-check
+            the lot number on the vial label with the "Lot" field on the COA;
+            the two must match exactly. If they do not, do not use the
+            material — contact support and we will replace the order.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What payment methods do you accept?<span class="plus" aria-hidden="true"></span></summary>
+          <div class="faq-body">
+            Standard credit and debit cards (Visa, Mastercard, American
+            Express, Discover). We do not require cryptocurrency. We do not
+            store card numbers on our servers; all payment processing is
+            handled by a PCI-compliant third-party gateway.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Do you ship internationally?<span class="plus" aria-hidden="true"></span></summary>
+          <div class="faq-body">
+            No. Hello You Labs ships to addresses in the fifty United States only.
+            International orders and freight-forwarder addresses are declined
+            at checkout to remain compliant with US export controls and
+            destination-country regulations.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What if my product arrives damaged?<span class="plus" aria-hidden="true"></span></summary>
+          <div class="faq-body">
+            Photograph the outer carton and vial as received and email support
+            within 72 hours of delivery. Verified damage or transit failure
+            (broken vial, expired cold-pack) is replaced free of charge from
+            the same lot when inventory permits, or refunded in full.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How are peptides stored and shipped?<span class="plus" aria-hidden="true"></span></summary>
+          <div class="faq-body">
+            Lyophilized peptides are stable short-term at ambient temperature
+            and are stored long-term at 2–8 °C sealed and desiccated. For
+            temperature-sensitive lots we ship with insulated liners and gel
+            ice packs and prioritize 2-day carrier service. After
+            reconstitution for in-vitro assays, refer to the lot-specific COA
+            for stability guidance.
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEWSLETTER / CONTACT ============ -->
+<section id="contact" class="relative py-16 md:py-24 border-t hairline" style="background: linear-gradient(180deg, #0a0908 0%, #0f0c09 100%);">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-8 md:gap-10 items-end">
+      <div class="md:col-span-6">
+        <div class="eyebrow hi mb-3">Research access</div>
+        <h2 class="display text-[36px] md:text-[52px] max-w-[20ch] leading-[1.02]">
+          Get notified when new lots<br/><span class="accent">are released.</span>
+        </h2>
+        <p class="mt-6 text-ink-200 text-[15.5px] leading-[1.75] max-w-[52ch]">
+          Low-volume list. One email per lot release. Unsubscribe from any
+          message.
+        </p>
+      </div>
+
+      <div class="md:col-span-6">
+        <form class="grid gap-3" onsubmit="event.preventDefault(); this.querySelector('.form-status').textContent='Subscribed. Thanks.';">
+          <label for="email" class="text-[12px] uppercase tracking-[0.12em] text-ink-400 mono">Email address</label>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input id="email" type="email" required autocomplete="email" placeholder="you@lab.example" class="field flex-1" />
+            <button type="submit" class="btn btn-primary justify-center">Subscribe →</button>
+          </div>
+          <p class="text-[12px] text-ember-soft form-status min-h-[1em]"></p>
+        </form>
+
+        <div class="mt-10 pt-8 border-t hairline grid grid-cols-2 gap-6">
+          <div>
+            <div class="text-[11px] uppercase tracking-[0.12em] text-ink-400 mono">Support</div>
+            <a href="mailto:support@helloyoulabs.example" class="mt-2 mono text-[14px] text-ink-100 hover:text-ember-soft transition block">support@helloyoulabs.example</a>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-[0.12em] text-ink-400 mono">Wholesale</div>
+            <a href="mailto:wholesale@helloyoulabs.example" class="mt-2 mono text-[14px] text-ink-100 hover:text-ember-soft transition block">wholesale@helloyoulabs.example</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative border-t hairline pt-16 pb-10" style="background: #050403;">
+  <div class="container-x">
+
+    <!-- RUO block -->
+    <div id="ruo-footer" class="panel-2 p-7 md:p-9 mb-14">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="chip warn">RUO</span>
+        <span class="text-[13px] text-ember-soft">Research use only — important notice</span>
+      </div>
+      <p class="text-ink-200 text-[14.5px] leading-[1.8] max-w-[92ch]">
+        All products offered by Hello You Labs are sold strictly for in-vitro
+        laboratory research and development use. These products are not
+        intended for human or veterinary consumption, diagnostic use,
+        therapeutic use, or any other use involving living organisms. Products
+        are not approved by the U.S. Food and Drug Administration (FDA) for
+        any medicinal purpose. By purchasing, you certify that you are a
+        qualified researcher, at least 21 years of age, and will handle these
+        materials in accordance with all applicable laws and safety guidelines.
+        Hello You Labs makes no claims regarding the safety, efficacy, or suitability
+        of these products for any purpose other than laboratory research.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-10 mb-12">
+      <div class="col-span-2 md:col-span-4">
+        <a href="#top" class="flex items-center gap-3 mb-5" aria-label="Hello You Labs — home">
+          <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-14 w-auto select-none" draggable="false" />
+          <span class="mono text-[10.5px] tracking-[0.14em] uppercase text-ink-400 border-l border-ink-800 pl-3">Labs · Research</span>
+        </a>
+        <p class="text-ink-300 text-[14px] leading-[1.75] max-w-[38ch]">
+          Reference-grade research peptides. Third-party verified. Domestic US
+          shipping.
+        </p>
+      </div>
+
+      <div class="md:col-span-2 md:col-start-6">
+        <div class="text-[11px] uppercase tracking-[0.12em] text-ink-400 mb-4 mono">Catalog</div>
+        <ul class="space-y-2.5 text-[14px]">
+          <li><a href="#catalog" class="text-ink-200 hover:text-ember-soft transition">GLP-1</a></li>
+          <li><a href="#catalog" class="text-ink-200 hover:text-ember-soft transition">Repair</a></li>
+          <li><a href="#catalog" class="text-ink-200 hover:text-ember-soft transition">GHS</a></li>
+          <li><a href="#catalog" class="text-ink-200 hover:text-ember-soft transition">All lots</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="text-[11px] uppercase tracking-[0.12em] text-ink-400 mb-4 mono">Company</div>
+        <ul class="space-y-2.5 text-[14px]">
+          <li><a href="#about" class="text-ink-200 hover:text-ember-soft transition">About</a></li>
+          <li><a href="#testing" class="text-ink-200 hover:text-ember-soft transition">Testing</a></li>
+          <li><a href="#shipping" class="text-ink-200 hover:text-ember-soft transition">Shipping</a></li>
+          <li><a href="#faq" class="text-ink-200 hover:text-ember-soft transition">FAQ</a></li>
+          <li><a href="#contact" class="text-ink-200 hover:text-ember-soft transition">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="text-[11px] uppercase tracking-[0.12em] text-ink-400 mb-4 mono">Follow</div>
+        <ul class="space-y-2.5 text-[14px]">
+          <li><a href="#" aria-label="X / Twitter" class="text-ink-200 hover:text-ember-soft transition">X</a></li>
+          <li><a href="#" aria-label="Instagram" class="text-ink-200 hover:text-ember-soft transition">Instagram</a></li>
+          <li><a href="#" aria-label="Reddit" class="text-ink-200 hover:text-ember-soft transition">Reddit</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pt-6 border-t hairline flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="text-[12px] text-ink-400 mono">
+        © 2026 Hello You Labs. All rights reserved.
+      </div>
+      <ul class="flex flex-wrap gap-x-6 gap-y-2 text-[12px]">
+        <li><a href="#" class="text-ink-300 hover:text-ember-soft transition">Terms</a></li>
+        <li><a href="#" class="text-ink-300 hover:text-ember-soft transition">Privacy</a></li>
+        <li><a href="#shipping" class="text-ink-300 hover:text-ember-soft transition">Shipping</a></li>
+        <li><a href="#" class="text-ink-300 hover:text-ember-soft transition">Returns</a></li>
+        <li><a href="#ruo-footer" class="text-ink-300 hover:text-ember-soft transition">RUO Policy</a></li>
+      </ul>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ============ STICKY MINI CART / LAUNCH BAR ============ -->
+<div id="stickyCart" class="sticky-cart" aria-live="polite">
+  <span class="wa-live-dot" aria-hidden="true" style="width:8px; height:8px; border-radius:50%; background: var(--indigo-soft); box-shadow: 0 0 0 0 rgba(230,204,143,0.6); animation: waPulse 2.4s ease-out infinite;"></span>
+  <span class="text-ink-200">Checkout launches soon</span>
+  <span class="text-ink-500">·</span>
+  <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener">Message on WhatsApp →</a>
+</div>
+
+<!-- ============ WHATSAPP FLOATING BUTTON ============ -->
+<a
+  href="https://wa.me/17867803626?text=Hi%2C%20I%20have%20a%20question%20about%20Hello%20You%20Labs%20research%20peptides."
+  target="_blank"
+  rel="noopener"
+  class="wa-fab"
+  aria-label="Chat with Hello You Labs on WhatsApp">
+  <span class="wa-pulse" aria-hidden="true"></span>
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+  <span class="wa-fab-label">WhatsApp us</span>
+</a>
+
+<script>
+  // RUO bar dismiss
+  (function () {
+    var bar = document.getElementById('ruoBar');
+    var btn = document.getElementById('ruoDismiss');
+    if (btn && bar) {
+      btn.addEventListener('click', function () {
+        bar.style.display = 'none';
+      });
+    }
+  })();
+
+  // Sticky cart appears after scrolling past hero
+  (function () {
+    var cart = document.getElementById('stickyCart');
+    if (!cart) return;
+    var trigger = 620;
+    var onScroll = function () {
+      if (window.scrollY > trigger) cart.classList.add('shown');
+      else cart.classList.remove('shown');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // Simple reveal-on-scroll (skipped if reduced motion)
+  (function () {
+    var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduce || !('IntersectionObserver' in window)) return;
+    var els = document.querySelectorAll('.reveal');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  // Filter pill toggle (visual only)
+  (function () {
+    var pills = document.querySelectorAll('.filter-pill');
+    pills.forEach(function (p) {
+      p.addEventListener('click', function () {
+        var parent = p.parentElement;
+        if (!parent) return;
+        var sibs = parent.querySelectorAll('.filter-pill');
+        sibs.forEach(function (s) { s.classList.remove('on'); s.setAttribute('aria-pressed', 'false'); });
+        p.classList.add('on');
+        p.setAttribute('aria-pressed', 'true');
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

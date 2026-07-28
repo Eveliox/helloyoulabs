@@ -1,0 +1,34 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets / env (defensive — none yet, but never commit these)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Node (if you add build tools later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build output (if added later)
+dist/
+build/
+.vercel/
+.next/
