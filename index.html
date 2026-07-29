@@ -81,7 +81,7 @@
   }
 
   * { -webkit-font-smoothing: antialiased; }
-  html { scroll-behavior: smooth; font-size: 16px; }
+  html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; }
   body {
     background: var(--bg);
     color: var(--ink-1);
@@ -90,6 +90,14 @@
     line-height: 1.6;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    overflow-wrap: break-word;
+  }
+  body.menu-open { overflow: hidden; touch-action: none; }
+
+  /* Global tap-target + no 300ms delay for interactive elements */
+  a, button, summary, [role="button"], input, select, textarea, .filter-pill {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -108,9 +116,15 @@
     font-optical-sizing: auto;
   }
 
-  .container-x { max-width: 1360px; margin: 0 auto; padding-left: 22px; padding-right: 22px; }
-  @media (min-width: 768px) { .container-x { padding-left: 40px; padding-right: 40px; } }
-  @media (min-width: 1280px) { .container-x { padding-left: 64px; padding-right: 64px; } }
+  .container-x {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
+  }
+  @media (min-width: 480px) { .container-x { padding-left: max(22px, env(safe-area-inset-left)); padding-right: max(22px, env(safe-area-inset-right)); } }
+  @media (min-width: 768px) { .container-x { padding-left: max(40px, env(safe-area-inset-left)); padding-right: max(40px, env(safe-area-inset-right)); } }
+  @media (min-width: 1280px) { .container-x { padding-left: max(64px, env(safe-area-inset-left)); padding-right: max(64px, env(safe-area-inset-right)); } }
 
   .hairline { border-color: var(--line); }
   .hairline-strong { border-color: var(--line-strong); }
@@ -159,12 +173,13 @@
 
   /* Buttons */
   .btn {
-    display: inline-flex; align-items: center; gap: 10px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.01em;
     padding: 12px 20px;
+    min-height: 44px;
     border-radius: 999px;
     border: 1px solid transparent;
     transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
@@ -192,8 +207,12 @@
   }
   .btn-ember:hover { border-color: var(--ember-soft); background: rgba(243,201,174,0.05); color: var(--cream); }
   .btn-small {
-    padding: 9px 16px;
+    padding: 10px 16px;
     font-size: 13px;
+    min-height: 40px;
+  }
+  @media (max-width: 640px) {
+    .btn-small { min-height: 44px; padding: 11px 18px; }
   }
 
   /* Cards */
@@ -378,13 +397,18 @@
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     font-weight: 500;
-    padding: 8px 14px;
+    padding: 10px 14px;
+    min-height: 40px;
     background: transparent;
     border: 1px solid var(--line-strong);
     color: var(--ink-2);
     transition: all .2s ease;
     cursor: pointer;
     border-radius: 999px;
+    white-space: nowrap;
+  }
+  @media (max-width: 640px) {
+    .filter-pill { min-height: 44px; padding: 11px 16px; }
   }
   .filter-pill:hover { color: var(--ink-1); border-color: var(--ink-4); }
   .filter-pill.on { background: var(--indigo); color: #fff; border-color: var(--indigo); }
@@ -433,7 +457,9 @@
 
   /* Sticky cart */
   .sticky-cart {
-    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(120%);
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    left: 50%; transform: translateX(-50%) translateY(160%);
     z-index: 40;
     background: var(--panel-2);
     border: 1px solid var(--line-strong);
@@ -446,10 +472,32 @@
     box-shadow: 0 24px 60px rgba(0,0,0,0.55);
     transition: transform .3s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
     opacity: 0;
+    max-width: calc(100vw - 32px);
   }
   .sticky-cart.shown { transform: translateX(-50%) translateY(0); opacity: 1; }
-  .sticky-cart a { color: var(--ember-soft); text-decoration: none; font-weight: 500; }
+  .sticky-cart a { color: var(--ember-soft); text-decoration: none; font-weight: 500; white-space: nowrap; }
   .sticky-cart a:hover { color: var(--cream); }
+  /* Phone: keep well out of the WhatsApp FAB's way and use compact copy */
+  @media (max-width: 640px) {
+    .sticky-cart {
+      bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      left: 12px;
+      right: calc(84px + env(safe-area-inset-right, 0px));
+      transform: translateY(160%);
+      max-width: none;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      gap: 8px;
+      justify-content: flex-start;
+    }
+    .sticky-cart.shown { transform: translateY(0); }
+    .sticky-cart .sticky-cart-long { display: none; }
+    .sticky-cart .sticky-cart-sep { display: none; }
+    .sticky-cart a { font-size: 12.5px; }
+  }
+  @media (min-width: 641px) {
+    .sticky-cart .sticky-cart-short { display: none; }
+  }
 
   /* WhatsApp floating button */
   .wa-fab {
@@ -680,11 +728,246 @@
   }
   .spec-chip strong { color: var(--ink-1); font-weight: 500; }
 
+  /* Hamburger trigger (mobile only) */
+  .nav-toggle {
+    display: none;
+    width: 44px; height: 44px;
+    align-items: center; justify-content: center;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-1);
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .nav-toggle:hover { border-color: var(--ink-3); background: rgba(245,239,223,0.03); }
+  .nav-toggle:focus-visible { outline: 2px solid var(--indigo-soft); outline-offset: 2px; }
+  .nav-toggle .bar {
+    position: absolute;
+    left: 12px; right: 12px;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform .28s ease, opacity .2s ease, top .28s ease;
+  }
+  .nav-toggle .bar:nth-child(1) { top: 15px; }
+  .nav-toggle .bar:nth-child(2) { top: 21px; }
+  .nav-toggle .bar:nth-child(3) { top: 27px; }
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(1) { top: 21px; transform: rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(3) { top: 21px; transform: rotate(-45deg); }
+  @media (max-width: 767px) {
+    .nav-toggle { display: inline-flex; }
+  }
+
+  /* Mobile menu overlay */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgba(5,4,3,0.98);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    color: var(--ink-1);
+    display: flex;
+    flex-direction: column;
+    padding-top: calc(env(safe-area-inset-top, 0px));
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px));
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity .28s ease, transform .28s ease, visibility 0s linear .28s;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .mobile-menu[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity .28s ease, transform .28s ease, visibility 0s linear 0s;
+  }
+  .mobile-menu-inner {
+    display: flex; flex-direction: column;
+    min-height: 100%;
+    padding: 22px 22px 32px;
+  }
+  .mobile-menu-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 8px;
+    min-height: 80px;
+  }
+  .mobile-menu-close {
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-1);
+    border-radius: 12px;
+    font-size: 22px; line-height: 1;
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .mobile-menu-close:hover { border-color: var(--ink-3); background: rgba(245,239,223,0.03); }
+  .mobile-menu-close:focus-visible { outline: 2px solid var(--indigo-soft); outline-offset: 2px; }
+  .mobile-menu-nav {
+    display: flex; flex-direction: column;
+    gap: 4px;
+    margin-top: 24px;
+  }
+  .mobile-menu-nav a {
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 30px;
+    letter-spacing: -0.015em;
+    color: var(--ink-1);
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--line);
+    min-height: 60px;
+    text-decoration: none;
+    transition: color .2s ease, padding-left .2s ease;
+  }
+  .mobile-menu-nav a::after {
+    content: '→';
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: var(--ink-4);
+    transition: color .2s ease, transform .2s ease;
+  }
+  .mobile-menu-nav a:hover,
+  .mobile-menu-nav a:focus-visible {
+    color: var(--ember-soft);
+    outline: none;
+  }
+  .mobile-menu-nav a:hover::after,
+  .mobile-menu-nav a:focus-visible::after {
+    color: var(--ember-soft);
+    transform: translateX(4px);
+  }
+  .mobile-menu-meta {
+    margin-top: 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .mobile-menu-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-500); }
+  .mobile-menu-footer {
+    margin-top: auto;
+    padding-top: 28px;
+  }
+  .mobile-menu-cta {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%;
+    background: var(--indigo);
+    color: #fff;
+    border: 1px solid var(--indigo);
+    padding: 16px 20px;
+    min-height: 52px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 12px 28px rgba(201,166,100,0.28);
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .mobile-menu-cta:hover { background: var(--indigo-deep); border-color: var(--indigo-deep); transform: translateY(-1px); }
+  .mobile-menu-cta:focus-visible { outline: 2px solid var(--indigo-soft); outline-offset: 3px; }
+
+  /* Hide mobile menu on desktop no matter what */
+  @media (min-width: 768px) {
+    .mobile-menu { display: none !important; }
+  }
+
+  /* RUO strip: tighten on mobile & make dismiss reach 44px */
+  .ruo-strip .ruo-dismiss {
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent;
+    border: 0;
+    color: var(--ink-4);
+    font-size: 20px; line-height: 1;
+    cursor: pointer;
+    margin-right: -10px;
+    border-radius: 8px;
+    transition: color .2s ease;
+  }
+  .ruo-strip .ruo-dismiss:hover { color: var(--ink-1); }
+  .ruo-strip .ruo-dismiss:focus-visible { outline: 2px solid var(--indigo-soft); outline-offset: 2px; }
+  @media (max-width: 640px) {
+    .ruo-strip { font-size: 12px; }
+    .ruo-strip p { line-height: 1.5; }
+  }
+
+  /* Cart icon button — ensure 44px tap target on mobile */
+  .cart-btn {
+    min-height: 40px;
+  }
+  @media (max-width: 640px) {
+    .cart-btn { min-height: 44px; padding: 8px 12px; }
+  }
+
+  /* Mobile-specific responsive tweaks */
+  @media (max-width: 480px) {
+    /* Hero display headline: prevent overflow at 375px */
+    .hero-display { font-size: 40px !important; line-height: 1.03; }
+    /* Stack hero CTAs full-width */
+    .hero-cta-row { flex-direction: column; align-items: stretch; }
+    .hero-cta-row .btn { width: 100%; }
+    /* Early-access CTA: full-width feels intentional */
+    #early-access .btn-ember { width: 100%; text-align: center; justify-content: center; }
+  }
+
+  /* About video: cap height on mobile so it doesn't dominate */
+  @media (max-width: 767px) {
+    .about-visual { max-height: 60vh; aspect-ratio: 4 / 5; }
+  }
+
+  /* COA sample: better mobile spec bars */
+  @media (max-width: 640px) {
+    .coa-chart { grid-template-columns: 1fr; gap: 4px 0; }
+    .coa-chart .lbl { font-size: 12px; margin-top: 8px; }
+    .coa-chart .val {
+      font-size: 11.5px;
+      justify-self: end;
+      margin-top: -18px;
+      margin-bottom: 2px;
+    }
+    .coa-chart .bar { margin-top: 2px; }
+  }
+
+  /* Product card action row: give more breathing room on narrow screens */
+  @media (max-width: 400px) {
+    .product-card .action-row { flex-direction: column; align-items: stretch; gap: 14px; }
+    .product-card .action-row .action-right { align-items: stretch; width: 100%; }
+    .product-card .action-row .action-right .btn { width: 100%; }
+    .product-card .action-row .action-right .coa-link { text-align: right; }
+  }
+
+  /* Filter bar horizontal scroll on very tight screens */
+  @media (max-width: 480px) {
+    .filter-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+    }
+    .filter-scroll::-webkit-scrollbar { display: none; }
+  }
+
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
     .reveal { opacity: 1; transform: none; }
     .product-card:hover { transform: none; }
+    .mobile-menu, .mobile-menu[aria-hidden="false"] { transition: opacity .001ms ease, visibility 0s !important; transform: none !important; }
   }
 </style>
 </head>
@@ -729,20 +1012,20 @@
 
 <!-- ============ ANNOUNCEMENT BAR ============ -->
 <div id="ruoBar" class="ruo-strip">
-  <div class="container-x flex items-center justify-between py-2.5 gap-4">
-    <p>
+  <div class="container-x flex items-center justify-between py-2 sm:py-2.5 gap-3">
+    <p class="min-w-0">
       <span class="hidden sm:inline text-indigo2-soft mono text-[11px] tracking-[0.12em] uppercase mr-2">RUO Notice ·</span>
-      <span class="text-ink-200">All products sold for laboratory research use only. Not for human or veterinary consumption.</span>
+      <span class="text-ink-200"><span class="sm:hidden">Research use only. Not for human or veterinary use.</span><span class="hidden sm:inline">All products sold for laboratory research use only. Not for human or veterinary consumption.</span></span>
     </p>
-    <button id="ruoDismiss" aria-label="Dismiss notice" class="text-ink-400 hover:text-ink-100 transition text-lg leading-none">×</button>
+    <button id="ruoDismiss" aria-label="Dismiss notice" class="ruo-dismiss shrink-0">×</button>
   </div>
 </div>
 
 <!-- ============ HEADER / NAV ============ -->
 <header class="nav sticky top-0 z-40">
-  <div class="container-x flex items-center justify-between h-20 md:h-24">
-    <a href="#top" class="flex items-center gap-3 group" aria-label="Hello You Labs — home">
-      <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-14 md:h-16 w-auto select-none" draggable="false" />
+  <div class="container-x flex items-center justify-between h-20 md:h-24 gap-3">
+    <a href="#top" class="flex items-center gap-3 group min-w-0" aria-label="Hello You Labs — home">
+      <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-12 sm:h-14 md:h-16 w-auto select-none shrink-0" draggable="false" />
       <span class="hidden md:inline mono text-[10.5px] tracking-[0.14em] uppercase text-ink-400 border-l border-ink-800 pl-3">Labs · Research</span>
     </a>
 
@@ -756,9 +1039,9 @@
       <a href="#contact" class="nav-link">Contact</a>
     </nav>
 
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0">
       <span class="hidden lg:inline mono text-[10px] tracking-[0.14em] uppercase text-ink-400 border border-ink-800 rounded-full px-2.5 py-1">RUO · 21 CFR</span>
-      <button aria-label="Open cart, 0 items" class="flex items-center gap-2 text-[13px] text-ink-100 hover:text-ember-soft transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember-soft focus-visible:outline-offset-2 rounded-full px-3 py-1.5 border border-ink-800">
+      <button aria-label="Open cart, 0 items" class="cart-btn flex items-center gap-2 text-[13px] text-ink-100 hover:text-ember-soft transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember-soft focus-visible:outline-offset-2 rounded-full px-3 py-1.5 border border-ink-800">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
           <path d="M3 4h2.5l2.4 12.3a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 8H6"/>
           <circle cx="10" cy="21" r="1.2"/>
@@ -766,9 +1049,77 @@
         </svg>
         <span id="cartCount" class="tabular-nums mono text-[12px]">0</span>
       </button>
+      <button
+        id="navToggle"
+        class="nav-toggle"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
+        type="button">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- ============ MOBILE NAV OVERLAY ============ -->
+<div
+  id="mobileMenu"
+  class="mobile-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site navigation"
+  aria-hidden="true">
+  <div class="mobile-menu-inner">
+    <div class="mobile-menu-header">
+      <a href="#top" class="flex items-center gap-3 min-w-0" data-menu-close aria-label="Hello You Labs — home">
+        <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-12 w-auto select-none shrink-0" draggable="false" />
+        <span class="mono text-[10px] tracking-[0.14em] uppercase text-ink-400 border-l border-ink-800 pl-3">Labs · Research</span>
+      </a>
+      <button
+        id="navClose"
+        class="mobile-menu-close"
+        aria-label="Close navigation menu"
+        type="button">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <nav class="mobile-menu-nav" aria-label="Primary mobile">
+      <a href="#catalog" data-menu-close>Catalog</a>
+      <a href="#about" data-menu-close>About</a>
+      <a href="#ordering" data-menu-close>Ordering</a>
+      <a href="#testing" data-menu-close>Testing</a>
+      <a href="#shipping" data-menu-close>Shipping</a>
+      <a href="#faq" data-menu-close>FAQ</a>
+      <a href="#contact" data-menu-close>Contact</a>
+    </nav>
+
+    <div class="mobile-menu-meta">
+      <span>RUO · 21 CFR</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span>US shipping</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span>Lot cycle 26 Q3</span>
+    </div>
+
+    <div class="mobile-menu-footer">
+      <a
+        href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs."
+        target="_blank"
+        rel="noopener"
+        class="mobile-menu-cta"
+        data-menu-close>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        Message on WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
 
 <a id="top"></a>
 
@@ -776,19 +1127,19 @@
 <section class="relative overflow-hidden">
   <div class="absolute inset-0 ambient-wash pointer-events-none"></div>
 
-  <div class="container-x relative pt-16 md:pt-24 pb-16 md:pb-24">
+  <div class="container-x relative pt-12 sm:pt-16 md:pt-24 pb-14 sm:pb-16 md:pb-24">
     <!-- meta row -->
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 md:mb-14">
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mb-8 sm:mb-10 md:mb-14">
       <span class="eyebrow hi">Catalog · Lot cycle 26 Q3</span>
       <span class="eyebrow">Domestic US shipping · Verified inventory</span>
     </div>
 
-    <h1 class="display text-[46px] sm:text-[64px] md:text-[86px] lg:text-[104px] max-w-[15ch]">
+    <h1 class="display hero-display text-[44px] sm:text-[64px] md:text-[86px] lg:text-[104px] max-w-[15ch]">
       Reference-grade peptides,
       <span class="accent">delivered like<br/>a good friend would.</span>
     </h1>
 
-    <p class="mt-8 md:mt-10 max-w-[58ch] text-ink-200 text-[16.5px] md:text-[18px] leading-[1.7]">
+    <p class="mt-7 sm:mt-8 md:mt-10 max-w-[58ch] text-ink-200 text-[15.5px] sm:text-[16.5px] md:text-[18px] leading-[1.7]">
       Hello You Labs ships lot-traceable synthetic peptides straight from our US
       fulfillment center to your door. Ordered like any other lab reagent —
       no distributor markup, no institutional gatekeeping, no wait-list.
@@ -796,7 +1147,7 @@
       that released it.
     </p>
 
-    <div class="mt-10 flex flex-wrap items-center gap-3">
+    <div class="hero-cta-row mt-8 sm:mt-10 flex flex-wrap items-center gap-3">
       <a href="#catalog" class="btn btn-primary">
         Browse catalog
         <span aria-hidden="true">→</span>
@@ -807,12 +1158,12 @@
     </div>
 
     <!-- trust row -->
-    <div class="mt-16 md:mt-20 border-t border-b hairline py-6">
-      <ul class="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-8 text-[14px] text-ink-200">
-        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft"></span>≥ 99% HPLC purity</li>
-        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft"></span>Direct-to-researcher</li>
-        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft"></span>24h US dispatch</li>
-        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft"></span>No account approval</li>
+    <div class="mt-14 sm:mt-16 md:mt-20 border-t border-b hairline py-6">
+      <ul class="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 sm:gap-x-8 text-[13.5px] sm:text-[14px] text-ink-200">
+        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft shrink-0"></span><span class="min-w-0">≥ 99% HPLC purity</span></li>
+        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft shrink-0"></span><span class="min-w-0">Direct-to-researcher</span></li>
+        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft shrink-0"></span><span class="min-w-0">24h US dispatch</span></li>
+        <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-ember-soft shrink-0"></span><span class="min-w-0">No account approval</span></li>
       </ul>
     </div>
   </div>
@@ -821,14 +1172,14 @@
 <!-- ============ EARLY ACCESS / LAUNCH ANNOUNCEMENT ============ -->
 <section id="early-access" class="relative border-t border-b hairline overflow-hidden" style="background: linear-gradient(180deg, #0e0b07 0%, #14100a 100%);">
   <div class="absolute inset-0 pointer-events-none opacity-70" style="background: radial-gradient(700px 200px at 50% 0%, rgba(201,166,100,0.10), transparent 60%);"></div>
-  <div class="container-x py-10 md:py-14 relative">
+  <div class="container-x py-9 sm:py-10 md:py-14 relative">
     <div class="grid md:grid-cols-12 gap-6 md:gap-10 items-center">
       <div class="md:col-span-8">
         <div class="mono text-[10.5px] tracking-[0.18em] uppercase text-indigo-soft mb-3 flex items-center gap-2.5">
           <span class="w-1.5 h-1.5 rounded-full bg-indigo"></span>
           Launch update · Early access
         </div>
-        <h3 class="serif text-[26px] md:text-[34px] leading-[1.15] text-ink-100 tracking-[-0.015em]">
+        <h3 class="serif text-[24px] sm:text-[28px] md:text-[34px] leading-[1.18] md:leading-[1.15] text-ink-100 tracking-[-0.015em]">
           Credit-card checkout <span class="text-indigo-soft">launches soon.</span>
           <br class="hidden md:block"/>
           Message us on WhatsApp for early orders.
@@ -844,7 +1195,7 @@
           href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs."
           target="_blank"
           rel="noopener"
-          class="btn btn-ember"
+          class="btn btn-ember w-full md:w-auto"
           style="padding: 14px 22px; font-size: 13.5px; gap: 10px;">
           <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
@@ -876,17 +1227,17 @@
       <!-- Copy -->
       <div class="md:col-span-6 md:col-start-7">
         <div class="ornament mb-6"><span class="mono text-[11px] tracking-[0.16em] uppercase">About</span></div>
-        <h2 class="display text-[36px] md:text-[52px] leading-[1.05]">
+        <h2 class="display text-[34px] sm:text-[40px] md:text-[52px] leading-[1.05]">
           A small team,<br/>
           <span class="accent">running clean chemistry.</span>
         </h2>
-        <p class="mt-8 text-ink-200 text-[16.5px] md:text-[17.5px] leading-[1.75]">
+        <p class="mt-7 sm:mt-8 text-ink-200 text-[15.5px] sm:text-[16.5px] md:text-[17.5px] leading-[1.75]">
           Hello You Labs is a direct-to-researcher supplier operating out of a single
           US fulfillment center. We source from vetted synthesis partners,
           release nothing without an independent third-party assay, and
           keep the paperwork boring so the science can be interesting.
         </p>
-        <p class="mt-5 text-ink-300 text-[15.5px] leading-[1.75]">
+        <p class="mt-5 text-ink-300 text-[14.5px] sm:text-[15.5px] leading-[1.75]">
           When you order, a real person packs your vials the same day.
           When you email, a real person answers. That is roughly the whole
           pitch.
@@ -924,9 +1275,9 @@
     </div>
 
     <!-- Filter bar -->
-    <div class="panel-2 flex flex-wrap items-center gap-3 md:gap-4 p-4 mb-10" role="toolbar" aria-label="Catalog filters">
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="text-[12px] uppercase tracking-[0.12em] text-ink-400 mr-2 mono">Filter</span>
+    <div class="panel-2 flex flex-wrap items-center gap-3 md:gap-4 p-3 sm:p-4 mb-10" role="toolbar" aria-label="Catalog filters">
+      <div class="filter-scroll flex items-center gap-2 flex-wrap w-full sm:w-auto">
+        <span class="text-[11px] sm:text-[12px] uppercase tracking-[0.12em] text-ink-400 mr-1 sm:mr-2 mono shrink-0">Filter</span>
         <button class="filter-pill on" aria-pressed="true">All</button>
         <button class="filter-pill" aria-pressed="false">GLP-1</button>
         <button class="filter-pill" aria-pressed="false">Repair</button>
@@ -972,13 +1323,13 @@
               <span class="spec-chip"><strong>5 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>SEM-2607</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$65<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20to%20reserve%20Semaglutide%205mg%20(Lot%20SEM-2607)." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order Semaglutide 5mg via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1005,13 +1356,13 @@
               <span class="spec-chip"><strong>10 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>TIR-2612</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$85<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1038,13 +1389,13 @@
               <span class="spec-chip"><strong>30 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>TIR-2613</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$189<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1071,13 +1422,13 @@
               <span class="spec-chip"><strong>5 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>RET-2604</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$95<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1104,13 +1455,13 @@
               <span class="spec-chip"><strong>10 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>RET-2605</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$175<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1152,13 +1503,13 @@
               <span class="spec-chip"><strong>5 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>BPC-2609</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$42<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1185,13 +1536,13 @@
               <span class="spec-chip"><strong>50 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>GHK-2610</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$48<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1233,13 +1584,13 @@
               <span class="spec-chip"><strong>5 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>IPA-2608</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$38<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1266,13 +1617,13 @@
               <span class="spec-chip"><strong>5 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>CJC-2607</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$45<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1299,13 +1650,13 @@
               <span class="spec-chip"><strong>2 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>CJD-2606</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$52<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1332,13 +1683,13 @@
               <span class="spec-chip"><strong>5 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>SER-2605</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$40<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1365,13 +1716,13 @@
               <span class="spec-chip"><strong>5 mg</strong> lyo</span>
               <span class="spec-chip">Lot <strong>TES-2604</strong></span>
             </div>
-            <div class="mt-6 pt-5 border-t hairline flex items-end justify-between">
+            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
               <div>
                 <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
                 <div class="serif text-[28px] text-ink-100 mt-0.5">$88<span class="text-ink-400 text-[14px] mono">.00</span></div>
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <a href="#" class="text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
+              <div class="action-right flex flex-col items-end gap-2">
+                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
                 <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
               </div>
             </div>
@@ -1924,10 +2275,11 @@
 
 <!-- ============ STICKY MINI CART / LAUNCH BAR ============ -->
 <div id="stickyCart" class="sticky-cart" aria-live="polite">
-  <span class="wa-live-dot" aria-hidden="true" style="width:8px; height:8px; border-radius:50%; background: var(--indigo-soft); box-shadow: 0 0 0 0 rgba(230,204,143,0.6); animation: waPulse 2.4s ease-out infinite;"></span>
-  <span class="text-ink-200">Checkout launches soon</span>
-  <span class="text-ink-500">·</span>
-  <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener">Message on WhatsApp →</a>
+  <span class="wa-live-dot shrink-0" aria-hidden="true" style="width:8px; height:8px; border-radius:50%; background: var(--indigo-soft); box-shadow: 0 0 0 0 rgba(230,204,143,0.6); animation: waPulse 2.4s ease-out infinite;"></span>
+  <span class="text-ink-200 sticky-cart-long">Checkout launches soon</span>
+  <span class="text-ink-200 sticky-cart-short">Launching soon</span>
+  <span class="text-ink-500 sticky-cart-sep">·</span>
+  <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener"><span class="sticky-cart-long">Message on WhatsApp →</span><span class="sticky-cart-short">WhatsApp →</span></a>
 </div>
 
 <!-- ============ WHATSAPP FLOATING BUTTON ============ -->
@@ -1956,12 +2308,113 @@
     }
   })();
 
+  // Mobile navigation menu
+  (function () {
+    var toggle = document.getElementById('navToggle');
+    var menu = document.getElementById('mobileMenu');
+    var closeBtn = document.getElementById('navClose');
+    if (!toggle || !menu) return;
+
+    var lastFocusedBeforeOpen = null;
+    var focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    function getFocusables() {
+      return Array.prototype.slice.call(menu.querySelectorAll(focusableSelector))
+        .filter(function (el) { return el.offsetParent !== null || el === document.activeElement; });
+    }
+
+    function openMenu() {
+      lastFocusedBeforeOpen = document.activeElement;
+      menu.setAttribute('aria-hidden', 'false');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close navigation menu');
+      document.body.classList.add('menu-open');
+      // Focus first actionable element inside the menu
+      setTimeout(function () {
+        var focusables = getFocusables();
+        if (focusables.length) focusables[0].focus();
+      }, 40);
+      document.addEventListener('keydown', onKeydown);
+    }
+
+    function closeMenu() {
+      menu.setAttribute('aria-hidden', 'true');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation menu');
+      document.body.classList.remove('menu-open');
+      document.removeEventListener('keydown', onKeydown);
+      if (lastFocusedBeforeOpen && typeof lastFocusedBeforeOpen.focus === 'function') {
+        lastFocusedBeforeOpen.focus();
+      } else {
+        toggle.focus();
+      }
+    }
+
+    function onKeydown(e) {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        e.preventDefault();
+        closeMenu();
+        return;
+      }
+      if (e.key === 'Tab') {
+        var focusables = getFocusables();
+        if (!focusables.length) return;
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    toggle.addEventListener('click', function () {
+      if (menu.getAttribute('aria-hidden') === 'false') closeMenu();
+      else openMenu();
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+    // Close on link tap (any element with data-menu-close inside the menu)
+    menu.addEventListener('click', function (e) {
+      var target = e.target;
+      while (target && target !== menu) {
+        if (target.hasAttribute && target.hasAttribute('data-menu-close')) {
+          // Small delay so the anchor's smooth-scroll fires before we close
+          setTimeout(closeMenu, 10);
+          return;
+        }
+        target = target.parentNode;
+      }
+    });
+
+    // Click-outside dismiss: taps on the backdrop (menu root) but not inside .mobile-menu-inner
+    menu.addEventListener('click', function (e) {
+      if (e.target === menu) closeMenu();
+    });
+
+    // Ensure menu closes on breakpoint jump to desktop
+    var mq = window.matchMedia('(min-width: 768px)');
+    var mqHandler = function (ev) {
+      if (ev.matches && menu.getAttribute('aria-hidden') === 'false') closeMenu();
+    };
+    if (mq.addEventListener) mq.addEventListener('change', mqHandler);
+    else if (mq.addListener) mq.addListener(mqHandler);
+  })();
+
   // Sticky cart appears after scrolling past hero
   (function () {
     var cart = document.getElementById('stickyCart');
     if (!cart) return;
     var trigger = 620;
     var onScroll = function () {
+      if (document.body.classList.contains('menu-open')) {
+        cart.classList.remove('shown');
+        return;
+      }
       if (window.scrollY > trigger) cart.classList.add('shown');
       else cart.classList.remove('shown');
     };
