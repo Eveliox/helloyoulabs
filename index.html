@@ -580,6 +580,279 @@
     .wa-fab { transition: none; }
   }
 
+  /* =========================================
+     CART DRAWER + BACKDROP
+     ========================================= */
+
+  .cart-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(5, 4, 3, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0; pointer-events: none;
+    transition: opacity .35s cubic-bezier(.2,.7,.2,1);
+    z-index: 90;
+  }
+  .cart-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  .cart-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 100%; max-width: 440px;
+    background: var(--panel);
+    border-left: 1px solid var(--line-strong);
+    box-shadow: -30px 0 60px -20px rgba(0,0,0,0.6);
+    transform: translateX(100%);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1);
+    z-index: 91;
+    display: flex; flex-direction: column;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .cart-drawer.open { transform: translateX(0); }
+
+  .cart-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .cart-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    color: var(--ink-1);
+    margin: 0;
+  }
+  .cart-title-count {
+    display: inline-block;
+    margin-left: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+    vertical-align: middle;
+  }
+  .cart-close {
+    background: transparent; border: 1px solid var(--line-strong);
+    width: 36px; height: 36px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ink-1); cursor: pointer;
+    font-size: 22px; line-height: 1;
+    transition: border-color .2s, color .2s, background .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cart-close:hover { border-color: var(--ember-soft); color: var(--ember-soft); }
+  .cart-close:focus-visible { outline: 2px solid var(--ember-soft); outline-offset: 2px; }
+
+  .cart-items {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 8px 0;
+    scrollbar-width: thin;
+  }
+
+  .cart-empty {
+    padding: 60px 32px;
+    text-align: center;
+    color: var(--ink-3);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .cart-empty-icon {
+    width: 48px; height: 48px;
+    margin: 0 auto 18px;
+    opacity: 0.35;
+  }
+  .cart-empty-link {
+    display: inline-block;
+    margin-top: 14px;
+    color: var(--ember-soft);
+    background: transparent; border: 0;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    padding: 6px 0;
+  }
+  .cart-empty-link:hover { color: var(--cream); }
+
+  .cart-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 6px 16px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .cart-item:last-child { border-bottom: 0; }
+
+  .cart-item-main {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+  }
+  .cart-item-name {
+    font-family: 'Fraunces', serif;
+    font-size: 17.5px;
+    color: var(--ink-1);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin: 0 0 4px;
+  }
+  .cart-item-spec {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .cart-item-price {
+    grid-column: 2;
+    grid-row: 1;
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    color: var(--ink-1);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .cart-item-controls {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+  .cart-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 2px;
+  }
+  .cart-qty-btn {
+    background: transparent;
+    border: 0;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    color: var(--ink-1);
+    font-size: 16px; font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cart-qty-btn:hover { background: rgba(232,169,132,0.12); color: var(--ember-soft); }
+  .cart-qty-btn:focus-visible { outline: 2px solid var(--ember-soft); outline-offset: -2px; }
+  .cart-qty-value {
+    min-width: 24px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-1);
+    padding: 0 4px;
+  }
+  .cart-item-remove {
+    background: transparent;
+    border: 0;
+    color: var(--ink-4);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 6px 0;
+    letter-spacing: 0.04em;
+    transition: color .15s;
+  }
+  .cart-item-remove:hover { color: var(--danger); }
+
+  .cart-footer {
+    flex-shrink: 0;
+    border-top: 1px solid var(--line);
+    padding: 20px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+    background: var(--panel-2);
+  }
+  .cart-subtotal-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 4px;
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+  .cart-subtotal-value {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    color: var(--ink-1);
+    letter-spacing: -0.02em;
+  }
+  .cart-subtotal-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .cart-checkout-btn {
+    display: flex;
+    align-items: center; justify-content: center; gap: 10px;
+    width: 100%;
+    padding: 15px 20px;
+    background: var(--ember);
+    color: var(--bg);
+    border: 0;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: transform .2s cubic-bezier(.2,.7,.2,1), background .2s, box-shadow .2s;
+    box-shadow: 0 10px 28px -8px rgba(212,165,116,0.5);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cart-checkout-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: var(--ember-soft);
+    box-shadow: 0 14px 34px -8px rgba(212,165,116,0.65);
+  }
+  .cart-checkout-btn:disabled {
+    opacity: 0.4; cursor: not-allowed;
+    box-shadow: none;
+  }
+  .cart-checkout-btn:focus-visible {
+    outline: 2px solid var(--ember-soft);
+    outline-offset: 3px;
+  }
+  .cart-checkout-note {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    text-align: center;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  /* Body scroll lock while cart open */
+  body.cart-open { overflow: hidden; }
+
+  /* Cart count badge state — subtle emphasis when > 0 */
+  .cart-count-active { color: var(--ember-soft); font-weight: 600; }
+
+  /* Add-to-cart pressed state (brief pulse feedback) */
+  .add-to-cart-btn.added {
+    background: var(--ember-soft);
+    transition: background .2s ease;
+  }
+
+  @media (max-width: 640px) {
+    .cart-drawer { max-width: 100%; }
+    .cart-header { padding: 18px 20px 14px; }
+    .cart-title { font-size: 22px; }
+    .cart-item { padding: 16px 20px; }
+    .cart-footer { padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cart-backdrop, .cart-drawer, .cart-qty-btn, .cart-checkout-btn { transition: none; }
+  }
+
   /* Newsletter input */
   .field {
     width: 100%;
@@ -1041,7 +1314,7 @@
 
     <div class="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0">
       <span class="hidden lg:inline mono text-[10px] tracking-[0.14em] uppercase text-ink-400 border border-ink-800 rounded-full px-2.5 py-1">RUO · 21 CFR</span>
-      <button aria-label="Open cart, 0 items" class="cart-btn flex items-center gap-2 text-[13px] text-ink-100 hover:text-ember-soft transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember-soft focus-visible:outline-offset-2 rounded-full px-3 py-1.5 border border-ink-800">
+      <button data-cart-open type="button" aria-label="Open cart" class="cart-btn flex items-center gap-2 text-[13px] text-ink-100 hover:text-ember-soft transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember-soft focus-visible:outline-offset-2 rounded-full px-3 py-1.5 border border-ink-800">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
           <path d="M3 4h2.5l2.4 12.3a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 8H6"/>
           <circle cx="10" cy="21" r="1.2"/>
@@ -1330,7 +1603,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20to%20reserve%20Semaglutide%205mg%20(Lot%20SEM-2607)." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order Semaglutide 5mg via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add Semaglutide to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1363,7 +1636,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1396,7 +1669,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1429,7 +1702,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1462,7 +1735,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1510,7 +1783,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1543,7 +1816,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1591,7 +1864,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1624,7 +1897,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1657,7 +1930,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1690,7 +1963,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1723,7 +1996,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1771,7 +2044,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20to%20order%20the%20GLOW%20Stack%20blend." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order GLOW Stack via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add GLOW Stack to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1804,7 +2077,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20to%20order%20the%20Wolverine%20blend." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order Wolverine via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add Wolverine to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -1837,7 +2110,7 @@
               </div>
               <div class="action-right flex flex-col items-end gap-2">
                 <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20to%20order%20the%20CJC-1295%20%2F%20Ipamorelin%20blend." target="_blank" rel="noopener" class="btn btn-ember btn-small" aria-label="Order CJC-1295 / Ipamorelin via WhatsApp">Order via WhatsApp</a>
+                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add CJC-1295 / Ipamorelin to cart">Add to cart</button>
               </div>
             </div>
           </div>
@@ -2390,11 +2663,37 @@
 <!-- ============ STICKY MINI CART / LAUNCH BAR ============ -->
 <div id="stickyCart" class="sticky-cart" aria-live="polite">
   <span class="wa-live-dot shrink-0" aria-hidden="true" style="width:8px; height:8px; border-radius:50%; background: var(--indigo-soft); box-shadow: 0 0 0 0 rgba(230,204,143,0.6); animation: waPulse 2.4s ease-out infinite;"></span>
-  <span class="text-ink-200 sticky-cart-long">Checkout launches soon</span>
-  <span class="text-ink-200 sticky-cart-short">Launching soon</span>
+  <span class="text-ink-200"><span id="stickyCartCount" class="tabular-nums mono">0</span> <span class="sticky-cart-long">items in cart</span><span class="sticky-cart-short">items</span></span>
   <span class="text-ink-500 sticky-cart-sep">·</span>
-  <a href="https://wa.me/17867803626?text=Hi%2C%20I'd%20like%20info%20on%20ordering%20from%20Hello%20You%20Labs." target="_blank" rel="noopener"><span class="sticky-cart-long">Message on WhatsApp →</span><span class="sticky-cart-short">WhatsApp →</span></a>
+  <button type="button" data-cart-open class="bg-transparent border-0 p-0 cursor-pointer" style="color: var(--ember-soft); font-weight: 500;"><span class="sticky-cart-long">View cart →</span><span class="sticky-cart-short">Cart →</span></button>
 </div>
+
+<!-- ============ CART DRAWER + BACKDROP ============ -->
+<div id="cartBackdrop" class="cart-backdrop" data-cart-close aria-hidden="true"></div>
+
+<aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true" tabindex="-1">
+  <div class="cart-header">
+    <h2 id="cartTitle" class="cart-title">Your cart<span id="cartTitleCount" class="cart-title-count"></span></h2>
+    <button type="button" class="cart-close" data-cart-close aria-label="Close cart">×</button>
+  </div>
+  <div id="cartItems" class="cart-items" role="list">
+    <!-- populated by JS -->
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal-row">
+      <span>Subtotal</span>
+      <span id="cartSubtotal" class="cart-subtotal-value">$0</span>
+    </div>
+    <div class="cart-subtotal-note">Shipping calculated in WhatsApp · USD</div>
+    <button type="button" id="cartCheckout" class="cart-checkout-btn" disabled aria-label="Checkout via WhatsApp">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+      </svg>
+      <span>Checkout via WhatsApp</span>
+    </button>
+    <p class="cart-checkout-note">Opens WhatsApp with your order. You'll confirm shipping address and payment in the chat.</p>
+  </div>
+</aside>
 
 <!-- ============ WHATSAPP FLOATING BUTTON ============ -->
 <a
@@ -2563,6 +2862,260 @@
       });
     });
   })();
+</script>
+
+<!-- ============ CART LOGIC ============ -->
+<script>
+(function () {
+  var CART_KEY = 'hyl_cart_v1';
+  var WHATSAPP_NUMBER = '17867803626';
+
+  function loadCart() {
+    try {
+      var raw = localStorage.getItem(CART_KEY);
+      var parsed = raw ? JSON.parse(raw) : { items: [] };
+      if (!parsed.items || !Array.isArray(parsed.items)) parsed.items = [];
+      return parsed;
+    } catch (e) { return { items: [] }; }
+  }
+  function persistCart() {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+  }
+
+  var cart = loadCart();
+
+  // Slugify utility for stable IDs
+  function slug(s) {
+    return String(s).toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  // Parse a product-card element into a cart-item shape
+  function readProduct(card) {
+    var nameEl = card.querySelector('h4');
+    var name = nameEl ? nameEl.textContent.trim() : 'Unknown';
+    var specChip = card.querySelector('.spec-chip');
+    var spec = specChip ? specChip.textContent.replace(/\s+/g, ' ').trim() : '';
+    var priceEl = card.querySelector('.action-row .serif');
+    var price = 0;
+    if (priceEl) {
+      var m = priceEl.textContent.match(/\$([0-9]+)/);
+      if (m) price = parseInt(m[1], 10);
+    }
+    var id = slug(name) + '-' + slug(spec);
+    return { id: id, name: name, spec: spec, price: price, qty: 1 };
+  }
+
+  function itemCount() {
+    return cart.items.reduce(function (n, i) { return n + i.qty; }, 0);
+  }
+  function subtotal() {
+    return cart.items.reduce(function (n, i) { return n + (i.price * i.qty); }, 0);
+  }
+
+  function addItem(item) {
+    var existing = cart.items.filter(function (i) { return i.id === item.id; })[0];
+    if (existing) existing.qty += 1;
+    else cart.items.push({ id: item.id, name: item.name, spec: item.spec, price: item.price, qty: 1 });
+    persistCart();
+    render();
+  }
+  function changeQty(id, delta) {
+    var existing = cart.items.filter(function (i) { return i.id === id; })[0];
+    if (!existing) return;
+    existing.qty = Math.max(0, existing.qty + delta);
+    if (existing.qty === 0) {
+      cart.items = cart.items.filter(function (i) { return i.id !== id; });
+    }
+    persistCart();
+    render();
+  }
+  function removeItem(id) {
+    cart.items = cart.items.filter(function (i) { return i.id !== id; });
+    persistCart();
+    render();
+  }
+
+  // Rendering
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+  }
+
+  function render() {
+    var count = itemCount();
+
+    // Header count
+    var headerCount = document.getElementById('cartCount');
+    if (headerCount) {
+      headerCount.textContent = count;
+      headerCount.classList.toggle('cart-count-active', count > 0);
+    }
+    // Sticky pill count
+    var stickyCount = document.getElementById('stickyCartCount');
+    if (stickyCount) {
+      stickyCount.textContent = count;
+      stickyCount.classList.toggle('cart-count-active', count > 0);
+    }
+    // Drawer title count
+    var titleCount = document.getElementById('cartTitleCount');
+    if (titleCount) {
+      titleCount.textContent = count > 0 ? '(' + count + ')' : '';
+    }
+
+    // Cart contents
+    var container = document.getElementById('cartItems');
+    var checkoutBtn = document.getElementById('cartCheckout');
+    if (!container) return;
+
+    if (cart.items.length === 0) {
+      container.innerHTML =
+        '<div class="cart-empty">' +
+          '<svg class="cart-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">' +
+            '<path d="M3 4h2.5l2.4 12.3a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 8H6"/>' +
+            '<circle cx="10" cy="21" r="1.2"/><circle cx="18" cy="21" r="1.2"/>' +
+          '</svg>' +
+          'Your cart is empty.<br/>' +
+          '<button type="button" class="cart-empty-link" data-cart-close>Continue browsing →</button>' +
+        '</div>';
+      if (checkoutBtn) checkoutBtn.setAttribute('disabled', '');
+    } else {
+      container.innerHTML = cart.items.map(function (i) {
+        var lineTotal = i.price * i.qty;
+        return (
+          '<div class="cart-item" role="listitem" data-item-id="' + esc(i.id) + '">' +
+            '<div class="cart-item-main">' +
+              '<div class="cart-item-name">' + esc(i.name) + '</div>' +
+              '<div class="cart-item-spec">' + esc(i.spec) + '</div>' +
+            '</div>' +
+            '<div class="cart-item-price">$' + lineTotal + '</div>' +
+            '<div class="cart-item-controls">' +
+              '<div class="cart-qty" role="group" aria-label="Quantity for ' + esc(i.name) + '">' +
+                '<button type="button" class="cart-qty-btn" data-qty-minus="' + esc(i.id) + '" aria-label="Decrease quantity">−</button>' +
+                '<span class="cart-qty-value" aria-live="polite">' + i.qty + '</span>' +
+                '<button type="button" class="cart-qty-btn" data-qty-plus="' + esc(i.id) + '" aria-label="Increase quantity">+</button>' +
+              '</div>' +
+              '<button type="button" class="cart-item-remove" data-remove="' + esc(i.id) + '">Remove</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+      if (checkoutBtn) checkoutBtn.removeAttribute('disabled');
+    }
+
+    // Subtotal
+    var subEl = document.getElementById('cartSubtotal');
+    if (subEl) subEl.textContent = '$' + subtotal();
+  }
+
+  // Cart drawer open/close
+  var lastFocused = null;
+  function openCart() {
+    var drawer = document.getElementById('cartDrawer');
+    var backdrop = document.getElementById('cartBackdrop');
+    if (!drawer || !backdrop) return;
+    lastFocused = document.activeElement;
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    backdrop.classList.add('open');
+    document.body.classList.add('cart-open');
+    setTimeout(function () {
+      var closeBtn = drawer.querySelector('.cart-close');
+      if (closeBtn) closeBtn.focus();
+    }, 100);
+  }
+  function closeCart() {
+    var drawer = document.getElementById('cartDrawer');
+    var backdrop = document.getElementById('cartBackdrop');
+    if (!drawer || !backdrop) return;
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    backdrop.classList.remove('open');
+    document.body.classList.remove('cart-open');
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  // WhatsApp checkout
+  function checkout() {
+    if (cart.items.length === 0) return;
+    var lines = cart.items.map(function (i) {
+      var line = '• ' + i.name + (i.spec ? ' ' + i.spec : '') + ' × ' + i.qty + ' — $' + (i.price * i.qty);
+      return line;
+    });
+    var total = subtotal();
+    var msg = 'Hi Hello You Labs — I\'d like to order:\n\n' +
+              lines.join('\n') +
+              '\n\nSubtotal: $' + total +
+              '\n\nPlease confirm availability and let me know shipping and payment options. Thanks!';
+    var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank', 'noopener');
+  }
+
+  // Add-to-cart feedback
+  function flashAdded(btn) {
+    var original = btn.textContent;
+    btn.textContent = 'Added ✓';
+    btn.classList.add('added');
+    btn.setAttribute('disabled', '');
+    setTimeout(function () {
+      btn.textContent = original;
+      btn.classList.remove('added');
+      btn.removeAttribute('disabled');
+    }, 1100);
+  }
+
+  // Event wiring — delegated so it works with dynamically rendered content
+  document.addEventListener('click', function (e) {
+    // Add to cart
+    var addBtn = e.target.closest('.add-to-cart-btn');
+    if (addBtn) {
+      var card = addBtn.closest('article.product-card');
+      if (card) {
+        var item = readProduct(card);
+        addItem(item);
+        flashAdded(addBtn);
+        openCart();
+      }
+      return;
+    }
+    // Open cart
+    if (e.target.closest('[data-cart-open]')) {
+      e.preventDefault();
+      openCart();
+      return;
+    }
+    // Close cart
+    if (e.target.closest('[data-cart-close]')) {
+      e.preventDefault();
+      closeCart();
+      return;
+    }
+    // Qty +
+    var plus = e.target.closest('[data-qty-plus]');
+    if (plus) { changeQty(plus.getAttribute('data-qty-plus'), 1); return; }
+    // Qty -
+    var minus = e.target.closest('[data-qty-minus]');
+    if (minus) { changeQty(minus.getAttribute('data-qty-minus'), -1); return; }
+    // Remove
+    var remove = e.target.closest('[data-remove]');
+    if (remove) { removeItem(remove.getAttribute('data-remove')); return; }
+    // Checkout
+    if (e.target.closest('#cartCheckout')) { checkout(); return; }
+  });
+
+  // ESC to close
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var drawer = document.getElementById('cartDrawer');
+      if (drawer && drawer.classList.contains('open')) closeCart();
+    }
+  });
+
+  // Initial render
+  render();
+})();
 </script>
 
 </body>
