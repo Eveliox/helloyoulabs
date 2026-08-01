@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Wholesale Application · Hello You Labs</title>
+<meta name="description" content="Apply for a Hello You Labs wholesale account. B2B research peptide supply for clinics, wellness centers, and qualified resellers. Reviewed within 24 hours." />
+<meta name="theme-color" content="#0a0908" />
+<meta name="robots" content="index, follow" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: {
+            1000:'#050403', 950:'#0a0908', 900:'#141210', 850:'#1a1714', 800:'#221e18',
+            700:'#302a22', 600:'#4a4136', 500:'#6b6250', 400:'#8f8571', 300:'#b3a992',
+            200:'#d0c7ae', 100:'#e8dfc7', 50:'#f5efdf'
+          },
+          ember: { DEFAULT: '#d4a574', soft: '#e6c69a', deep: '#a67e50' },
+          cream: '#f6efe4'
+        },
+        fontFamily: {
+          sans: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          serif: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root {
+    --bg: #0a0908; --bg-2: #050403; --panel: #141210; --panel-2: #1a1714;
+    --ink-1: #f5efdf; --ink-2: #d0c7ae; --ink-3: #8f8571; --ink-4: #6b6250;
+    --line: rgba(245,239,223,0.09); --line-strong: rgba(245,239,223,0.16);
+    --ember: #d4a574; --ember-soft: #e6c69a; --ember-deep: #a67e50;
+    --cream: #f6efe4; --danger: #ff9a86;
+  }
+  * { -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    background: var(--bg); color: var(--ink-1);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-weight: 400; line-height: 1.6;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(900px 400px at 85% -5%, rgba(212,165,116,0.10), transparent 60%),
+      radial-gradient(700px 320px at 10% 30%, rgba(212,165,116,0.05), transparent 60%);
+  }
+  .serif { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 400; letter-spacing: -0.015em; }
+  .mono { font-family: 'IBM Plex Mono', monospace; font-feature-settings: "zero"; }
+  .hairline { border-color: var(--line); }
+  .hairline-strong { border-color: var(--line-strong); }
+
+  .container-x { max-width: 780px; margin: 0 auto; padding-left: 22px; padding-right: 22px; }
+  @media (min-width: 768px) { .container-x { padding-left: 40px; padding-right: 40px; } }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ember);
+  }
+
+  .nav {
+    background: rgba(10, 9, 8, 0.85);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+    position: fixed; top: 0; inset-inline: 0; z-index: 40;
+  }
+
+  /* Form styling */
+  .form-field {
+    display: block; width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--ink-1);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    transition: border-color .2s, background .2s;
+  }
+  .form-field::placeholder { color: var(--ink-4); }
+  .form-field:hover { border-color: var(--ember-deep); }
+  .form-field:focus { outline: none; border-color: var(--ember); background: var(--panel); }
+  .form-field:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  select.form-field {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%238f8571' stroke-width='1.6'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 44px;
+  }
+  select.form-field option { background: var(--panel-2); color: var(--ink-1); }
+
+  textarea.form-field { min-height: 100px; resize: vertical; }
+
+  .form-label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+  .form-label .req { color: var(--ember); margin-left: 3px; }
+
+  .form-section {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px 26px;
+  }
+  .form-section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    letter-spacing: -0.015em;
+    color: var(--ink-1);
+    margin-bottom: 4px;
+  }
+  .form-section-sub {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-bottom: 20px;
+  }
+
+  .checkbox-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    font-size: 14.5px;
+  }
+  .checkbox-row:hover { border-color: var(--ember-deep); }
+  .checkbox-row input[type="checkbox"] {
+    accent-color: var(--ember);
+    width: 18px; height: 18px;
+    cursor: pointer;
+  }
+  .checkbox-row input[type="checkbox"]:checked ~ .checkbox-label { color: var(--cream); }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--ember);
+    color: var(--bg);
+    border: 0;
+    border-radius: 999px;
+    padding: 16px 28px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform .2s cubic-bezier(.2,.7,.2,1), background .2s, box-shadow .2s;
+    box-shadow: 0 12px 32px -8px rgba(212,165,116,0.5);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: var(--ember-soft);
+    box-shadow: 0 16px 40px -8px rgba(212,165,116,0.65);
+  }
+  .btn-primary:active { transform: translateY(0) scale(0.98); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+  .btn-primary:focus-visible { outline: 2px solid var(--ember-soft); outline-offset: 3px; }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 0;
+    transition: color .2s;
+  }
+  .btn-ghost:hover { color: var(--ember-soft); }
+
+  /* RUO strip at top */
+  .ruo-strip {
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    padding: 8px 20px;
+    text-align: center;
+  }
+
+  /* Success state */
+  .success-panel {
+    background: var(--panel);
+    border: 1px solid var(--ember-deep);
+    border-radius: 20px;
+    padding: 48px 32px;
+    text-align: center;
+  }
+  .success-icon {
+    width: 64px; height: 64px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: rgba(212,165,116,0.15);
+    border: 1px solid var(--ember-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ember);
+  }
+
+  /* Footer */
+  footer.site-footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 0;
+    margin-top: 80px;
+    background: var(--bg-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-primary { transition: none; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- RUO strip -->
+<div class="ruo-strip">
+  <span class="uppercase" style="color: var(--ember);">RUO Notice</span>
+  &nbsp;·&nbsp; Products sold for laboratory research or physician-directed use only.
+</div>
+
+<!-- Header -->
+<header class="nav">
+  <div class="container-x flex items-center justify-between h-16 md:h-20" style="max-width: 1400px;">
+    <a href="index.html" class="flex items-center gap-3" aria-label="Hello You Labs — home">
+      <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-10 md:h-14 w-auto select-none" draggable="false" />
+      <span class="hidden md:inline mono text-[10.5px] tracking-[0.14em] uppercase text-ink-400 border-l border-ink-800 pl-3">Labs · Research</span>
+    </a>
+    <a href="index.html" class="btn-ghost mono text-[11px] tracking-[0.14em] uppercase">← Back to store</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="pt-32 md:pt-40 pb-10">
+  <div class="container-x">
+    <div class="eyebrow mb-4">§ Wholesale · Application</div>
+    <h1 class="serif text-[42px] md:text-[64px] leading-[1.05]">
+      Apply for a<br/>wholesale account.
+    </h1>
+    <p class="mt-8 text-ink-200 text-[16px] md:text-[17px] leading-[1.75] max-w-[62ch]">
+      Hello You Labs wholesale is built for licensed clinics, wellness centers, medical practices,
+      and qualified resellers ordering 10+ vials per SKU. Applications are reviewed by a human within
+      24 hours. Approved accounts get access to volume pricing, priority fulfillment, and payment
+      terms once established.
+    </p>
+    <p class="mt-4 text-ink-300 text-[14px]">
+      Individual buyers or single-vial orders → please use our
+      <a href="index.html" class="text-ember-soft hover:text-cream transition underline decoration-ember-deep underline-offset-4">retail store</a>.
+    </p>
+  </div>
+</section>
+
+<!-- Application form -->
+<section class="pb-16">
+  <div class="container-x">
+
+    <form id="applyForm" action="https://formspree.io/f/xvzejvqr" method="POST" class="space-y-6">
+
+      <!-- Formspree meta -->
+      <input type="hidden" name="_subject" value="[Wholesale Application] New wholesale account request">
+      <input type="hidden" name="form_type" value="wholesale_application">
+      <!-- Honeypot -->
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;">
+
+      <!-- Business info -->
+      <div class="form-section">
+        <div class="form-section-title">Business</div>
+        <div class="form-section-sub">Tell us about the company placing orders.</div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="form-label">Company / practice name<span class="req">*</span></label>
+            <input type="text" name="company_name" required class="form-field" placeholder="e.g. Meridian Medical Group">
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Business type<span class="req">*</span></label>
+              <select name="business_type" required class="form-field">
+                <option value="">Select…</option>
+                <option>Medical clinic / practice</option>
+                <option>Wellness center / med spa</option>
+                <option>Compounding pharmacy</option>
+                <option>Research laboratory</option>
+                <option>Veterinary clinic</option>
+                <option>Retail reseller</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">State / country<span class="req">*</span></label>
+              <input type="text" name="location" required class="form-field" placeholder="e.g. Florida, USA">
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">EIN / business registration #</label>
+              <input type="text" name="ein" class="form-field" placeholder="Optional but speeds review">
+            </div>
+            <div>
+              <label class="form-label">Website</label>
+              <input type="url" name="website" class="form-field" placeholder="https://">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact info -->
+      <div class="form-section">
+        <div class="form-section-title">Contact</div>
+        <div class="form-section-sub">Who should we reply to?</div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="form-label">Full name<span class="req">*</span></label>
+            <input type="text" name="contact_name" required class="form-field" placeholder="First and last name">
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Business email<span class="req">*</span></label>
+              <input type="email" name="email" required class="form-field" placeholder="you@company.com">
+            </div>
+            <div>
+              <label class="form-label">Phone<span class="req">*</span></label>
+              <input type="tel" name="phone" required class="form-field" placeholder="+1 (555) 000-0000">
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Role / title</label>
+            <input type="text" name="role" class="form-field" placeholder="e.g. Owner, Purchasing manager, MD">
+          </div>
+        </div>
+      </div>
+
+      <!-- Order plan -->
+      <div class="form-section">
+        <div class="form-section-title">Order plan</div>
+        <div class="form-section-sub">Helps us prioritize and confirm inventory.</div>
+
+        <div class="space-y-5">
+          <div>
+            <label class="form-label">Estimated monthly volume<span class="req">*</span></label>
+            <select name="monthly_volume" required class="form-field">
+              <option value="">Select…</option>
+              <option>Under $2,000</option>
+              <option>$2,000 – $5,000</option>
+              <option>$5,000 – $15,000</option>
+              <option>$15,000 – $50,000</option>
+              <option>$50,000+</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label">Products of interest (check all that apply)</label>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <label class="checkbox-row">
+                <input type="checkbox" name="interest[]" value="GLP-1s (Semaglutide, Tirzepatide, Retatrutide)">
+                <span class="checkbox-label">GLP-1s</span>
+              </label>
+              <label class="checkbox-row">
+                <input type="checkbox" name="interest[]" value="Repair &amp; Recovery (BPC-157, GHK-Cu)">
+                <span class="checkbox-label">Repair &amp; Recovery</span>
+              </label>
+              <label class="checkbox-row">
+                <input type="checkbox" name="interest[]" value="Growth Hormone Secretagogues">
+                <span class="checkbox-label">Growth Hormone Secretagogues</span>
+              </label>
+              <label class="checkbox-row">
+                <input type="checkbox" name="interest[]" value="Peptide Blends (GLOW, Wolverine, CJC/Ipa)">
+                <span class="checkbox-label">Peptide Blends</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">How did you hear about us?</label>
+            <input type="text" name="referral" class="form-field" placeholder="Optional">
+          </div>
+
+          <div>
+            <label class="form-label">Anything else we should know?</label>
+            <textarea name="notes" class="form-field" placeholder="Special requirements, timeline, existing suppliers, etc."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certification -->
+      <div class="form-section" style="background: linear-gradient(180deg, rgba(212,165,116,0.05), transparent);">
+        <label class="checkbox-row" style="background: transparent; border: 0; padding: 0;">
+          <input type="checkbox" name="cert" required>
+          <span class="text-[13.5px] text-ink-200 leading-[1.6]">
+            <strong class="text-ink-100">I certify</strong> that I am a qualified business purchaser, over 21 years of age, and that all products purchased are for laboratory research or physician-directed use only. I understand these products are not FDA-approved for human consumption.
+          </span>
+        </label>
+      </div>
+
+      <!-- Submit -->
+      <div class="pt-2">
+        <button type="submit" id="submitBtn" class="btn-primary w-full">
+          <span id="submitText">Submit application</span>
+          <svg id="submitSpinner" class="hidden animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+            <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <p class="mt-4 text-center text-[12px] text-ink-400">
+          You'll receive an email confirmation and a decision within 24 hours.
+        </p>
+      </div>
+
+    </form>
+
+    <!-- Success state -->
+    <div id="applySuccess" class="hidden success-panel">
+      <div class="success-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <h2 class="serif text-[32px] md:text-[40px] leading-tight">Application received.</h2>
+      <p class="mt-4 text-ink-200 leading-[1.7] max-w-[42ch] mx-auto">
+        We'll review your application and reply to your email within 24 hours. If approved, you'll receive
+        login credentials for the wholesale portal.
+      </p>
+      <a href="index.html" class="btn-ghost mt-6 inline-flex mono text-[11px] tracking-[0.14em] uppercase">← Back to retail store</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container-x text-center" style="max-width: 900px;">
+    <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-10 w-auto select-none mx-auto opacity-70" draggable="false" />
+    <p class="mt-4 text-ink-400 text-[12px] mono">
+      © 2026 Hello You Labs · Products supplied for laboratory research or physician-directed use only · Not evaluated by the FDA
+    </p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var form = document.getElementById('applyForm');
+    var submitBtn = document.getElementById('submitBtn');
+    var submitText = document.getElementById('submitText');
+    var submitSpinner = document.getElementById('submitSpinner');
+    var success = document.getElementById('applySuccess');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // Loading state
+      submitBtn.disabled = true;
+      submitText.textContent = 'Submitting…';
+      submitSpinner.classList.remove('hidden');
+
+      var data = new FormData(form);
+
+      try {
+        var res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          form.style.display = 'none';
+          success.classList.remove('hidden');
+          window.scrollTo({ top: form.offsetTop - 100, behavior: 'smooth' });
+        } else {
+          var body = await res.json().catch(function () { return {}; });
+          alert('There was a problem submitting your application. ' + (body.error || 'Please try again or email helloyouwellnessclinic@gmail.com directly.'));
+          submitBtn.disabled = false;
+          submitText.textContent = 'Submit application';
+          submitSpinner.classList.add('hidden');
+        }
+      } catch (err) {
+        alert('Network error. Please try again or email helloyouwellnessclinic@gmail.com directly.');
+        submitBtn.disabled = false;
+        submitText.textContent = 'Submit application';
+        submitSpinner.classList.add('hidden');
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

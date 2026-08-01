@@ -1,0 +1,1729 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Wholesale Portal · Hello You Labs</title>
+<meta name="description" content="Hello You Labs wholesale portal — volume pricing and priority fulfillment for approved B2B accounts." />
+<meta name="theme-color" content="#0a0908" />
+<!-- Gated content: do not index -->
+<meta name="robots" content="noindex, nofollow" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: {
+            1000:'#050403', 950:'#0a0908', 900:'#141210', 850:'#1a1714', 800:'#221e18',
+            700:'#302a22', 600:'#4a4136', 500:'#6b6250', 400:'#8f8571', 300:'#b3a992',
+            200:'#d0c7ae', 100:'#e8dfc7', 50:'#f5efdf'
+          },
+          ember: { DEFAULT: '#d4a574', soft: '#e6c69a', deep: '#a67e50' },
+          cream: '#f6efe4'
+        },
+        fontFamily: {
+          sans: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          serif: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root {
+    --bg: #0a0908; --bg-2: #050403; --panel: #141210; --panel-2: #1a1714; --panel-warm: #1e1913;
+    --ink-1: #f5efdf; --ink-2: #d0c7ae; --ink-3: #8f8571; --ink-4: #6b6250;
+    --line: rgba(245,239,223,0.09); --line-strong: rgba(245,239,223,0.16);
+    --ember: #d4a574; --ember-soft: #e6c69a; --ember-deep: #a67e50;
+    --cream: #f6efe4; --danger: #ff9a86;
+  }
+  * { -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    background: var(--bg); color: var(--ink-1);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-weight: 400; line-height: 1.6;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(1000px 500px at 85% -5%, rgba(212,165,116,0.10), transparent 60%),
+      radial-gradient(700px 320px at 10% 25%, rgba(212,165,116,0.05), transparent 60%);
+  }
+  .serif { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 400; letter-spacing: -0.015em; }
+  .mono { font-family: 'IBM Plex Mono', monospace; font-feature-settings: "zero"; }
+  .hairline { border-color: var(--line); }
+  .hairline-strong { border-color: var(--line-strong); }
+
+  .container-x { max-width: 1240px; margin: 0 auto; padding-left: 22px; padding-right: 22px; }
+  @media (min-width: 768px) { .container-x { padding-left: 40px; padding-right: 40px; } }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ember);
+  }
+  .eyebrow.warm { color: var(--ember); }
+
+  /* RUO strip */
+  .ruo-strip {
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    padding: 8px 20px;
+    text-align: center;
+  }
+
+  /* Nav */
+  .nav {
+    background: rgba(10, 9, 8, 0.85);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+    position: fixed; top: 0; inset-inline: 0; z-index: 40;
+  }
+  .nav-link {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 8px 4px;
+    transition: color .2s;
+  }
+  .nav-link:hover { color: var(--ember-soft); }
+
+  /* Panels */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+  .panel-2 {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+
+  /* Chip */
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: rgba(212,165,116,0.10);
+    color: var(--ember-soft);
+    border: 1px solid rgba(212,165,116,0.28);
+  }
+  .chip.neutral { background: rgba(245,239,223,0.04); color: var(--ink-2); border-color: var(--line-strong); }
+  .chip.warm { color: var(--ember); background: rgba(212,165,116,0.06); border-color: var(--ember-deep); }
+  .spec-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+  }
+  .spec-chip strong { color: var(--ink-1); font-weight: 500; }
+
+  /* Product card */
+  .product-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    transition: border-color .3s, transform .3s;
+  }
+  .product-card:hover { border-color: var(--ember-deep); }
+
+  .vial-slot {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background:
+      radial-gradient(140% 90% at 50% 0%, rgba(212,165,116,0.10), transparent 60%),
+      linear-gradient(180deg, #1a1613 0%, #100e0c 100%);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .vial-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 55%;
+    transform: scale(1.18);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .product-card:hover .vial-img { transform: scale(1.24); }
+
+  /* Tiered pricing display */
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 12px;
+    padding: 10px;
+    background: var(--panel-2);
+    border-radius: 10px;
+    border: 1px solid var(--line);
+  }
+  .tier-cell {
+    text-align: center;
+    padding: 6px 4px;
+  }
+  .tier-qty {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 2px;
+  }
+  .tier-price {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--ink-1);
+    letter-spacing: -0.01em;
+  }
+  .tier-cell.active {
+    background: rgba(212,165,116,0.14);
+    border-radius: 6px;
+  }
+  .tier-cell.active .tier-price { color: var(--ember-soft); font-weight: 500; }
+  .tier-cell.active .tier-qty { color: var(--ember); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 0;
+    transition: transform .2s cubic-bezier(.2,.7,.2,1), background .2s, color .2s;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-ember {
+    background: var(--ember);
+    color: var(--bg);
+    box-shadow: 0 10px 26px -8px rgba(212,165,116,0.5);
+  }
+  .btn-ember:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: var(--ember-soft);
+    box-shadow: 0 14px 34px -8px rgba(212,165,116,0.65);
+  }
+  .btn-ember:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+  .btn-small { padding: 8px 16px; font-size: 12.5px; }
+  .btn:focus-visible { outline: 2px solid var(--ember-soft); outline-offset: 3px; }
+
+  /* Cart drawer */
+  .cart-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(5, 4, 3, 0.65);
+    backdrop-filter: blur(6px);
+    opacity: 0; pointer-events: none;
+    transition: opacity .35s cubic-bezier(.2,.7,.2,1);
+    z-index: 90;
+  }
+  .cart-backdrop.open { opacity: 1; pointer-events: auto; }
+  .cart-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 100%; max-width: 520px;
+    background: var(--panel);
+    border-left: 1px solid var(--line-strong);
+    box-shadow: -30px 0 60px -20px rgba(0,0,0,0.6);
+    transform: translateX(100%);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1);
+    z-index: 91;
+    display: flex; flex-direction: column;
+  }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .cart-title {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: 26px; letter-spacing: -0.02em; color: var(--ink-1); margin: 0;
+  }
+  .cart-title-count {
+    display: inline-block; margin-left: 8px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    color: var(--ink-3); vertical-align: middle;
+  }
+  .cart-close {
+    background: transparent; border: 1px solid var(--line-strong);
+    width: 36px; height: 36px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ink-1); cursor: pointer; font-size: 22px; line-height: 1;
+    transition: border-color .2s, color .2s;
+  }
+  .cart-close:hover { border-color: var(--ember-soft); color: var(--ember-soft); }
+  .cart-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+  .cart-empty {
+    padding: 60px 32px;
+    text-align: center;
+    color: var(--ink-3);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .cart-empty-icon {
+    width: 48px; height: 48px;
+    margin: 0 auto 18px;
+    opacity: 0.35;
+  }
+  .cart-empty-link {
+    display: inline-block; margin-top: 14px;
+    color: var(--ember-soft);
+    background: transparent; border: 0;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+  }
+
+  .cart-item {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .cart-item:last-of-type { border-bottom: 0; }
+  .cart-item-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 16px;
+    align-items: start;
+  }
+  .cart-item-name {
+    font-family: 'Fraunces', serif;
+    font-size: 17.5px;
+    color: var(--ink-1);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin: 0 0 4px;
+  }
+  .cart-item-spec {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .cart-item-line {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    color: var(--ink-1);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .cart-item-tier {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ember);
+    text-align: right;
+    margin-top: 2px;
+  }
+  .cart-item-controls {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 12px;
+  }
+  .cart-qty {
+    display: inline-flex; align-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 2px;
+  }
+  .cart-qty-btn {
+    background: transparent; border: 0;
+    width: 30px; height: 30px; border-radius: 50%;
+    color: var(--ink-1); font-size: 16px; font-weight: 500; line-height: 1;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    transition: background .15s;
+  }
+  .cart-qty-btn:hover { background: rgba(212,165,116,0.12); color: var(--ember-soft); }
+  .cart-qty-value {
+    min-width: 32px; text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; color: var(--ink-1); padding: 0 6px;
+  }
+  .cart-item-remove {
+    background: transparent; border: 0;
+    color: var(--ink-4); font-size: 12px;
+    cursor: pointer; padding: 6px 0;
+    letter-spacing: 0.04em;
+    transition: color .15s;
+  }
+  .cart-item-remove:hover { color: var(--danger); }
+
+  /* Checkout form (inside drawer) */
+  .checkout-form { padding: 20px 24px; border-top: 1px solid var(--line); }
+  .checkout-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px; color: var(--ink-1); margin: 0 0 4px;
+  }
+  .checkout-sub {
+    font-size: 12.5px; color: var(--ink-3); margin: 0 0 16px;
+  }
+  .form-label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+  .form-label .req { color: var(--ember); margin-left: 3px; }
+  .form-field {
+    display: block; width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--ink-1);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    transition: border-color .2s;
+  }
+  .form-field::placeholder { color: var(--ink-4); }
+  .form-field:focus { outline: none; border-color: var(--ember); }
+  textarea.form-field { min-height: 70px; resize: vertical; }
+
+  /* Variant dropdown on product card */
+  .variant-select {
+    display: block; width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--ember-deep);
+    border-radius: 10px;
+    padding: 10px 40px 10px 14px;
+    color: var(--ink-1);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23d4a574' stroke-width='1.8'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+    transition: border-color .2s, background-color .2s;
+  }
+  .variant-select:hover { background: var(--panel); border-color: var(--ember); }
+  .variant-select:focus { outline: none; border-color: var(--ember); }
+  .variant-select option { background: var(--panel-2); color: var(--ink-1); padding: 4px; }
+  .single-variant-label {
+    background: var(--panel-2);
+    border: 1px dashed var(--line-strong);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--ink-2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .variant-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .cart-footer {
+    flex-shrink: 0;
+    border-top: 1px solid var(--line);
+    padding: 20px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+    background: var(--panel-2);
+  }
+  .cart-subtotal-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    color: var(--ink-2); font-size: 14px;
+  }
+  .cart-subtotal-value {
+    font-family: 'Fraunces', serif;
+    font-size: 28px; color: var(--ink-1); letter-spacing: -0.02em;
+  }
+  .cart-savings {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--ember);
+    text-align: right; margin-top: 2px;
+  }
+  .cart-note {
+    font-size: 11.5px; color: var(--ink-3);
+    text-align: center; margin-top: 12px; line-height: 1.5;
+  }
+
+  .cart-checkout-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 15px 20px;
+    background: var(--ember); color: var(--bg);
+    border: 0; border-radius: 999px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600; font-size: 14.5px;
+    cursor: pointer;
+    transition: transform .2s, background .2s, box-shadow .2s;
+    box-shadow: 0 10px 28px -8px rgba(212,165,116,0.5);
+    margin-top: 14px;
+  }
+  .cart-checkout-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: var(--ember-soft);
+    box-shadow: 0 14px 34px -8px rgba(212,165,116,0.65);
+  }
+  .cart-checkout-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+  /* Cart open state */
+  body.cart-open { overflow: hidden; }
+
+  /* Success state */
+  .order-success {
+    padding: 60px 32px;
+    text-align: center;
+  }
+  .success-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(212,165,116,0.15);
+    border: 1px solid var(--ember-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ember);
+    flex-shrink: 0;
+  }
+
+  /* Payment instructions screen */
+  .order-payment {
+    padding: 28px 24px 40px;
+  }
+  .order-payment-header {
+    display: flex; align-items: center; gap: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .order-id-display {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+  }
+  .pay-panel {
+    background: var(--panel-2);
+    border: 1px solid var(--ember-deep);
+    border-radius: 14px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .pay-row {
+    padding: 14px 16px;
+    border-bottom: 1px dashed rgba(212,165,116,0.2);
+  }
+  .pay-row:last-child { border-bottom: 0; }
+  .pay-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+  .pay-label-critical {
+    color: var(--ember);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 10.5px;
+    margin-left: 6px;
+  }
+  .pay-value-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .pay-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    color: var(--ink-1);
+    letter-spacing: 0.01em;
+    word-break: break-all;
+    flex: 1;
+  }
+  .pay-value-amount {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    color: var(--ember-soft);
+    font-weight: 500;
+  }
+  .pay-value-memo {
+    color: var(--ember-soft);
+    font-weight: 500;
+  }
+  .copy-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(212,165,116,0.10);
+    border: 1px solid var(--ember-deep);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ember-soft);
+    cursor: pointer;
+    transition: background .15s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: rgba(212,165,116,0.20); }
+  .copy-btn:active { transform: scale(0.96); }
+  .copy-btn.copied {
+    background: rgba(212,165,116,0.30);
+    color: var(--cream);
+  }
+
+  .pay-howto {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .pay-howto ol {
+    margin: 12px 0 12px 20px;
+    padding: 0;
+    color: var(--ink-2);
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .pay-howto ol li { padding: 3px 0; }
+  .pay-howto ol li strong { color: var(--ink-1); font-weight: 500; }
+  .pay-limits {
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    font-size: 12px;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+  .pay-savenote {
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: rgba(212,165,116,0.06);
+    border-left: 3px solid var(--ember);
+    border-radius: 0 8px 8px 0;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .pay-savenote strong { color: var(--ink-1); }
+
+  /* Print-friendly for save-as-PDF */
+  @media print {
+    body > *:not(.cart-drawer),
+    .cart-header,
+    .cart-footer,
+    .order-payment > .mt-6 { display: none !important; }
+    .cart-drawer { position: static !important; width: 100% !important; max-width: 100% !important; transform: none !important; box-shadow: none !important; border: 0 !important; background: white !important; color: black !important; }
+    .cart-drawer * { color: black !important; }
+    .pay-panel, .pay-howto, .pay-savenote { background: #f5f5f5 !important; border-color: #999 !important; }
+    .copy-btn { display: none !important; }
+    .success-icon { background: transparent !important; border-color: black !important; color: black !important; }
+    .order-id-display, .pay-value-amount, .pay-value-memo { color: black !important; }
+  }
+
+  /* Cart count badge */
+  .cart-count-active { color: var(--ember-soft); font-weight: 600; }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .cart-drawer { max-width: 100%; }
+    .cart-header { padding: 18px 20px 14px; }
+    .cart-title { font-size: 22px; }
+    .cart-item { padding: 16px 20px; }
+    .cart-footer { padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px)); }
+    .tiers-grid { padding: 8px; }
+    .tier-price { font-size: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cart-backdrop, .cart-drawer, .btn, .cart-checkout-btn, .vial-img { transition: none; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- RUO strip -->
+<div class="ruo-strip">
+  <span style="color: var(--ember);" class="uppercase">Wholesale portal</span>
+  &nbsp;·&nbsp; Products supplied for laboratory research or physician-directed use only.
+</div>
+
+<!-- Header -->
+<header class="nav">
+  <div class="container-x flex items-center justify-between h-16 md:h-20 gap-3">
+    <a href="index.html" class="flex items-center gap-3 min-w-0" aria-label="Hello You Labs — home">
+      <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-10 md:h-14 w-auto select-none shrink-0" draggable="false" />
+      <span class="hidden md:inline mono text-[10.5px] tracking-[0.14em] uppercase text-ink-400 border-l border-ink-800 pl-3">Labs · Wholesale</span>
+    </a>
+    <div class="flex items-center gap-3 md:gap-5">
+      <a href="index.html" class="nav-link mono text-[10.5px] tracking-[0.14em] uppercase hidden md:inline">← Retail store</a>
+      <button data-cart-open type="button" aria-label="Open cart" class="flex items-center gap-2 text-[13px] text-ink-100 hover:text-ember-soft transition rounded-full px-3 py-1.5 border border-ink-800">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M3 4h2.5l2.4 12.3a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 8H6"/>
+          <circle cx="10" cy="21" r="1.2"/><circle cx="18" cy="21" r="1.2"/>
+        </svg>
+        <span id="cartCount" class="tabular-nums mono text-[12px]">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="pt-32 md:pt-40 pb-10">
+  <div class="container-x">
+    <div class="eyebrow mb-4">§ Wholesale portal · Active session</div>
+    <h1 class="serif text-[42px] md:text-[64px] leading-[1.05]">
+      Welcome back.<br/><span style="color: var(--ember-soft);">Volume pricing enabled.</span>
+    </h1>
+    <p class="mt-8 text-ink-200 text-[16px] md:text-[17px] leading-[1.75] max-w-[64ch]">
+      Full catalog with three-tier volume pricing. Orders submitted here go directly to fulfillment.
+      You'll receive a payment link by email within one business day, and an order confirmation with
+      tracking once payment clears.
+    </p>
+
+    <!-- Trust bar -->
+    <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-5 py-5 border-y hairline">
+      <div class="flex items-center gap-2 text-[12.5px] mono uppercase tracking-[0.08em] text-ink-200">
+        <span style="color: var(--ember);">§</span> 3-tier volume pricing
+      </div>
+      <div class="flex items-center gap-2 text-[12.5px] mono uppercase tracking-[0.08em] text-ink-200">
+        <span style="color: var(--ember);">§</span> Priority fulfillment
+      </div>
+      <div class="flex items-center gap-2 text-[12.5px] mono uppercase tracking-[0.08em] text-ink-200">
+        <span style="color: var(--ember);">§</span> Payment link within 24h
+      </div>
+      <div class="flex items-center gap-2 text-[12.5px] mono uppercase tracking-[0.08em] text-ink-200">
+        <span style="color: var(--ember);">§</span> Net terms available
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Catalog -->
+<section id="catalog" class="pb-20">
+  <div class="container-x">
+    <div id="productGrid"></div>
+  </div>
+</section>
+
+<!-- Wholesale terms -->
+<section class="pb-20">
+  <div class="container-x">
+    <div class="panel p-8 md:p-10">
+      <div class="eyebrow mb-3">§ Wholesale terms</div>
+      <h3 class="serif text-[26px] md:text-[32px] mb-6">The fine print, upfront.</h3>
+      <div class="grid md:grid-cols-2 gap-6 md:gap-10 text-[14.5px] leading-[1.7] text-ink-200">
+        <div>
+          <div class="mono text-[10.5px] tracking-[0.14em] uppercase text-ember-soft mb-2">Order minimums</div>
+          <p>No hard minimum on individual line items, but wholesale pricing tiers activate at 10 and 25 vials of the same SKU. Combined order minimum: $500.</p>
+        </div>
+        <div>
+          <div class="mono text-[10.5px] tracking-[0.14em] uppercase text-ember-soft mb-2">Payment</div>
+          <p>First 3 orders: payment upfront via secure payment link (credit card or ACH). After 3 completed orders, Net 15 terms available on request. Wire transfer available for orders over $5,000.</p>
+        </div>
+        <div>
+          <div class="mono text-[10.5px] tracking-[0.14em] uppercase text-ember-soft mb-2">Shipping</div>
+          <p>Priority 2-day US shipping included on orders over $1,000. Cold-chain when required. Discreet packaging standard. Domestic US only.</p>
+        </div>
+        <div>
+          <div class="mono text-[10.5px] tracking-[0.14em] uppercase text-ember-soft mb-2">Returns &amp; damage</div>
+          <p>Damaged in transit: replaced same-day if reported within 24h with photo. Otherwise, sealed vials only, unopened, within 14 days. Restocking fee: 15%.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t hairline py-10" style="background: var(--bg-2);">
+  <div class="container-x text-center">
+    <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="h-10 w-auto select-none mx-auto opacity-70" draggable="false" />
+    <p class="mt-4 text-ink-400 text-[12px] mono">
+      © 2026 Hello You Labs · Wholesale portal · Products supplied for laboratory research or physician-directed use only
+    </p>
+    <p class="mt-2 text-ink-500 text-[11px]">
+      Questions? Email <a href="mailto:helloyouwellnessclinic@gmail.com" class="text-ember-soft hover:text-cream transition">helloyouwellnessclinic@gmail.com</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ============ CART DRAWER + BACKDROP ============ -->
+<div id="cartBackdrop" class="cart-backdrop" data-cart-close aria-hidden="true"></div>
+
+<aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true" tabindex="-1">
+  <div class="cart-header">
+    <h2 id="cartTitle" class="cart-title">Wholesale order<span id="cartTitleCount" class="cart-title-count"></span></h2>
+    <button type="button" class="cart-close" data-cart-close aria-label="Close cart">×</button>
+  </div>
+
+  <div id="cartBody" class="cart-body">
+    <!-- populated by JS: items list + checkout form -->
+  </div>
+
+  <div id="cartFooter" class="cart-footer">
+    <div class="cart-subtotal-row">
+      <span>Subtotal</span>
+      <span id="cartSubtotal" class="cart-subtotal-value">$0</span>
+    </div>
+    <div id="cartSavings" class="cart-savings" style="display: none;"></div>
+    <button type="button" id="cartCheckout" class="cart-checkout-btn" disabled>
+      Continue to order details →
+    </button>
+    <p class="cart-note">You'll enter shipping details next. Order goes to fulfillment; payment link follows by email within 24h.</p>
+  </div>
+</aside>
+
+<!-- Payment instructions template (shown after successful order submit) -->
+<template id="orderPaymentTpl">
+  <div class="order-payment">
+    <div class="order-payment-header">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="mono text-[10.5px] tracking-[0.16em] uppercase" style="color: var(--ember);">Order confirmed</div>
+        <h3 class="serif text-[26px] leading-tight mt-1">Order <span class="order-id-display" style="color: var(--ember-soft);">—</span></h3>
+      </div>
+    </div>
+
+    <p class="text-ink-200 leading-[1.65] text-[14.5px] mt-4">
+      To finalize your order, complete the Zelle payment below.
+      Once we receive payment, we ship priority (same-day if received before 3pm&nbsp;ET).
+    </p>
+
+    <!-- Payment instructions -->
+    <div class="pay-panel">
+      <div class="pay-row">
+        <div class="pay-label">Amount</div>
+        <div class="pay-value-row">
+          <span class="pay-value pay-value-amount">$0</span>
+          <button type="button" class="copy-btn" data-copy-target="amount" aria-label="Copy amount">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span class="copy-btn-label">Copy</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pay-row">
+        <div class="pay-label">Send Zelle to</div>
+        <div class="pay-value-row">
+          <span class="pay-value pay-value-email" style="font-size: 14px;">helloyouwellnessclinic@gmail.com</span>
+          <button type="button" class="copy-btn" data-copy-target="email" aria-label="Copy email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span class="copy-btn-label">Copy</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pay-row">
+        <div class="pay-label">Memo <span class="pay-label-critical">(critical — this is how we match your payment)</span></div>
+        <div class="pay-value-row">
+          <span class="pay-value pay-value-memo">—</span>
+          <button type="button" class="copy-btn" data-copy-target="memo" aria-label="Copy memo">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span class="copy-btn-label">Copy</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to pay -->
+    <div class="pay-howto">
+      <div class="mono text-[10.5px] tracking-[0.14em] uppercase" style="color: var(--ember);">How to pay</div>
+      <ol>
+        <li>Open your bank's app (Chase, BofA, Wells Fargo, US Bank, Cap One, etc.)</li>
+        <li>Navigate to <strong>Zelle → Send Money</strong></li>
+        <li>Recipient: <strong>helloyouwellnessclinic@gmail.com</strong></li>
+        <li>Amount: the amount shown above</li>
+        <li>Memo: the order # shown above (this is how we match payment to your order)</li>
+        <li>Confirm and send</li>
+      </ol>
+      <p class="pay-limits">
+        Bank sending limits vary. If your Zelle limit is below the order total,
+        pay in multiple transfers using the same memo — we'll aggregate them.
+      </p>
+    </div>
+
+    <div class="pay-savenote">
+      <strong>Save your order # —</strong> you'll need it if you have any questions.
+      We've also received your order details by email.
+    </div>
+
+    <div class="mt-6 flex gap-3">
+      <button type="button" data-cart-close class="btn btn-ember btn-small" style="flex: 1;">Done</button>
+      <button type="button" onclick="window.print()" class="btn btn-small" style="background: var(--panel-2); border: 1px solid var(--line-strong); color: var(--ink-1); flex: 1;">Print / Save</button>
+    </div>
+  </div>
+</template>
+
+<script>
+(function () {
+  var CART_KEY = 'hyl_wholesale_cart_v2';
+  var FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzejvqr';
+  var CONTACT_EMAIL = 'helloyouwellnessclinic@gmail.com';
+
+  // ============ PRODUCT CATALOG (with variants — mg + mL combos) ============
+  var PRODUCTS = [
+    // ─── GLP-1s ───
+    {
+      id: 'sema', cat: 'GLP-1s', catCode: 'A',
+      name: 'Semaglutide', molecule: 'GLP-1 receptor agonist',
+      purity: '99.4%', lot: 'SEM-2607', img: 'img/vials/semaglutide-5mg.png',
+      variants: [
+        { mg:5,  ml:3, tiers:[{q:1,p:77},{q:10,p:74},{q:25,p:70}] },
+        { mg:10, ml:3, tiers:[{q:1,p:96},{q:10,p:91},{q:25,p:87}] },
+        { mg:15, ml:3, tiers:[{q:1,p:115},{q:10,p:109},{q:25,p:104}] },
+        { mg:20, ml:3, tiers:[{q:1,p:125},{q:10,p:119},{q:25,p:113}] },
+        { mg:30, ml:3, tiers:[{q:1,p:145},{q:10,p:138},{q:25,p:130}] },
+        { mg:30, ml:5, tiers:[{q:1,p:145},{q:10,p:138},{q:25,p:130}] }
+      ]
+    },
+    {
+      id: 'tirz', cat: 'GLP-1s', catCode: 'A',
+      name: 'Tirzepatide', molecule: 'GLP-1 / GIP dual agonist',
+      purity: '99.6%', lot: 'TIR-2612', img: 'img/vials/tirzepatide-10mg.png',
+      variants: [
+        { mg:5,   ml:3,  tiers:[{q:1,p:77},{q:10,p:74},{q:25,p:70}] },
+        { mg:10,  ml:3,  tiers:[{q:1,p:92},{q:10,p:87},{q:25,p:83}] },
+        { mg:15,  ml:3,  tiers:[{q:1,p:108},{q:10,p:103},{q:25,p:97}] },
+        { mg:20,  ml:3,  tiers:[{q:1,p:135},{q:10,p:128},{q:25,p:122}] },
+        { mg:30,  ml:3,  tiers:[{q:1,p:174},{q:10,p:165},{q:25,p:156}] },
+        { mg:40,  ml:3,  tiers:[{q:1,p:221},{q:10,p:210},{q:25,p:199}] },
+        { mg:45,  ml:3,  tiers:[{q:1,p:226},{q:10,p:215},{q:25,p:203}] },
+        { mg:50,  ml:3,  tiers:[{q:1,p:256},{q:10,p:243},{q:25,p:230}] },
+        { mg:60,  ml:3,  tiers:[{q:1,p:270},{q:10,p:257},{q:25,p:243}] },
+        { mg:60,  ml:5,  tiers:[{q:1,p:279},{q:10,p:265},{q:25,p:251}] },
+        { mg:60,  ml:10, tiers:[{q:1,p:279},{q:10,p:265},{q:25,p:251}] },
+        { mg:100, ml:10, tiers:[{q:1,p:385},{q:10,p:366},{q:25,p:347}] },
+        { mg:120, ml:10, tiers:[{q:1,p:432},{q:10,p:410},{q:25,p:389}] }
+      ]
+    },
+    {
+      id: 'reta', cat: 'GLP-1s', catCode: 'A',
+      name: 'Retatrutide', molecule: 'GLP-1 / GIP / glucagon triple agonist',
+      purity: '99.2%', lot: 'RET-2604', img: 'img/vials/retatrutide-5mg.png',
+      variants: [
+        { mg:5,   ml:3,  tiers:[{q:1,p:111},{q:10,p:105},{q:25,p:100}] },
+        { mg:10,  ml:3,  tiers:[{q:1,p:125},{q:10,p:119},{q:25,p:113}] },
+        { mg:15,  ml:3,  tiers:[{q:1,p:174},{q:10,p:165},{q:25,p:156}] },
+        { mg:20,  ml:3,  tiers:[{q:1,p:212},{q:10,p:201},{q:25,p:190}] },
+        { mg:30,  ml:3,  tiers:[{q:1,p:241},{q:10,p:229},{q:25,p:217}] },
+        { mg:30,  ml:5,  tiers:[{q:1,p:243},{q:10,p:231},{q:25,p:219}] },
+        { mg:40,  ml:3,  tiers:[{q:1,p:270},{q:10,p:257},{q:25,p:243}] },
+        { mg:40,  ml:5,  tiers:[{q:1,p:275},{q:10,p:261},{q:25,p:247}] },
+        { mg:50,  ml:3,  tiers:[{q:1,p:289},{q:10,p:274},{q:25,p:260}] },
+        { mg:50,  ml:5,  tiers:[{q:1,p:289},{q:10,p:275},{q:25,p:260}] },
+        { mg:60,  ml:3,  tiers:[{q:1,p:338},{q:10,p:321},{q:25,p:304}] },
+        { mg:60,  ml:5,  tiers:[{q:1,p:342},{q:10,p:325},{q:25,p:308}] },
+        { mg:60,  ml:10, tiers:[{q:1,p:342},{q:10,p:325},{q:25,p:308}] },
+        { mg:100, ml:10, tiers:[{q:1,p:540},{q:10,p:513},{q:25,p:486}] }
+      ]
+    },
+
+    // ─── Repair & Recovery ───
+    {
+      id: 'bpc', cat: 'Repair & Recovery', catCode: 'B',
+      name: 'BPC-157', molecule: 'Pentadecapeptide',
+      purity: '99.5%', lot: 'BPC-2609', img: 'img/vials/bpc157-5mg.png',
+      variants: [
+        { mg:5,  ml:3, tiers:[{q:1,p:49},{q:10,p:46},{q:25,p:44}] },
+        { mg:10, ml:3, tiers:[{q:1,p:59},{q:10,p:56},{q:25,p:53}] },
+        { mg:10, ml:5, tiers:[{q:1,p:59},{q:10,p:56},{q:25,p:53}] },
+        { mg:15, ml:3, tiers:[{q:1,p:66},{q:10,p:62},{q:25,p:59}] },
+        { mg:15, ml:5, tiers:[{q:1,p:68},{q:10,p:64},{q:25,p:61}] }
+      ]
+    },
+    {
+      id: 'ghk', cat: 'Repair & Recovery', catCode: 'B',
+      name: 'GHK-Cu', molecule: 'Copper tripeptide',
+      purity: '99.7%', lot: 'GHK-2610', img: 'img/vials/ghkcu-50mg.png',
+      variants: [
+        { mg:50,  ml:3,  tiers:[{q:1,p:41},{q:10,p:39},{q:25,p:37}] },
+        { mg:50,  ml:10, tiers:[{q:1,p:45},{q:10,p:43},{q:25,p:41}] },
+        { mg:70,  ml:5,  tiers:[{q:1,p:47},{q:10,p:44},{q:25,p:42}] },
+        { mg:100, ml:3,  tiers:[{q:1,p:53},{q:10,p:50},{q:25,p:48}] },
+        { mg:100, ml:10, tiers:[{q:1,p:58},{q:10,p:55},{q:25,p:52}] }
+      ]
+    },
+
+    // ─── Growth Hormone Secretagogues ───
+    {
+      id: 'ipa', cat: 'Growth Hormone Secretagogues', catCode: 'C',
+      name: 'Ipamorelin', molecule: 'GHRP',
+      purity: '99.4%', lot: 'IPA-2608', img: 'img/vials/ipamorelin-5mg.png',
+      variants: [
+        { mg:5,  ml:3, tiers:[{q:1,p:45},{q:10,p:43},{q:25,p:41}] },
+        { mg:10, ml:3, tiers:[{q:1,p:54},{q:10,p:51},{q:25,p:49}] },
+        { mg:15, ml:5, tiers:[{q:1,p:63},{q:10,p:60},{q:25,p:57}] }
+      ]
+    },
+    {
+      id: 'cjc-nodac', cat: 'Growth Hormone Secretagogues', catCode: 'C',
+      name: 'CJC-1295 (no DAC)', molecule: 'GHRH analog',
+      purity: '99.5%', lot: 'CJC-2607', img: 'img/vials/cjc1295-nodac-5mg.png',
+      variants: [
+        { mg:5,  ml:3, tiers:[{q:1,p:45},{q:10,p:43},{q:25,p:41}] },
+        { mg:10, ml:3, tiers:[{q:1,p:55},{q:10,p:52},{q:25,p:49}] },
+        { mg:15, ml:5, tiers:[{q:1,p:63},{q:10,p:60},{q:25,p:57}] }
+      ]
+    },
+    {
+      id: 'cjc-dac', cat: 'Growth Hormone Secretagogues', catCode: 'C',
+      name: 'CJC-1295 DAC', molecule: 'GHRH analog (DAC)',
+      purity: '99.3%', lot: 'CJD-2606', img: 'img/vials/cjc1295-dac-2mg.png',
+      variants: [
+        { mg:5, ml:3, tiers:[{q:1,p:45},{q:10,p:43},{q:25,p:41}] }
+      ]
+    },
+    {
+      id: 'ser', cat: 'Growth Hormone Secretagogues', catCode: 'C',
+      name: 'Sermorelin', molecule: 'GHRH analog',
+      purity: '99.4%', lot: 'SER-2605', img: 'img/vials/sermorelin-5mg.png',
+      variants: [
+        { mg:5,  ml:3, tiers:[{q:1,p:45},{q:10,p:43},{q:25,p:41}] },
+        { mg:9,  ml:5, tiers:[{q:1,p:54},{q:10,p:51},{q:25,p:49}] },
+        { mg:10, ml:3, tiers:[{q:1,p:59},{q:10,p:56},{q:25,p:53}] },
+        { mg:15, ml:5, tiers:[{q:1,p:81},{q:10,p:77},{q:25,p:73}] }
+      ]
+    },
+    {
+      id: 'tesa', cat: 'Growth Hormone Secretagogues', catCode: 'C',
+      name: 'Tesamorelin', molecule: 'GHRH analog',
+      purity: '99.2%', lot: 'TES-2604', img: 'img/vials/tesamorelin-5mg.png',
+      variants: [
+        { mg:5,  ml:3, tiers:[{q:1,p:43},{q:10,p:41},{q:25,p:39}] },
+        { mg:10, ml:3, tiers:[{q:1,p:65},{q:10,p:62},{q:25,p:58}] },
+        { mg:15, ml:3, tiers:[{q:1,p:68},{q:10,p:64},{q:25,p:61}] },
+        { mg:15, ml:5, tiers:[{q:1,p:69},{q:10,p:66},{q:25,p:62}] },
+        { mg:20, ml:3, tiers:[{q:1,p:86},{q:10,p:81},{q:25,p:77}] },
+        { mg:20, ml:5, tiers:[{q:1,p:86},{q:10,p:82},{q:25,p:77}] }
+      ]
+    },
+
+    // ─── Peptide Blends ───
+    {
+      id: 'glow', cat: 'Peptide Blends', catCode: 'D',
+      name: 'GLOW Stack', molecule: 'BPC-157 + GHK-Cu + TB-500',
+      purity: '99.4%', lot: 'GLW-2701', img: 'img/vials/glow-blend.png',
+      variants: [
+        { label:'10 + 50 + 10 mg · 3 mL', mgLabel:'10 + 50 + 10 mg', ml:3, tiers:[{q:1,p:131},{q:10,p:124},{q:25,p:117}] },
+        { label:'GLOW+ · 10 + 70 + 10 mg · 5 mL', mgLabel:'10 + 70 + 10 mg', ml:5, tiers:[{q:1,p:140},{q:10,p:133},{q:25,p:126}] }
+      ]
+    },
+    {
+      id: 'wolv', cat: 'Peptide Blends', catCode: 'D',
+      name: 'Wolverine', molecule: 'BPC-157 + TB-500',
+      purity: '99.4%', lot: 'WLV-2702', img: 'img/vials/wolverine-blend.png',
+      variants: [
+        { label:'5 + 5 mg · 3 mL',   mgLabel:'5 + 5 mg',   ml:3, tiers:[{q:1,p:72},{q:10,p:68},{q:25,p:65}] },
+        { label:'10 + 10 mg · 3 mL', mgLabel:'10 + 10 mg', ml:3, tiers:[{q:1,p:85},{q:10,p:80},{q:25,p:76}] },
+        { label:'10 + 10 mg · 5 mL', mgLabel:'10 + 10 mg', ml:5, tiers:[{q:1,p:88},{q:10,p:84},{q:25,p:79}] },
+        { label:'15 + 15 mg · 5 mL', mgLabel:'15 + 15 mg', ml:5, tiers:[{q:1,p:102},{q:10,p:97},{q:25,p:92}] },
+        { label:'30 + 30 mg · 5 mL', mgLabel:'30 + 30 mg', ml:5, tiers:[{q:1,p:173},{q:10,p:164},{q:25,p:156}] }
+      ]
+    },
+    {
+      id: 'cjcipa', cat: 'Peptide Blends', catCode: 'D',
+      name: 'CJC-1295 / Ipamorelin', molecule: 'GHRH + GHRP combo',
+      purity: '99.5%', lot: 'CJI-2703', img: 'img/vials/cjc1295-ipamorelin-blend.png',
+      variants: [
+        { label:'5 + 5 mg · 3 mL',   mgLabel:'5 + 5 mg',   ml:3, tiers:[{q:1,p:59},{q:10,p:56},{q:25,p:53}] },
+        { label:'5 + 5 mg · 5 mL',   mgLabel:'5 + 5 mg',   ml:5, tiers:[{q:1,p:64},{q:10,p:61},{q:25,p:58}] },
+        { label:'10 + 10 mg · 3 mL', mgLabel:'10 + 10 mg', ml:3, tiers:[{q:1,p:71},{q:10,p:68},{q:25,p:64}] },
+        { label:'10 + 10 mg · 5 mL', mgLabel:'10 + 10 mg', ml:5, tiers:[{q:1,p:76},{q:10,p:72},{q:25,p:68}] },
+        { label:'12 + 6 mg · 5 mL',  mgLabel:'12 + 6 mg',  ml:5, tiers:[{q:1,p:104},{q:10,p:99},{q:25,p:94}] }
+      ]
+    }
+  ];
+
+  // Assign stable variant IDs + auto-labels + product back-ref
+  var VARIANTS_BY_ID = {};
+  PRODUCTS.forEach(function (p) {
+    p.variants.forEach(function (v) {
+      // Variant id: productId-Xmg-YmL (using X for blends' + character)
+      var mgKey = String(v.mgLabel || v.mg).replace(/\s/g,'').replace(/\+/g,'x');
+      v.id = p.id + '-' + mgKey + '-' + v.ml + 'ml';
+      v.productId = p.id;
+      if (!v.label) v.label = v.mg + ' mg · ' + v.ml + ' mL';
+      if (!v.mgLabel) v.mgLabel = v.mg + ' mg';
+      VARIANTS_BY_ID[v.id] = v;
+    });
+  });
+
+  var CATEGORIES = ['A','B','C','D'].map(function (code) {
+    var first = PRODUCTS.find(function (p) { return p.catCode === code; });
+    return { code: code, name: first ? first.cat : '' };
+  }).filter(function (c) { return c.name; });
+
+  // ============ CART STATE ============
+  // Schema v2: items keyed by variantId, not productId
+  //   { items: [ { variantId, qty } ] }
+  function loadCart() {
+    try {
+      var raw = localStorage.getItem(CART_KEY);
+      var parsed = raw ? JSON.parse(raw) : { items: [] };
+      if (!parsed.items || !Array.isArray(parsed.items)) parsed.items = [];
+      // Filter out any items whose variant no longer exists (e.g. schema migration)
+      parsed.items = parsed.items.filter(function (i) {
+        return i && i.variantId && VARIANTS_BY_ID[i.variantId];
+      });
+      return parsed;
+    } catch (e) { return { items: [] }; }
+  }
+  function saveCart() {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+  }
+  var cart = loadCart();
+
+  // Lookups
+  function findProduct(id) {
+    return PRODUCTS.find(function (p) { return p.id === id; });
+  }
+  function findVariant(id) { return VARIANTS_BY_ID[id]; }
+  function productForVariant(variantId) {
+    var v = findVariant(variantId);
+    return v ? findProduct(v.productId) : null;
+  }
+
+  // Get unit price given a variant + quantity (walks tiers)
+  function unitPriceFor(variant, qty) {
+    var price = variant.tiers[0].p;
+    for (var i = 0; i < variant.tiers.length; i++) {
+      if (qty >= variant.tiers[i].q) price = variant.tiers[i].p;
+    }
+    return price;
+  }
+  function currentTierIndex(variant, qty) {
+    var idx = 0;
+    for (var i = 0; i < variant.tiers.length; i++) {
+      if (qty >= variant.tiers[i].q) idx = i;
+    }
+    return idx;
+  }
+
+  function itemCount() {
+    return cart.items.reduce(function (n, i) { return n + i.qty; }, 0);
+  }
+  function subtotal() {
+    return cart.items.reduce(function (sum, i) {
+      var v = findVariant(i.variantId);
+      if (!v) return sum;
+      return sum + unitPriceFor(v, i.qty) * i.qty;
+    }, 0);
+  }
+  function savingsVsTier1() {
+    var tier1Total = 0;
+    var actualTotal = 0;
+    cart.items.forEach(function (i) {
+      var v = findVariant(i.variantId);
+      if (!v) return;
+      tier1Total += v.tiers[0].p * i.qty;
+      actualTotal += unitPriceFor(v, i.qty) * i.qty;
+    });
+    return tier1Total - actualTotal;
+  }
+
+  // ============ CART OPERATIONS ============
+  function addItem(variantId) {
+    if (!VARIANTS_BY_ID[variantId]) return;
+    var existing = cart.items.filter(function (i) { return i.variantId === variantId; })[0];
+    if (existing) existing.qty += 1;
+    else cart.items.push({ variantId: variantId, qty: 1 });
+    saveCart();
+    renderAll();
+    openCart();
+  }
+  function changeQty(variantId, delta) {
+    var existing = cart.items.filter(function (i) { return i.variantId === variantId; })[0];
+    if (!existing) return;
+    existing.qty = Math.max(0, existing.qty + delta);
+    if (existing.qty === 0) cart.items = cart.items.filter(function (i) { return i.variantId !== variantId; });
+    saveCart();
+    renderAll();
+  }
+  function removeItem(variantId) {
+    cart.items = cart.items.filter(function (i) { return i.variantId !== variantId; });
+    saveCart();
+    renderAll();
+  }
+  function clearCart() {
+    cart.items = [];
+    saveCart();
+    renderAll();
+  }
+
+  // ============ RENDERING ============
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+  }
+
+  function renderCatalog() {
+    var container = document.getElementById('productGrid');
+    if (!container) return;
+    var html = CATEGORIES.map(function (cat) {
+      var catProducts = PRODUCTS.filter(function (p) { return p.catCode === cat.code; });
+      return (
+        '<div class="mb-14 md:mb-20">' +
+          '<div class="flex items-end justify-between pb-5 mb-6 border-b hairline">' +
+            '<div>' +
+              '<div class="eyebrow warm mb-2">Category ' + cat.code + '</div>' +
+              '<h3 class="serif text-[24px] md:text-[30px]">' + esc(cat.name) + '</h3>' +
+            '</div>' +
+            '<span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">' + catProducts.length + ' SKUs</span>' +
+          '</div>' +
+          '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">' +
+            catProducts.map(renderProductCard).join('') +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+    container.innerHTML = html;
+  }
+
+  function renderProductCard(p) {
+    // Default selected variant = first one
+    var defaultVariant = p.variants[0];
+
+    // Compute qty for the default variant to show active tier
+    var cartItem = cart.items.filter(function (i) { return i.variantId === defaultVariant.id; })[0];
+    var currentQty = cartItem ? cartItem.qty : 0;
+    var currentTier = currentQty > 0 ? currentTierIndex(defaultVariant, currentQty) : -1;
+
+    var tiersHtml = defaultVariant.tiers.map(function (t, idx) {
+      var isActive = idx === currentTier;
+      return (
+        '<div class="tier-cell' + (isActive ? ' active' : '') + '">' +
+          '<span class="tier-qty">' + (idx === 0 ? '1 vial' : idx === defaultVariant.tiers.length - 1 ? t.q + '+ vials' : t.q + '+') + '</span>' +
+          '<span class="tier-price">$' + t.p + '</span>' +
+        '</div>'
+      );
+    }).join('');
+
+    // Variant selector: dropdown if multiple, static label if single
+    var variantSelectorHtml;
+    if (p.variants.length > 1) {
+      var optionsHtml = p.variants.map(function (v, idx) {
+        return '<option value="' + esc(v.id) + '"' + (idx === 0 ? ' selected' : '') + '>' + esc(v.label) + '</option>';
+      }).join('');
+      variantSelectorHtml =
+        '<div class="mt-3">' +
+          '<span class="variant-label">Dose · Volume · <span style="color: var(--ink-3);">' + p.variants.length + ' options</span></span>' +
+          '<select class="variant-select" data-variant-select>' + optionsHtml + '</select>' +
+        '</div>';
+    } else {
+      variantSelectorHtml =
+        '<div class="mt-3">' +
+          '<span class="variant-label">Dose · Volume</span>' +
+          '<div class="single-variant-label">' + esc(defaultVariant.label) + '</div>' +
+          '<input type="hidden" data-variant-select value="' + esc(defaultVariant.id) + '" />' +
+        '</div>';
+    }
+
+    // Cart action row: show qty controls if this variant is in cart, else Add button
+    var actionRowHtml;
+    if (currentQty > 0) {
+      actionRowHtml =
+        '<div class="cart-qty" style="flex: 1;" data-cart-controls>' +
+          '<button type="button" class="cart-qty-btn" data-qty-minus="' + esc(defaultVariant.id) + '" aria-label="Decrease">−</button>' +
+          '<span class="cart-qty-value" style="flex: 1;">' + currentQty + ' in order</span>' +
+          '<button type="button" class="cart-qty-btn" data-qty-plus="' + esc(defaultVariant.id) + '" aria-label="Increase">+</button>' +
+        '</div>';
+    } else {
+      actionRowHtml =
+        '<button type="button" class="btn btn-ember btn-small flex-1" data-add>Add to order</button>';
+    }
+
+    return (
+      '<article class="product-card" data-product-id="' + esc(p.id) + '">' +
+        '<div class="vial-slot">' +
+          '<img class="vial-img" alt="" src="' + esc(p.img) + '" onerror="this.style.display=\'none\'" />' +
+        '</div>' +
+        '<div class="p-5 md:p-6 flex flex-col flex-1">' +
+          '<div class="flex items-start justify-between gap-3 mb-1">' +
+            '<div class="min-w-0">' +
+              '<div class="mono text-[10px] tracking-[0.12em] uppercase text-ink-400 truncate">' + esc(p.molecule) + '</div>' +
+              '<h4 class="mt-1 serif text-[22px] leading-tight">' + esc(p.name) + '</h4>' +
+            '</div>' +
+            '<span class="chip">' + esc(p.purity) + '</span>' +
+          '</div>' +
+          '<div class="mt-3 flex flex-wrap gap-1.5">' +
+            '<span class="spec-chip">Lot <strong>' + esc(p.lot) + '</strong></span>' +
+          '</div>' +
+          variantSelectorHtml +
+          '<div class="tiers-grid" data-tiers-grid>' + tiersHtml + '</div>' +
+          '<div class="mt-5 flex items-center justify-between gap-3" data-action-row>' +
+            actionRowHtml +
+          '</div>' +
+        '</div>' +
+      '</article>'
+    );
+  }
+
+  // Re-render just the tiers + action row for a single card when its dropdown changes
+  function updateCardForVariant(card) {
+    var select = card.querySelector('[data-variant-select]');
+    if (!select) return;
+    var variantId = select.value || select.getAttribute('value');
+    var variant = findVariant(variantId);
+    if (!variant) return;
+
+    // Update tiers
+    var cartItem = cart.items.filter(function (i) { return i.variantId === variantId; })[0];
+    var currentQty = cartItem ? cartItem.qty : 0;
+    var currentTier = currentQty > 0 ? currentTierIndex(variant, currentQty) : -1;
+
+    var tiersGrid = card.querySelector('[data-tiers-grid]');
+    if (tiersGrid) {
+      tiersGrid.innerHTML = variant.tiers.map(function (t, idx) {
+        var isActive = idx === currentTier;
+        return (
+          '<div class="tier-cell' + (isActive ? ' active' : '') + '">' +
+            '<span class="tier-qty">' + (idx === 0 ? '1 vial' : idx === variant.tiers.length - 1 ? t.q + '+ vials' : t.q + '+') + '</span>' +
+            '<span class="tier-price">$' + t.p + '</span>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    // Update action row
+    var actionRow = card.querySelector('[data-action-row]');
+    if (actionRow) {
+      if (currentQty > 0) {
+        actionRow.innerHTML =
+          '<div class="cart-qty" style="flex: 1;" data-cart-controls>' +
+            '<button type="button" class="cart-qty-btn" data-qty-minus="' + esc(variantId) + '" aria-label="Decrease">−</button>' +
+            '<span class="cart-qty-value" style="flex: 1;">' + currentQty + ' in order</span>' +
+            '<button type="button" class="cart-qty-btn" data-qty-plus="' + esc(variantId) + '" aria-label="Increase">+</button>' +
+          '</div>';
+      } else {
+        actionRow.innerHTML =
+          '<button type="button" class="btn btn-ember btn-small flex-1" data-add>Add to order</button>';
+      }
+    }
+  }
+
+  function renderCartBody() {
+    var body = document.getElementById('cartBody');
+    var footer = document.getElementById('cartFooter');
+    var checkoutBtn = document.getElementById('cartCheckout');
+    var savingsEl = document.getElementById('cartSavings');
+    if (!body) return;
+
+    if (cart.items.length === 0) {
+      body.innerHTML =
+        '<div class="cart-empty">' +
+          '<svg class="cart-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">' +
+            '<path d="M3 4h2.5l2.4 12.3a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 8H6"/>' +
+            '<circle cx="10" cy="21" r="1.2"/><circle cx="18" cy="21" r="1.2"/>' +
+          '</svg>' +
+          'Your order is empty.<br/>' +
+          '<button type="button" class="cart-empty-link" data-cart-close>Continue browsing →</button>' +
+        '</div>';
+      if (checkoutBtn) checkoutBtn.setAttribute('disabled', '');
+      if (savingsEl) savingsEl.style.display = 'none';
+    } else {
+      body.innerHTML = cart.items.map(function (i) {
+        var v = findVariant(i.variantId);
+        var p = v ? findProduct(v.productId) : null;
+        if (!v || !p) return '';
+        var unitP = unitPriceFor(v, i.qty);
+        var lineTotal = unitP * i.qty;
+        var tierIdx = currentTierIndex(v, i.qty);
+        var tierLabel = tierIdx === 0 ? '' :
+          '<div class="cart-item-tier">Tier ' + (tierIdx + 1) + ' · $' + unitP + '/ea</div>';
+
+        return (
+          '<div class="cart-item" data-item-id="' + esc(i.variantId) + '">' +
+            '<div class="cart-item-row">' +
+              '<div>' +
+                '<div class="cart-item-name">' + esc(p.name) + '</div>' +
+                '<div class="cart-item-spec">' + esc(v.label) + ' · Lot ' + esc(p.lot) + '</div>' +
+              '</div>' +
+              '<div>' +
+                '<div class="cart-item-line">$' + lineTotal + '</div>' +
+                tierLabel +
+              '</div>' +
+            '</div>' +
+            '<div class="cart-item-controls">' +
+              '<div class="cart-qty" role="group">' +
+                '<button type="button" class="cart-qty-btn" data-qty-minus="' + esc(i.variantId) + '" aria-label="Decrease">−</button>' +
+                '<span class="cart-qty-value">' + i.qty + '</span>' +
+                '<button type="button" class="cart-qty-btn" data-qty-plus="' + esc(i.variantId) + '" aria-label="Increase">+</button>' +
+              '</div>' +
+              '<button type="button" class="cart-item-remove" data-remove="' + esc(i.variantId) + '">Remove</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+
+      // Checkout form
+      body.innerHTML += renderCheckoutForm();
+
+      if (checkoutBtn) checkoutBtn.removeAttribute('disabled');
+
+      // Savings display
+      var savings = savingsVsTier1();
+      if (savings > 0 && savingsEl) {
+        savingsEl.textContent = 'Volume savings: −$' + savings;
+        savingsEl.style.display = 'block';
+      } else if (savingsEl) {
+        savingsEl.style.display = 'none';
+      }
+    }
+
+    // Subtotal
+    var subEl = document.getElementById('cartSubtotal');
+    if (subEl) subEl.textContent = '$' + subtotal();
+  }
+
+  function renderCheckoutForm() {
+    return (
+      '<form id="orderForm" class="checkout-form">' +
+        '<h3 class="checkout-title">Order details</h3>' +
+        '<p class="checkout-sub">Shipping and contact info. Payment link follows by email.</p>' +
+
+        '<div class="space-y-3">' +
+          '<div>' +
+            '<label class="form-label">Company / account<span class="req">*</span></label>' +
+            '<input required type="text" name="company" class="form-field" placeholder="Business name on file">' +
+          '</div>' +
+          '<div>' +
+            '<label class="form-label">Contact name<span class="req">*</span></label>' +
+            '<input required type="text" name="contact_name" class="form-field" placeholder="Person placing this order">' +
+          '</div>' +
+          '<div class="grid grid-cols-2 gap-3">' +
+            '<div>' +
+              '<label class="form-label">Email<span class="req">*</span></label>' +
+              '<input required type="email" name="email" class="form-field" placeholder="you@company.com">' +
+            '</div>' +
+            '<div>' +
+              '<label class="form-label">Phone<span class="req">*</span></label>' +
+              '<input required type="tel" name="phone" class="form-field" placeholder="+1">' +
+            '</div>' +
+          '</div>' +
+          '<div>' +
+            '<label class="form-label">Shipping address<span class="req">*</span></label>' +
+            '<textarea required name="shipping_address" class="form-field" placeholder="Full street address, city, state, ZIP"></textarea>' +
+          '</div>' +
+          '<div>' +
+            '<label class="form-label">PO # (optional)</label>' +
+            '<input type="text" name="po_number" class="form-field" placeholder="If your accounting requires one">' +
+          '</div>' +
+          '<div>' +
+            '<label class="form-label">Order notes (optional)</label>' +
+            '<textarea name="notes" class="form-field" placeholder="Cold pack required, ship after date, etc."></textarea>' +
+          '</div>' +
+        '</div>' +
+      '</form>'
+    );
+  }
+
+  function renderCartCount() {
+    var count = itemCount();
+    var headerCount = document.getElementById('cartCount');
+    if (headerCount) {
+      headerCount.textContent = count;
+      headerCount.classList.toggle('cart-count-active', count > 0);
+    }
+    var titleCount = document.getElementById('cartTitleCount');
+    if (titleCount) titleCount.textContent = count > 0 ? '(' + count + ')' : '';
+  }
+
+  function renderAll() {
+    renderCatalog();
+    renderCartBody();
+    renderCartCount();
+  }
+
+  // ============ DRAWER ============
+  var lastFocused = null;
+  function openCart() {
+    var drawer = document.getElementById('cartDrawer');
+    var backdrop = document.getElementById('cartBackdrop');
+    if (!drawer || !backdrop) return;
+    lastFocused = document.activeElement;
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    backdrop.classList.add('open');
+    document.body.classList.add('cart-open');
+    setTimeout(function () {
+      var closeBtn = drawer.querySelector('.cart-close');
+      if (closeBtn) closeBtn.focus();
+    }, 100);
+  }
+  function closeCart() {
+    var drawer = document.getElementById('cartDrawer');
+    var backdrop = document.getElementById('cartBackdrop');
+    if (!drawer || !backdrop) return;
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    backdrop.classList.remove('open');
+    document.body.classList.remove('cart-open');
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  // ============ ORDER ID ============
+  function generateOrderId() {
+    // Format: HYL-XXX-000 (letters + digits, unambiguous chars only)
+    var letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // no I, O
+    var digits = '23456789'; // no 0, 1
+    var id = 'HYL-';
+    for (var i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+    id += '-';
+    for (var j = 0; j < 3; j++) id += digits[Math.floor(Math.random() * digits.length)];
+    return id;
+  }
+
+  // ============ CLIPBOARD ============
+  function copyToClipboard(text, buttonEl) {
+    var promise;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      promise = navigator.clipboard.writeText(text);
+    } else {
+      // Fallback for older browsers / non-HTTPS local files
+      promise = new Promise(function (resolve, reject) {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'absolute'; ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          resolve();
+        } catch (e) { reject(e); }
+      });
+    }
+    promise.then(function () {
+      if (!buttonEl) return;
+      var labelEl = buttonEl.querySelector('.copy-btn-label');
+      var original = labelEl ? labelEl.textContent : 'Copy';
+      if (labelEl) labelEl.textContent = 'Copied ✓';
+      buttonEl.classList.add('copied');
+      setTimeout(function () {
+        if (labelEl) labelEl.textContent = original;
+        buttonEl.classList.remove('copied');
+      }, 1600);
+    }).catch(function () {
+      alert('Copy failed. Please select and copy manually.');
+    });
+  }
+
+  // ============ CHECKOUT ============
+  async function submitOrder() {
+    var form = document.getElementById('orderForm');
+    if (!form || cart.items.length === 0) return;
+
+    // Validate
+    if (!form.reportValidity()) return;
+
+    var checkoutBtn = document.getElementById('cartCheckout');
+    var originalText = checkoutBtn.textContent;
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Submitting order…';
+
+    // Generate order ID
+    var orderId = generateOrderId();
+
+    // Build order summary
+    var orderLines = cart.items.map(function (i) {
+      var v = findVariant(i.variantId);
+      var p = v ? findProduct(v.productId) : null;
+      if (!v || !p) return '';
+      var unitP = unitPriceFor(v, i.qty);
+      var lineTotal = unitP * i.qty;
+      return '• ' + p.name + ' — ' + v.label + ' (Lot ' + p.lot + ') × ' + i.qty + ' @ $' + unitP + '/ea = $' + lineTotal;
+    }).join('\n');
+    var total = subtotal();
+    var savings = savingsVsTier1();
+
+    var orderSummary =
+      'HELLO YOU LABS · WHOLESALE ORDER\n' +
+      'Order #: ' + orderId + '\n' +
+      '================================\n\n' +
+      orderLines +
+      '\n\nSubtotal: $' + total +
+      (savings > 0 ? '\nVolume savings applied: −$' + savings : '') +
+      '\n\nItems: ' + itemCount() +
+      '\n\n---\nPAYMENT: awaiting Zelle to helloyouwellnessclinic@gmail.com' +
+      '\nExpected memo: ' + orderId;
+
+    // Collect form fields
+    var formData = new FormData(form);
+    formData.append('_subject', '[Order ' + orderId + '] $' + total + ' · ' + itemCount() + ' items');
+    formData.append('form_type', 'wholesale_order');
+    formData.append('order_id', orderId);
+    formData.append('order_total', '$' + total);
+    formData.append('item_count', String(itemCount()));
+    formData.append('order_summary', orderSummary);
+    formData.append('payment_method', 'Zelle');
+    formData.append('payment_memo', orderId);
+
+    try {
+      var res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        showPaymentInstructions(orderId, total);
+        // Clear cart (order is submitted; payment happens externally)
+        cart.items = [];
+        saveCart();
+        renderCatalog();
+        renderCartCount();
+      } else {
+        alert('There was a problem submitting your order. Please try again or email ' + CONTACT_EMAIL + ' directly.');
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = originalText;
+      }
+    } catch (err) {
+      alert('Network error. Please try again or email ' + CONTACT_EMAIL + ' directly.');
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = originalText;
+    }
+  }
+
+  // ============ PAYMENT INSTRUCTIONS ============
+  function showPaymentInstructions(orderId, total) {
+    var body = document.getElementById('cartBody');
+    var footer = document.getElementById('cartFooter');
+    var tpl = document.getElementById('orderPaymentTpl');
+    body.innerHTML = '';
+    body.appendChild(tpl.content.cloneNode(true));
+    footer.style.display = 'none';
+
+    // Populate dynamic values
+    var totalStr = '$' + total.toFixed(2);
+    var idEls = body.querySelectorAll('.order-id-display');
+    idEls.forEach(function (el) { el.textContent = orderId; });
+    var amountEls = body.querySelectorAll('.pay-value-amount');
+    amountEls.forEach(function (el) { el.textContent = totalStr; });
+    var memoEls = body.querySelectorAll('.pay-value-memo');
+    memoEls.forEach(function (el) { el.textContent = orderId; });
+
+    // Store data for copy buttons
+    body.setAttribute('data-order-id', orderId);
+    body.setAttribute('data-order-amount', totalStr);
+
+    // Scroll drawer to top
+    body.scrollTop = 0;
+  }
+
+  // ============ EVENT WIRING ============
+  document.addEventListener('click', function (e) {
+    // Add to order — read the current variant from the card's dropdown
+    var addBtn = e.target.closest('[data-add]');
+    if (addBtn) {
+      var card = addBtn.closest('.product-card');
+      if (card) {
+        var select = card.querySelector('[data-variant-select]');
+        if (select) {
+          var variantId = select.value || select.getAttribute('value');
+          if (variantId) addItem(variantId);
+        }
+      }
+      return;
+    }
+    // Qty +/-
+    var plus = e.target.closest('[data-qty-plus]');
+    if (plus) { changeQty(plus.getAttribute('data-qty-plus'), 1); return; }
+    var minus = e.target.closest('[data-qty-minus]');
+    if (minus) { changeQty(minus.getAttribute('data-qty-minus'), -1); return; }
+    // Remove
+    var remove = e.target.closest('[data-remove]');
+    if (remove) { removeItem(remove.getAttribute('data-remove')); return; }
+    // Open cart
+    if (e.target.closest('[data-cart-open]')) { e.preventDefault(); openCart(); return; }
+    // Close cart
+    if (e.target.closest('[data-cart-close]')) { e.preventDefault(); closeCart(); return; }
+    // Checkout
+    if (e.target.closest('#cartCheckout')) { submitOrder(); return; }
+    // Copy buttons on payment instructions
+    var copyBtn = e.target.closest('.copy-btn');
+    if (copyBtn) {
+      var target = copyBtn.getAttribute('data-copy-target');
+      var body = document.getElementById('cartBody');
+      var text = '';
+      if (target === 'amount') text = body.getAttribute('data-order-amount') || '';
+      else if (target === 'email') text = 'helloyouwellnessclinic@gmail.com';
+      else if (target === 'memo') text = body.getAttribute('data-order-id') || '';
+      if (text) copyToClipboard(text, copyBtn);
+      return;
+    }
+  });
+
+  // Variant dropdown change — update just that card's tiers + action row
+  document.addEventListener('change', function (e) {
+    var select = e.target.closest('[data-variant-select]');
+    if (!select) return;
+    var card = select.closest('.product-card');
+    if (card) updateCardForVariant(card);
+  });
+
+  // ESC to close
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var drawer = document.getElementById('cartDrawer');
+      if (drawer && drawer.classList.contains('open')) closeCart();
+    }
+  });
+
+  // Initial render
+  renderAll();
+
+  // Reset footer visibility if reopened after successful order
+  document.getElementById('cartDrawer').addEventListener('transitionend', function () {
+    if (!document.getElementById('cartDrawer').classList.contains('open')) {
+      // On next open, footer should be visible again if there are items
+      var footer = document.getElementById('cartFooter');
+      if (cart.items.length > 0 && footer.style.display === 'none') {
+        footer.style.display = '';
+        renderCartBody();
+      }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
