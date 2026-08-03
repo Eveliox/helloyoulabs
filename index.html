@@ -1242,6 +1242,49 @@
     .product-card:hover { transform: none; }
     .mobile-menu, .mobile-menu[aria-hidden="false"] { transition: opacity .001ms ease, visibility 0s !important; transform: none !important; }
   }
+
+  /* Variant dropdown on product card (mg + mL combos) */
+  .variant-select {
+    display: block; width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--ember-deep);
+    border-radius: 10px;
+    padding: 10px 40px 10px 14px;
+    color: var(--ink-1);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23d4a574' stroke-width='1.8'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+    transition: border-color .2s, background-color .2s;
+    min-height: 44px;
+  }
+  .variant-select:hover { background-color: var(--panel); border-color: var(--ember); }
+  .variant-select:focus { outline: none; border-color: var(--ember); }
+  .variant-select option { background: var(--panel-2); color: var(--ink-1); padding: 4px; }
+  .single-variant-label {
+    background: var(--panel-2);
+    border: 1px dashed var(--line-strong);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--ink-2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .variant-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 6px;
+    display: block;
+  }
 </style>
 </head>
 
@@ -1557,6 +1600,7 @@
         <button class="filter-pill" aria-pressed="false">GLP-1</button>
         <button class="filter-pill" aria-pressed="false">Repair</button>
         <button class="filter-pill" aria-pressed="false">GHS</button>
+        <button class="filter-pill" aria-pressed="false">Blends</button>
       </div>
       <div class="hidden md:flex items-center gap-2 ml-auto">
         <span class="text-[12px] uppercase tracking-[0.12em] text-ink-400 mr-2 mono">Sort</span>
@@ -1566,560 +1610,8 @@
       </div>
     </div>
 
-    <!-- Category A: GLP-1 -->
-    <div class="mb-16 md:mb-24">
-      <div class="flex items-end justify-between pb-5 mb-8">
-        <div>
-          <div class="eyebrow warm">Category A</div>
-          <h3 class="mt-2 h-warm text-[26px] md:text-[32px]">GLP-1 Research Peptides</h3>
-        </div>
-        <span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">5 SKUs</span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
-
-        <!-- Semaglutide 5mg -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/semaglutide-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · semaglutide-5mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GLP-1 · Semaglutide</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Semaglutide</h4>
-              </div>
-              <span class="chip">99.4%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>SEM-2607</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$149<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add Semaglutide to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Tirzepatide 10mg -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/tirzepatide-10mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · tirzepatide-10mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GLP-1 / GIP · Tirzepatide</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Tirzepatide</h4>
-              </div>
-              <span class="chip">99.6%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>10 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>TIR-2612</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$179<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Tirzepatide 30mg -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/tirzepatide-30mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · tirzepatide-30mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GLP-1 / GIP · Tirzepatide</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Tirzepatide</h4>
-              </div>
-              <span class="chip">99.6%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>30 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>TIR-2613</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$339<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Retatrutide 5mg -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/retatrutide-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · retatrutide-5mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Tri-agonist · Retatrutide</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Retatrutide</h4>
-              </div>
-              <span class="chip">99.2%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>RET-2604</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$219<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Retatrutide 10mg -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/retatrutide-10mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · retatrutide-10mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Tri-agonist · Retatrutide</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Retatrutide</h4>
-              </div>
-              <span class="chip">99.2%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>10 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>RET-2605</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$249<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </div>
-
-    <!-- Category B: Repair & Recovery -->
-    <div class="mb-16 md:mb-24">
-      <div class="flex items-end justify-between pb-5 mb-8">
-        <div>
-          <div class="eyebrow warm">Category B</div>
-          <h3 class="mt-2 h-warm text-[26px] md:text-[32px]">Repair &amp; Recovery Peptides</h3>
-        </div>
-        <span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">2 SKUs</span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
-
-        <!-- BPC-157 -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/bpc157-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · bpc157-5mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Pentadecapeptide · BPC</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">BPC-157</h4>
-              </div>
-              <span class="chip">99.5%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>BPC-2609</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$95<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- GHK-Cu -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/ghkcu-50mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · ghkcu-50mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Copper peptide · GHK</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">GHK-Cu</h4>
-              </div>
-              <span class="chip">99.7%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>50 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>GHK-2610</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$79<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </div>
-
-    <!-- Category C: GHS -->
-    <div>
-      <div class="flex items-end justify-between pb-5 mb-8">
-        <div>
-          <div class="eyebrow warm">Category C</div>
-          <h3 class="mt-2 h-warm text-[26px] md:text-[32px]">Growth Hormone Secretagogues</h3>
-        </div>
-        <span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">5 SKUs</span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
-
-        <!-- Ipamorelin -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/ipamorelin-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · ipamorelin-5mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRP · Ipamorelin</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Ipamorelin</h4>
-              </div>
-              <span class="chip">99.4%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>IPA-2608</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$89<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- CJC-1295 no DAC -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/cjc1295-nodac-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · cjc1295-nodac-5mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRH analog · CJC</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">CJC-1295 <span class="text-ink-300 text-[18px]">(no DAC)</span></h4>
-              </div>
-              <span class="chip">99.5%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>CJC-2607</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$89<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- CJC-1295 DAC -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/cjc1295-dac-2mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · cjc1295-dac-2mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRH analog · CJC-DAC</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">CJC-1295 DAC</h4>
-              </div>
-              <span class="chip">99.3%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>2 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>CJD-2606</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$99<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Sermorelin -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/sermorelin-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · sermorelin-5mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRH fragment · Sermorelin</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Sermorelin</h4>
-              </div>
-              <span class="chip">99.4%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>SER-2605</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$85<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Tesamorelin -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/tesamorelin-5mg.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · tesamorelin-5mg.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">GHRH analog · Tesamorelin</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Tesamorelin</h4>
-              </div>
-              <span class="chip">99.2%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>5 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>TES-2604</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$129<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </div>
-
-    <!-- Category D: Blends -->
-    <div class="mt-16 md:mt-24">
-      <div class="flex items-end justify-between pb-5 mb-8">
-        <div>
-          <div class="eyebrow warm">Category D</div>
-          <h3 class="mt-2 h-warm text-[26px] md:text-[32px]">Peptide Blends</h3>
-        </div>
-        <span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">3 SKUs</span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
-
-        <!-- GLOW Stack -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/glow-blend.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · glow-blend.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Regen blend · BPC-157 + GHK-Cu + TB-500</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">GLOW Stack</h4>
-              </div>
-              <span class="chip">99.4%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>10 + 50 + 10 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>GLW-2701</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$249<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add GLOW Stack to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Wolverine -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/wolverine-blend.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · wolverine-blend.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Repair blend · BPC-157 + TB-500</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">Wolverine</h4>
-              </div>
-              <span class="chip">99.4%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>10 + 10 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>WLV-2702</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$169<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add Wolverine to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- CJC-1295 / Ipamorelin -->
-        <article class="product-card">
-          <div class="vial-slot">
-            <span class="vial-ratio-tag">4:5</span>
-            <img class="vial-img" alt="" src="img/vials/cjc1295-ipamorelin-blend.png" onerror="this.closest('.vial-slot').classList.remove('has-image'); this.remove();" onload="this.closest('.vial-slot').classList.add('has-image');" />
-            <svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>
-            <span class="vial-placeholder-label">img · cjc1295-ipamorelin-blend.png</span>
-          </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div>
-                <div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400">Secretagogue blend · GHRH + GHRP</div>
-                <h4 class="mt-1.5 serif text-[24px] leading-tight">CJC-1295 / Ipamorelin</h4>
-              </div>
-              <span class="chip">99.5%</span>
-            </div>
-            <div class="mt-3 flex flex-wrap gap-1.5">
-              <span class="spec-chip"><strong>5 + 5 mg</strong> lyo</span>
-              <span class="spec-chip">Lot <strong>CJI-2703</strong></span>
-            </div>
-            <div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>
-                <div class="serif text-[28px] text-ink-100 mt-0.5">$119<span class="text-ink-400 text-[14px] mono">.00</span></div>
-              </div>
-              <div class="action-right flex flex-col items-end gap-2">
-                <a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>
-                <button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add CJC-1295 / Ipamorelin to cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </div>
+    <!-- Catalog product grid — rendered from PRODUCTS array in cart script below -->
+    <div id="productGrid"></div>
 
     <!-- RUO reminder mid-page -->
     <div class="mt-16 panel-2 p-6 md:p-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -2866,108 +2358,390 @@
   })();
 </script>
 
-<!-- ============ CART LOGIC ============ -->
+<!-- ============ CATALOG + CART LOGIC (variant-aware) ============ -->
 <script>
 (function () {
-  var CART_KEY = 'hyl_cart_v1';
+  var CART_KEY = 'hyl_cart_v2';
   var WHATSAPP_NUMBER = '17867803626';
 
+  // ============ PRODUCT CATALOG (with variants — mg + mL combos, single retail price) ============
+  // Retail pricing set at ~1.9-2x supplier tier-1 (wholesale) per the Q3 2026 sheet.
+  var PRODUCTS = [
+    // ─── GLP-1s ───
+    {
+      id: 'sema', cat: 'GLP-1 Research Peptides', catCode: 'A', catFilter: 'GLP-1',
+      name: 'Semaglutide', molecule: 'GLP-1 · Semaglutide',
+      purity: '99.4%', lot: 'SEM-2607', img: 'img/vials/semaglutide-5mg.png',
+      variants: [
+        { mg:5,  ml:3, price:149 },
+        { mg:10, ml:3, price:189 },
+        { mg:15, ml:3, price:219 },
+        { mg:20, ml:3, price:239 },
+        { mg:30, ml:3, price:279 },
+        { mg:30, ml:5, price:289 }
+      ]
+    },
+    {
+      id: 'tirz', cat: 'GLP-1 Research Peptides', catCode: 'A', catFilter: 'GLP-1',
+      name: 'Tirzepatide', molecule: 'GLP-1 / GIP · Tirzepatide',
+      purity: '99.6%', lot: 'TIR-2612', img: 'img/vials/tirzepatide-10mg.png',
+      variants: [
+        { mg:5,   ml:3,  price:149 },
+        { mg:10,  ml:3,  price:179 },
+        { mg:15,  ml:3,  price:209 },
+        { mg:20,  ml:3,  price:259 },
+        { mg:30,  ml:3,  price:339 },
+        { mg:40,  ml:3,  price:429 },
+        { mg:45,  ml:3,  price:439 },
+        { mg:50,  ml:3,  price:499 },
+        { mg:60,  ml:3,  price:519 },
+        { mg:60,  ml:5,  price:539 },
+        { mg:60,  ml:10, price:549 },
+        { mg:100, ml:10, price:749 },
+        { mg:120, ml:10, price:839 }
+      ]
+    },
+    {
+      id: 'reta', cat: 'GLP-1 Research Peptides', catCode: 'A', catFilter: 'GLP-1',
+      name: 'Retatrutide', molecule: 'Tri-agonist · Retatrutide',
+      purity: '99.2%', lot: 'RET-2604', img: 'img/vials/retatrutide-5mg.png',
+      variants: [
+        { mg:5,   ml:3,  price:219 },
+        { mg:10,  ml:3,  price:249 },
+        { mg:15,  ml:3,  price:339 },
+        { mg:20,  ml:3,  price:419 },
+        { mg:30,  ml:3,  price:469 },
+        { mg:30,  ml:5,  price:479 },
+        { mg:40,  ml:3,  price:529 },
+        { mg:40,  ml:5,  price:539 },
+        { mg:50,  ml:3,  price:569 },
+        { mg:50,  ml:5,  price:579 },
+        { mg:60,  ml:3,  price:659 },
+        { mg:60,  ml:5,  price:669 },
+        { mg:60,  ml:10, price:679 },
+        { mg:100, ml:10, price:1049 }
+      ]
+    },
+
+    // ─── Repair & Recovery ───
+    {
+      id: 'bpc', cat: 'Repair & Recovery Peptides', catCode: 'B', catFilter: 'Repair',
+      name: 'BPC-157', molecule: 'Pentadecapeptide · BPC',
+      purity: '99.5%', lot: 'BPC-2609', img: 'img/vials/bpc157-5mg.png',
+      variants: [
+        { mg:5,  ml:3, price:95 },
+        { mg:10, ml:3, price:115 },
+        { mg:10, ml:5, price:119 },
+        { mg:15, ml:3, price:129 },
+        { mg:15, ml:5, price:135 }
+      ]
+    },
+    {
+      id: 'ghk', cat: 'Repair & Recovery Peptides', catCode: 'B', catFilter: 'Repair',
+      name: 'GHK-Cu', molecule: 'Copper peptide · GHK',
+      purity: '99.7%', lot: 'GHK-2610', img: 'img/vials/ghkcu-50mg.png',
+      variants: [
+        { mg:50,  ml:3,  price:79 },
+        { mg:50,  ml:10, price:89 },
+        { mg:70,  ml:5,  price:95 },
+        { mg:100, ml:3,  price:105 },
+        { mg:100, ml:10, price:115 }
+      ]
+    },
+
+    // ─── Growth Hormone Secretagogues ───
+    {
+      id: 'ipa', cat: 'Growth Hormone Secretagogues', catCode: 'C', catFilter: 'GHS',
+      name: 'Ipamorelin', molecule: 'GHRP · Ipamorelin',
+      purity: '99.4%', lot: 'IPA-2608', img: 'img/vials/ipamorelin-5mg.png',
+      variants: [
+        { mg:5,  ml:3, price:89 },
+        { mg:10, ml:3, price:105 },
+        { mg:15, ml:5, price:125 }
+      ]
+    },
+    {
+      id: 'cjc-nodac', cat: 'Growth Hormone Secretagogues', catCode: 'C', catFilter: 'GHS',
+      name: 'CJC-1295 (no DAC)', molecule: 'GHRH analog · CJC',
+      purity: '99.5%', lot: 'CJC-2607', img: 'img/vials/cjc1295-nodac-5mg.png',
+      variants: [
+        { mg:5,  ml:3, price:89 },
+        { mg:10, ml:3, price:109 },
+        { mg:15, ml:5, price:125 }
+      ]
+    },
+    {
+      id: 'cjc-dac', cat: 'Growth Hormone Secretagogues', catCode: 'C', catFilter: 'GHS',
+      name: 'CJC-1295 DAC', molecule: 'GHRH analog · CJC-DAC',
+      purity: '99.3%', lot: 'CJD-2606', img: 'img/vials/cjc1295-dac-2mg.png',
+      variants: [
+        { mg:5, ml:3, price:99 }
+      ]
+    },
+    {
+      id: 'ser', cat: 'Growth Hormone Secretagogues', catCode: 'C', catFilter: 'GHS',
+      name: 'Sermorelin', molecule: 'GHRH fragment · Sermorelin',
+      purity: '99.4%', lot: 'SER-2605', img: 'img/vials/sermorelin-5mg.png',
+      variants: [
+        { mg:5,  ml:3, price:85 },
+        { mg:9,  ml:5, price:105 },
+        { mg:10, ml:3, price:115 },
+        { mg:15, ml:5, price:159 }
+      ]
+    },
+    {
+      id: 'tesa', cat: 'Growth Hormone Secretagogues', catCode: 'C', catFilter: 'GHS',
+      name: 'Tesamorelin', molecule: 'GHRH analog · Tesamorelin',
+      purity: '99.2%', lot: 'TES-2604', img: 'img/vials/tesamorelin-5mg.png',
+      variants: [
+        { mg:5,  ml:3, price:85 },
+        { mg:10, ml:3, price:129 },
+        { mg:15, ml:3, price:135 },
+        { mg:15, ml:5, price:139 },
+        { mg:20, ml:3, price:169 },
+        { mg:20, ml:5, price:175 }
+      ]
+    },
+
+    // ─── Peptide Blends ───
+    {
+      id: 'glow', cat: 'Peptide Blends', catCode: 'D', catFilter: 'Blends',
+      name: 'GLOW Stack', molecule: 'Regen blend · BPC-157 + GHK-Cu + TB-500',
+      purity: '99.4%', lot: 'GLW-2701', img: 'img/vials/glow-blend.png',
+      variants: [
+        { label:'10 + 50 + 10 mg · 3 mL', mgLabel:'10 + 50 + 10 mg', ml:3, price:249 },
+        { label:'GLOW+ · 10 + 70 + 10 mg · 5 mL', mgLabel:'10 + 70 + 10 mg', ml:5, price:275 }
+      ]
+    },
+    {
+      id: 'wolv', cat: 'Peptide Blends', catCode: 'D', catFilter: 'Blends',
+      name: 'Wolverine', molecule: 'Repair blend · BPC-157 + TB-500',
+      purity: '99.4%', lot: 'WLV-2702', img: 'img/vials/wolverine-blend.png',
+      variants: [
+        { label:'5 + 5 mg · 3 mL',   mgLabel:'5 + 5 mg',   ml:3, price:139 },
+        { label:'10 + 10 mg · 3 mL', mgLabel:'10 + 10 mg', ml:3, price:169 },
+        { label:'10 + 10 mg · 5 mL', mgLabel:'10 + 10 mg', ml:5, price:175 },
+        { label:'15 + 15 mg · 5 mL', mgLabel:'15 + 15 mg', ml:5, price:199 },
+        { label:'30 + 30 mg · 5 mL', mgLabel:'30 + 30 mg', ml:5, price:339 }
+      ]
+    },
+    {
+      id: 'cjcipa', cat: 'Peptide Blends', catCode: 'D', catFilter: 'Blends',
+      name: 'CJC-1295 / Ipamorelin', molecule: 'Secretagogue blend · GHRH + GHRP',
+      purity: '99.5%', lot: 'CJI-2703', img: 'img/vials/cjc1295-ipamorelin-blend.png',
+      variants: [
+        { label:'5 + 5 mg · 3 mL',   mgLabel:'5 + 5 mg',   ml:3, price:119 },
+        { label:'5 + 5 mg · 5 mL',   mgLabel:'5 + 5 mg',   ml:5, price:125 },
+        { label:'10 + 10 mg · 3 mL', mgLabel:'10 + 10 mg', ml:3, price:139 },
+        { label:'10 + 10 mg · 5 mL', mgLabel:'10 + 10 mg', ml:5, price:149 },
+        { label:'12 + 6 mg · 5 mL',  mgLabel:'12 + 6 mg',  ml:5, price:209 }
+      ]
+    }
+  ];
+
+  // Assign stable variant IDs, auto-labels, product back-refs
+  var VARIANTS_BY_ID = {};
+  PRODUCTS.forEach(function (p) {
+    p.variants.forEach(function (v) {
+      var mgKey = String(v.mgLabel || v.mg).replace(/\s/g,'').replace(/\+/g,'x');
+      v.id = p.id + '-' + mgKey + '-' + v.ml + 'ml';
+      v.productId = p.id;
+      if (!v.label) v.label = v.mg + ' mg · ' + v.ml + ' mL';
+      if (!v.mgLabel) v.mgLabel = v.mg + ' mg';
+      VARIANTS_BY_ID[v.id] = v;
+    });
+  });
+
+  // Category order for rendering
+  var CATEGORIES = ['A','B','C','D'].map(function (code) {
+    var first = PRODUCTS.find(function (p) { return p.catCode === code; });
+    return { code: code, name: first ? first.cat : '' };
+  }).filter(function (c) { return c.name; });
+
+  // ============ CART STATE ============
+  // Schema v2: items keyed by variantId
+  //   { items: [ { variantId, qty } ] }
   function loadCart() {
     try {
       var raw = localStorage.getItem(CART_KEY);
       var parsed = raw ? JSON.parse(raw) : { items: [] };
       if (!parsed.items || !Array.isArray(parsed.items)) parsed.items = [];
+      // Drop any items whose variant no longer exists (schema migration safety)
+      parsed.items = parsed.items.filter(function (i) {
+        return i && i.variantId && VARIANTS_BY_ID[i.variantId];
+      });
       return parsed;
     } catch (e) { return { items: [] }; }
   }
   function persistCart() {
     try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
   }
-
   var cart = loadCart();
 
-  // Slugify utility for stable IDs
-  function slug(s) {
-    return String(s).toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  }
-
-  // Parse a product-card element into a cart-item shape
-  function readProduct(card) {
-    var nameEl = card.querySelector('h4');
-    var name = nameEl ? nameEl.textContent.trim() : 'Unknown';
-    var specChip = card.querySelector('.spec-chip');
-    var spec = specChip ? specChip.textContent.replace(/\s+/g, ' ').trim() : '';
-    var priceEl = card.querySelector('.action-row .serif');
-    var price = 0;
-    if (priceEl) {
-      var m = priceEl.textContent.match(/\$([0-9]+)/);
-      if (m) price = parseInt(m[1], 10);
-    }
-    var id = slug(name) + '-' + slug(spec);
-    return { id: id, name: name, spec: spec, price: price, qty: 1 };
-  }
+  // Lookups
+  function findProduct(id) { return PRODUCTS.find(function (p) { return p.id === id; }); }
+  function findVariant(id) { return VARIANTS_BY_ID[id]; }
 
   function itemCount() {
     return cart.items.reduce(function (n, i) { return n + i.qty; }, 0);
   }
   function subtotal() {
-    return cart.items.reduce(function (n, i) { return n + (i.price * i.qty); }, 0);
+    return cart.items.reduce(function (sum, i) {
+      var v = findVariant(i.variantId);
+      if (!v) return sum;
+      return sum + v.price * i.qty;
+    }, 0);
   }
 
-  function addItem(item) {
-    var existing = cart.items.filter(function (i) { return i.id === item.id; })[0];
+  // ============ CART OPERATIONS ============
+  function addVariant(variantId) {
+    if (!VARIANTS_BY_ID[variantId]) return;
+    var existing = cart.items.filter(function (i) { return i.variantId === variantId; })[0];
     if (existing) existing.qty += 1;
-    else cart.items.push({ id: item.id, name: item.name, spec: item.spec, price: item.price, qty: 1 });
+    else cart.items.push({ variantId: variantId, qty: 1 });
     persistCart();
-    render();
+    renderAll();
   }
-  function changeQty(id, delta) {
-    var existing = cart.items.filter(function (i) { return i.id === id; })[0];
+  function changeQty(variantId, delta) {
+    var existing = cart.items.filter(function (i) { return i.variantId === variantId; })[0];
     if (!existing) return;
     existing.qty = Math.max(0, existing.qty + delta);
-    if (existing.qty === 0) {
-      cart.items = cart.items.filter(function (i) { return i.id !== id; });
-    }
+    if (existing.qty === 0) cart.items = cart.items.filter(function (i) { return i.variantId !== variantId; });
     persistCart();
-    render();
+    renderAll();
   }
-  function removeItem(id) {
-    cart.items = cart.items.filter(function (i) { return i.id !== id; });
+  function removeItem(variantId) {
+    cart.items = cart.items.filter(function (i) { return i.variantId !== variantId; });
     persistCart();
-    render();
+    renderAll();
   }
 
-  // Rendering
+  // ============ RENDERING ============
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
     });
   }
 
-  function render() {
-    var count = itemCount();
+  function renderCatalog() {
+    var container = document.getElementById('productGrid');
+    if (!container) return;
+    var html = CATEGORIES.map(function (cat, catIdx) {
+      var catProducts = PRODUCTS.filter(function (p) { return p.catCode === cat.code; });
+      var marginCls = catIdx === 0 ? 'mb-16 md:mb-24' : (catIdx === CATEGORIES.length - 1 ? 'mt-16 md:mt-24' : 'mb-16 md:mb-24');
+      return (
+        '<div class="' + marginCls + '" data-cat-filter="' + esc(catProducts[0].catFilter) + '">' +
+          '<div class="flex items-end justify-between pb-5 mb-8">' +
+            '<div>' +
+              '<div class="eyebrow warm">Category ' + cat.code + '</div>' +
+              '<h3 class="mt-2 h-warm text-[26px] md:text-[32px]">' + esc(cat.name) + '</h3>' +
+            '</div>' +
+            '<span class="mono text-[11px] tracking-[0.12em] uppercase text-ink-400 hidden sm:inline">' + catProducts.length + ' SKU' + (catProducts.length === 1 ? '' : 's') + '</span>' +
+          '</div>' +
+          '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">' +
+            catProducts.map(renderProductCard).join('') +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+    container.innerHTML = html;
+  }
 
-    // Header count
-    var headerCount = document.getElementById('cartCount');
-    if (headerCount) {
-      headerCount.textContent = count;
-      headerCount.classList.toggle('cart-count-active', count > 0);
-    }
-    // Sticky pill count
-    var stickyCount = document.getElementById('stickyCartCount');
-    if (stickyCount) {
-      stickyCount.textContent = count;
-      stickyCount.classList.toggle('cart-count-active', count > 0);
-    }
-    // Drawer title count
-    var titleCount = document.getElementById('cartTitleCount');
-    if (titleCount) {
-      titleCount.textContent = count > 0 ? '(' + count + ')' : '';
+  function renderProductCard(p) {
+    var defaultVariant = p.variants[0];
+    var cartItem = cart.items.filter(function (i) { return i.variantId === defaultVariant.id; })[0];
+    var inCartQty = cartItem ? cartItem.qty : 0;
+
+    // Variant selector: dropdown if multiple, static label if single
+    var variantSelectorHtml;
+    if (p.variants.length > 1) {
+      var optionsHtml = p.variants.map(function (v, idx) {
+        return '<option value="' + esc(v.id) + '" data-price="' + v.price + '"' + (idx === 0 ? ' selected' : '') + '>' + esc(v.label) + ' · $' + v.price + '</option>';
+      }).join('');
+      variantSelectorHtml =
+        '<div class="mt-3">' +
+          '<span class="variant-label">Dose · Volume · <span style="color: var(--ink-3);">' + p.variants.length + ' options</span></span>' +
+          '<select class="variant-select" data-variant-select aria-label="Choose dose and volume for ' + esc(p.name) + '">' + optionsHtml + '</select>' +
+        '</div>';
+    } else {
+      variantSelectorHtml =
+        '<div class="mt-3">' +
+          '<span class="variant-label">Dose · Volume</span>' +
+          '<div class="single-variant-label">' + esc(defaultVariant.label) + '</div>' +
+          '<input type="hidden" data-variant-select value="' + esc(defaultVariant.id) + '" />' +
+        '</div>';
     }
 
-    // Cart contents
+    var inCartBadge = inCartQty > 0
+      ? '<span class="mono text-[10px] tracking-[0.1em] uppercase" style="color: var(--ember);">' + inCartQty + ' in cart</span>'
+      : '';
+
+    return (
+      '<article class="product-card" data-product-id="' + esc(p.id) + '">' +
+        '<div class="vial-slot">' +
+          '<span class="vial-ratio-tag">4:5</span>' +
+          '<img class="vial-img" alt="" src="' + esc(p.img) + '" onerror="this.closest(\'.vial-slot\').classList.remove(\'has-image\'); this.remove();" onload="this.closest(\'.vial-slot\').classList.add(\'has-image\');" />' +
+          '<svg class="vial-silhouette" viewBox="0 0 60 120" aria-hidden="true"><use href="#vialSilhouette"/></svg>' +
+          '<span class="vial-placeholder-label">img · ' + esc(p.id) + '</span>' +
+        '</div>' +
+        '<div class="p-6 flex flex-col flex-1">' +
+          '<div class="flex items-start justify-between gap-3 mb-2">' +
+            '<div class="min-w-0">' +
+              '<div class="mono text-[10.5px] tracking-[0.12em] uppercase text-ink-400 truncate">' + esc(p.molecule) + '</div>' +
+              '<h4 class="mt-1.5 serif text-[24px] leading-tight">' + esc(p.name) + '</h4>' +
+            '</div>' +
+            '<span class="chip">' + esc(p.purity) + '</span>' +
+          '</div>' +
+          '<div class="mt-3 flex flex-wrap gap-1.5">' +
+            '<span class="spec-chip">Lot <strong>' + esc(p.lot) + '</strong></span>' +
+            inCartBadge +
+          '</div>' +
+          variantSelectorHtml +
+          '<div class="action-row mt-6 pt-5 border-t hairline flex items-end justify-between gap-3">' +
+            '<div>' +
+              '<div class="text-[11px] uppercase tracking-[0.1em] text-ink-400">Per vial</div>' +
+              '<div class="serif text-[28px] text-ink-100 mt-0.5" data-price-display>$' + defaultVariant.price + '<span class="text-ink-400 text-[14px] mono">.00</span></div>' +
+            '</div>' +
+            '<div class="action-right flex flex-col items-end gap-2">' +
+              '<a href="#" class="coa-link text-[12px] text-ember-soft hover:text-cream transition">View COA →</a>' +
+              '<button type="button" class="btn btn-ember btn-small add-to-cart-btn" aria-label="Add ' + esc(p.name) + ' to cart">Add to cart</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</article>'
+    );
+  }
+
+  // When the variant dropdown changes, update just the price display for that card
+  function updateCardForVariant(card) {
+    var select = card.querySelector('[data-variant-select]');
+    if (!select) return;
+    var variantId = select.value || select.getAttribute('value');
+    var variant = findVariant(variantId);
+    if (!variant) return;
+
+    var priceEl = card.querySelector('[data-price-display]');
+    if (priceEl) priceEl.innerHTML = '$' + variant.price + '<span class="text-ink-400 text-[14px] mono">.00</span>';
+
+    // Refresh the "in cart" badge
+    var cartItem = cart.items.filter(function (i) { return i.variantId === variantId; })[0];
+    var inCartQty = cartItem ? cartItem.qty : 0;
+    var specRow = card.querySelector('.spec-chip') && card.querySelector('.spec-chip').parentElement;
+    if (specRow) {
+      var existingBadge = specRow.querySelector('[data-in-cart-badge]');
+      if (existingBadge) existingBadge.remove();
+      if (inCartQty > 0) {
+        var span = document.createElement('span');
+        span.className = 'mono text-[10px] tracking-[0.1em] uppercase';
+        span.style.color = 'var(--ember)';
+        span.setAttribute('data-in-cart-badge', '');
+        span.textContent = inCartQty + ' in cart';
+        specRow.appendChild(span);
+      }
+    }
+  }
+
+  function renderCartBody() {
     var container = document.getElementById('cartItems');
     var checkoutBtn = document.getElementById('cartCheckout');
     if (!container) return;
@@ -2985,21 +2759,24 @@
       if (checkoutBtn) checkoutBtn.setAttribute('disabled', '');
     } else {
       container.innerHTML = cart.items.map(function (i) {
-        var lineTotal = i.price * i.qty;
+        var v = findVariant(i.variantId);
+        var p = v ? findProduct(v.productId) : null;
+        if (!v || !p) return '';
+        var lineTotal = v.price * i.qty;
         return (
-          '<div class="cart-item" role="listitem" data-item-id="' + esc(i.id) + '">' +
+          '<div class="cart-item" role="listitem" data-item-id="' + esc(i.variantId) + '">' +
             '<div class="cart-item-main">' +
-              '<div class="cart-item-name">' + esc(i.name) + '</div>' +
-              '<div class="cart-item-spec">' + esc(i.spec) + '</div>' +
+              '<div class="cart-item-name">' + esc(p.name) + '</div>' +
+              '<div class="cart-item-spec">' + esc(v.label) + ' · Lot ' + esc(p.lot) + '</div>' +
             '</div>' +
             '<div class="cart-item-price">$' + lineTotal + '</div>' +
             '<div class="cart-item-controls">' +
-              '<div class="cart-qty" role="group" aria-label="Quantity for ' + esc(i.name) + '">' +
-                '<button type="button" class="cart-qty-btn" data-qty-minus="' + esc(i.id) + '" aria-label="Decrease quantity">−</button>' +
+              '<div class="cart-qty" role="group" aria-label="Quantity for ' + esc(p.name) + '">' +
+                '<button type="button" class="cart-qty-btn" data-qty-minus="' + esc(i.variantId) + '" aria-label="Decrease quantity">−</button>' +
                 '<span class="cart-qty-value" aria-live="polite">' + i.qty + '</span>' +
-                '<button type="button" class="cart-qty-btn" data-qty-plus="' + esc(i.id) + '" aria-label="Increase quantity">+</button>' +
+                '<button type="button" class="cart-qty-btn" data-qty-plus="' + esc(i.variantId) + '" aria-label="Increase quantity">+</button>' +
               '</div>' +
-              '<button type="button" class="cart-item-remove" data-remove="' + esc(i.id) + '">Remove</button>' +
+              '<button type="button" class="cart-item-remove" data-remove="' + esc(i.variantId) + '">Remove</button>' +
             '</div>' +
           '</div>'
         );
@@ -3007,12 +2784,33 @@
       if (checkoutBtn) checkoutBtn.removeAttribute('disabled');
     }
 
-    // Subtotal
     var subEl = document.getElementById('cartSubtotal');
     if (subEl) subEl.textContent = '$' + subtotal();
   }
 
-  // Cart drawer open/close
+  function renderCounts() {
+    var count = itemCount();
+    var headerCount = document.getElementById('cartCount');
+    if (headerCount) {
+      headerCount.textContent = count;
+      headerCount.classList.toggle('cart-count-active', count > 0);
+    }
+    var stickyCount = document.getElementById('stickyCartCount');
+    if (stickyCount) {
+      stickyCount.textContent = count;
+      stickyCount.classList.toggle('cart-count-active', count > 0);
+    }
+    var titleCount = document.getElementById('cartTitleCount');
+    if (titleCount) titleCount.textContent = count > 0 ? '(' + count + ')' : '';
+  }
+
+  function renderAll() {
+    renderCatalog();
+    renderCartBody();
+    renderCounts();
+  }
+
+  // ============ DRAWER ============
   var lastFocused = null;
   function openCart() {
     var drawer = document.getElementById('cartDrawer');
@@ -3039,15 +2837,17 @@
     if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
   }
 
-  // WhatsApp checkout
+  // ============ WHATSAPP CHECKOUT ============
   function checkout() {
     if (cart.items.length === 0) return;
     var lines = cart.items.map(function (i) {
-      var line = '• ' + i.name + (i.spec ? ' ' + i.spec : '') + ' × ' + i.qty + ' — $' + (i.price * i.qty);
-      return line;
-    });
+      var v = findVariant(i.variantId);
+      var p = v ? findProduct(v.productId) : null;
+      if (!v || !p) return '';
+      return '• ' + p.name + ' — ' + v.label + ' × ' + i.qty + ' — $' + (v.price * i.qty);
+    }).filter(Boolean);
     var total = subtotal();
-    var msg = 'Hi Hello You Labs — I\'d like to order:\n\n' +
+    var msg = "Hi Hello You Labs — I'd like to order:\n\n" +
               lines.join('\n') +
               '\n\nSubtotal: $' + total +
               '\n\nPlease confirm availability and let me know shipping and payment options. Thanks!';
@@ -3068,43 +2868,42 @@
     }, 1100);
   }
 
-  // Event wiring — delegated so it works with dynamically rendered content
+  // ============ EVENT WIRING ============
   document.addEventListener('click', function (e) {
-    // Add to cart
+    // Add to cart — read the current variant from the card's dropdown
     var addBtn = e.target.closest('.add-to-cart-btn');
     if (addBtn) {
       var card = addBtn.closest('article.product-card');
       if (card) {
-        var item = readProduct(card);
-        addItem(item);
-        flashAdded(addBtn);
-        openCart();
+        var select = card.querySelector('[data-variant-select]');
+        if (select) {
+          var variantId = select.value || select.getAttribute('value');
+          if (variantId) {
+            addVariant(variantId);
+            flashAdded(addBtn);
+            openCart();
+          }
+        }
       }
       return;
     }
-    // Open cart
-    if (e.target.closest('[data-cart-open]')) {
-      e.preventDefault();
-      openCart();
-      return;
-    }
-    // Close cart
-    if (e.target.closest('[data-cart-close]')) {
-      e.preventDefault();
-      closeCart();
-      return;
-    }
-    // Qty +
+    if (e.target.closest('[data-cart-open]')) { e.preventDefault(); openCart(); return; }
+    if (e.target.closest('[data-cart-close]')) { e.preventDefault(); closeCart(); return; }
     var plus = e.target.closest('[data-qty-plus]');
     if (plus) { changeQty(plus.getAttribute('data-qty-plus'), 1); return; }
-    // Qty -
     var minus = e.target.closest('[data-qty-minus]');
     if (minus) { changeQty(minus.getAttribute('data-qty-minus'), -1); return; }
-    // Remove
     var remove = e.target.closest('[data-remove]');
     if (remove) { removeItem(remove.getAttribute('data-remove')); return; }
-    // Checkout
     if (e.target.closest('#cartCheckout')) { checkout(); return; }
+  });
+
+  // Variant dropdown change — update price display on that card
+  document.addEventListener('change', function (e) {
+    var select = e.target.closest('[data-variant-select]');
+    if (!select) return;
+    var card = select.closest('.product-card');
+    if (card) updateCardForVariant(card);
   });
 
   // ESC to close
@@ -3115,8 +2914,26 @@
     }
   });
 
+  // Category filter integration — hide categories that don't match the active pill
+  document.addEventListener('click', function (e) {
+    var pill = e.target.closest('.filter-pill');
+    if (!pill) return;
+    // Only handle catalog filter pills (not the sort pills). Sort pills are inside the "Sort" group.
+    var parent = pill.parentElement;
+    if (!parent) return;
+    var isCatalogFilter = parent.classList.contains('filter-scroll');
+    if (!isCatalogFilter) return;
+    var label = pill.textContent.trim();
+    var grid = document.getElementById('productGrid');
+    if (!grid) return;
+    Array.prototype.forEach.call(grid.children, function (block) {
+      var f = block.getAttribute('data-cat-filter');
+      block.style.display = (label === 'All' || f === label) ? '' : 'none';
+    });
+  });
+
   // Initial render
-  render();
+  renderAll();
 })();
 </script>
 
