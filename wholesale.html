@@ -663,10 +663,328 @@
   @media (prefers-reduced-motion: reduce) {
     .cart-backdrop, .cart-drawer, .btn, .cart-checkout-btn, .vial-img { transition: none; }
   }
+
+  /* ============================================================
+     WHOLESALE ACCESS GATE
+     Full-viewport login before the catalog renders.
+     Shared password model: obfuscated via SHA-256 in JS.
+     ============================================================ */
+
+  .wholesale-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-image:
+      radial-gradient(1000px 500px at 85% -5%, rgba(212,165,116,0.10), transparent 60%),
+      radial-gradient(700px 320px at 10% 25%, rgba(212,165,116,0.05), transparent 60%);
+    overflow-y: auto;
+  }
+  /* When authed, hide the gate completely */
+  body.authed .wholesale-gate { display: none; }
+  /* When NOT authed, lock body scroll so background can't be interacted with */
+  body:not(.authed) { overflow: hidden; }
+
+  .wholesale-gate-card {
+    width: 100%;
+    max-width: 460px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    padding: 44px 36px;
+    text-align: center;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+  }
+  .wholesale-gate-logo {
+    height: 64px;
+    width: auto;
+    margin: 0 auto 20px;
+    opacity: 0.95;
+    display: block;
+  }
+  .wholesale-gate-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 14px;
+  }
+  .wholesale-gate-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 28px;
+    color: var(--ink-1);
+    margin: 0 0 10px;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+  .wholesale-gate-sub {
+    font-size: 13.5px;
+    color: var(--ink-3);
+    margin: 0 0 28px;
+    line-height: 1.55;
+  }
+  .wholesale-gate-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .wholesale-gate-form input {
+    background: var(--panel-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--ink-1);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    text-align: center;
+    letter-spacing: 0.03em;
+    transition: border-color .2s, background .2s;
+  }
+  .wholesale-gate-form input::placeholder {
+    color: var(--ink-4);
+    letter-spacing: normal;
+  }
+  .wholesale-gate-form input:focus {
+    outline: none;
+    border-color: var(--ember);
+    background: var(--panel);
+  }
+  .wholesale-gate-form button {
+    background: var(--ember);
+    color: var(--bg);
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    transition: background .2s, transform .2s, box-shadow .2s;
+    box-shadow: 0 10px 28px -8px rgba(212,165,116,0.5);
+  }
+  .wholesale-gate-form button:hover:not(:disabled) {
+    background: var(--ember-soft);
+    transform: translateY(-1px);
+  }
+  .wholesale-gate-form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .wholesale-gate-error {
+    color: var(--danger);
+    font-size: 13px;
+    margin-top: 14px;
+    min-height: 20px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .wholesale-gate-error.shake {
+    animation: gate-shake 0.42s cubic-bezier(.36,.07,.19,.97);
+  }
+  @keyframes gate-shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+  }
+  .wholesale-gate-footer {
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--ink-3);
+    line-height: 1.6;
+  }
+  .wholesale-gate-footer a {
+    color: var(--ember-soft);
+    text-decoration: none;
+  }
+  .wholesale-gate-footer a:hover {
+    color: var(--cream);
+    text-decoration: underline;
+    text-decoration-color: var(--ember-deep);
+    text-underline-offset: 3px;
+  }
+  .wholesale-gate-legal {
+    margin-top: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-4);
+  }
+
+  /* Sign-out link (visible when authed) */
+  .wholesale-signout {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-3);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color .2s, border-color .2s;
+  }
+  .wholesale-signout:hover {
+    color: var(--ember-soft);
+    border-color: var(--ember-deep);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wholesale-gate-error.shake { animation: none; }
+    .wholesale-gate-form button { transition: none; }
+  }
 </style>
 </head>
 
 <body>
+
+<!-- ============================================================
+     WHOLESALE ACCESS GATE
+     Synchronous auth check runs BEFORE the gate paints so
+     already-authed users see the catalog immediately.
+     ============================================================ -->
+<script>
+  (function () {
+    try {
+      var raw = localStorage.getItem('hyl_wholesale_auth_v1');
+      if (raw) {
+        var data = JSON.parse(raw);
+        var TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
+        if (data && data.at && (Date.now() - data.at) < TTL) {
+          document.body.classList.add('authed');
+        }
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<div class="wholesale-gate" id="wholesaleGate" role="dialog" aria-modal="true" aria-labelledby="wholesaleGateTitle">
+  <div class="wholesale-gate-card">
+    <img src="ChatGPT%20Image%20Jul%2028%2C%202026%2C%2003_06_14%20PM.png" alt="Hello You" class="wholesale-gate-logo" draggable="false" />
+    <div class="wholesale-gate-eyebrow">§ Wholesale portal · Approved access</div>
+    <h1 class="wholesale-gate-title" id="wholesaleGateTitle">Enter your access password</h1>
+    <p class="wholesale-gate-sub">Password provided in your approval email from Hello You Labs.</p>
+
+    <form id="wholesaleGateForm" class="wholesale-gate-form" autocomplete="off">
+      <input
+        type="password"
+        id="wholesaleGatePw"
+        name="wholesale-password"
+        placeholder="Password"
+        autocomplete="current-password"
+        spellcheck="false"
+        aria-label="Wholesale portal password"
+        required />
+      <button type="submit" id="wholesaleGateBtn">Enter portal →</button>
+    </form>
+    <div id="wholesaleGateError" class="wholesale-gate-error" role="alert" aria-live="polite"></div>
+
+    <div class="wholesale-gate-footer">
+      Not approved yet? <a href="wholesale-apply.html">Apply for a wholesale account →</a>
+      <div class="wholesale-gate-legal">Approved buyers only · Products supplied for laboratory research or physician-directed use only</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var AUTH_KEY = 'hyl_wholesale_auth_v1';
+    var PASSWORD_HASH = '925543563a217c8822d05098635573b2da9750a1f29e1659ca2fa897bbab0a78'; // sha256("helloyou2026")
+
+    async function sha256Hex(text) {
+      if (window.crypto && window.crypto.subtle) {
+        var buf = new TextEncoder().encode(text);
+        var hash = await crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(hash))
+          .map(function (b) { return b.toString(16).padStart(2, '0'); })
+          .join('');
+      }
+      return null;
+    }
+
+    function markAuthed() {
+      try {
+        localStorage.setItem(AUTH_KEY, JSON.stringify({ at: Date.now() }));
+      } catch (e) {}
+      document.body.classList.add('authed');
+    }
+
+    function signOut() {
+      try { localStorage.removeItem(AUTH_KEY); } catch (e) {}
+      document.body.classList.remove('authed');
+      // Reset any cart drawer state and reload cleanly
+      location.reload();
+    }
+
+    function wire() {
+      var form = document.getElementById('wholesaleGateForm');
+      var input = document.getElementById('wholesaleGatePw');
+      var btn = document.getElementById('wholesaleGateBtn');
+      var errorEl = document.getElementById('wholesaleGateError');
+
+      if (!form) return;
+
+      // Auto-focus if gate is visible (i.e. not authed)
+      if (!document.body.classList.contains('authed')) {
+        setTimeout(function () { input && input.focus(); }, 100);
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var pw = (input.value || '').trim();
+        if (!pw) return;
+
+        btn.disabled = true;
+        btn.textContent = 'Checking…';
+        errorEl.textContent = '';
+
+        var hash = await sha256Hex(pw);
+
+        // Small artificial delay for UX (feels like it did something)
+        setTimeout(function () {
+          if (hash === PASSWORD_HASH) {
+            markAuthed();
+            errorEl.textContent = '';
+          } else {
+            errorEl.textContent = 'Incorrect password. Contact your account manager for the correct password.';
+            errorEl.classList.remove('shake');
+            // Force reflow so the animation restarts on repeat wrong attempts
+            void errorEl.offsetWidth;
+            errorEl.classList.add('shake');
+            input.value = '';
+            input.focus();
+          }
+          btn.disabled = false;
+          btn.textContent = 'Enter portal →';
+        }, 350);
+      });
+
+      // Sign-out click (delegated so it also works if added dynamically)
+      document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-signout]')) {
+          e.preventDefault();
+          signOut();
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', wire);
+    } else {
+      wire();
+    }
+  })();
+</script>
 
 <!-- RUO strip -->
 <div class="ruo-strip">
@@ -770,6 +1088,11 @@
     <p class="mt-2 text-ink-500 text-[11px]">
       Questions? Email <a href="mailto:helloyouwellnessclinic@gmail.com" class="text-ember-soft hover:text-cream transition">helloyouwellnessclinic@gmail.com</a>
     </p>
+    <div class="mt-5">
+      <button type="button" class="wholesale-signout" data-signout aria-label="Sign out of wholesale portal">
+        Sign out
+      </button>
+    </div>
   </div>
 </footer>
 
