@@ -1,0 +1,23 @@
+{
+  "type": "Composites and crops of supplied product artwork; not new photography",
+  "approval": "User approved imagery-v1 contact sheet in conversation",
+  "review": "design-review/imagery-v1/",
+  "sources": [
+    "img/vials/semaglutide-5mg.png",
+    "img/vials/tirzepatide-10mg.png",
+    "img/vials/retatrutide-5mg.png",
+    "img/vials/bpc157-5mg.png",
+    "img/vials/ghkcu-50mg.png",
+    "img/vials/ipamorelin-5mg.png",
+    "img/vials/cjc1295-nodac-5mg.png",
+    "img/vials/cjc1295-dac-2mg.png",
+    "img/vials/sermorelin-5mg.png",
+    "img/vials/tesamorelin-5mg.png",
+    "img/vials/glow-blend.png",
+    "img/vials/wolverine-blend.png",
+    "img/vials/cjc1295-ipamorelin-blend.png"
+  ],
+  "processing": "Background masking, upright rotation, resizing, compositing, and simulated contact shadows. Product lettering is not regenerated.",
+  "shipping": "Existing illustration retained. Actual packaging photos still required.",
+  "limitations": "Glass retains reflections/transmission from original artwork. Composites do not verify label claims or represent a company facility."
+}

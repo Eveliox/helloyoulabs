@@ -1,0 +1,14 @@
+{
+  "name": "hello-you-labs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hello You Labs static research storefront",
+  "scripts": {
+    "dev": "node scripts/serve.cjs",
+    "test": "node --test tests/storefront.test.cjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "playwright": "^1.63.0"
+  }
+}
