@@ -57,4 +57,10 @@ Coverage includes catalog filters, pricing, cart arithmetic and persistence, mal
 
 ## Deployment
 
-Deploy the static site files, including `assets/`, to the existing static host. No build command is needed. Keep the existing root image/video assets and secondary pages while those pages reference them. Do not deploy `node_modules/`, tests, or development scripts. These changes have not been deployed to the live domain.
+The site is served by a Cloudflare Worker using static assets — no build step. Configuration lives in `wrangler.jsonc`; the repo root is the assets directory, and `.assetsignore` keeps `node_modules/`, tests, scripts and other dev files out of the upload.
+
+- **Cloudflare Workers Builds** (on push to `main`): build command *none*, deploy command `npx wrangler deploy`.
+- **Manual deploy**: `npm run deploy` (requires `wrangler login` once).
+- **Local preview**: `npm run preview`.
+
+Keep the existing root image/video assets and secondary pages while those pages reference them.

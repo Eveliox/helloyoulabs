@@ -1,0 +1,19 @@
+# Files excluded from the Cloudflare Workers static-asset upload.
+# Everything else in the repo root is served as-is.
+.git
+.gitignore
+.assetsignore
+node_modules
+tests
+scripts
+design-review
+package.json
+package-lock.json
+README.md
+deploy-manual.md
+AGENTS.md
+wrangler.jsonc
+wrangler.toml
+.wrangler
+.env
+.env.*

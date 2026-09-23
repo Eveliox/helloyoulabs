@@ -32,3 +32,6 @@ dist/
 build/
 .vercel/
 .next/
+
+# Wrangler local state
+.wrangler/
