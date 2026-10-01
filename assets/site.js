@@ -191,6 +191,14 @@
       0,
     );
   }
+  try {
+    const member = localStorage.getItem("hyl_account_name");
+    if (member && $("#heroEyebrow"))
+      $("#heroEyebrow").textContent =
+        `WELCOME BACK, ${member.toUpperCase()} / RESEARCH COLLECTION`;
+  } catch {
+    /* The default eyebrow stays when storage is blocked. */
+  }
   const invoiceEmail = $("#invoiceEmail");
   try {
     invoiceEmail.value = localStorage.getItem(INVOICE_EMAIL_KEY) || "";

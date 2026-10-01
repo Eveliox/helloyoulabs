@@ -11,7 +11,7 @@ The storefront now uses a warm ivory, charcoal and muted-bronze visual direction
 - `assets/signature.css`, `assets/signature.js` — interactive 2× product-detail lens and procedural canvas artwork. The material study switches among three real catalog products; its curves are abstract artwork, not molecular structures. Canvas rendering is capped near 30 fps, pauses offscreen/in hidden tabs, and follows the shared motion preference. The lens supports mouse movement, a keyboard/touch range control, and Escape.
 - `assets/modern.css`, `assets/motion.js` — product compositions, animated login artwork, scroll reveals, pointer depth, hover transitions and reading progress. A persistent motion toggle pauses decorative animation; device reduced-motion preferences take priority. CSS scenes pause offscreen and when the tab is hidden. No animation library is required.
 - `assets/secondary.css` — dark companion theme for existing wholesale/application/guide pages.
-- `login.html` — customer sign-in and account creation (email + password).
+- `login.html`, `assets/login.css`, `assets/login-art.js` — the sign-in gate: email-first sign-in/sign-up beside a generative “silk study” canvas (iridescent ribbon, glass orb, film grain; follows the pointer, renders one still frame for reduced motion, pauses when hidden).
 - `account.html` — signed-in dashboard: saved cart summary, profile (name, organization), support and wholesale links.
 - `standards.html` — research and documentation information.
 - `documentation.html` — product-specific COA requests via WhatsApp.
@@ -20,13 +20,15 @@ The storefront now uses a warm ivory, charcoal and muted-bronze visual direction
 
 ## Customer accounts
 
-Customers create an account with first name, email and password at `/login`, then land on `/account`. The API lives in `worker/index.js` and only runs for `/api/*`; every other path is still served as a static file.
+**The whole site requires sign-in.** The Worker runs before static assets on every request: pages (and `assets/catalog.js`, which carries pricing) redirect to `/login?next=…` without a session, and signed-in pages are sent `Cache-Control: private, no-store`. Public: `/login`, `/wholesale-apply`, `/api/*`, and static media (styles, scripts, images). After signing in, visitors return to the page they asked for (same-site paths only).
+
+Sign-in is email-first: the email is checked with `/api/lookup`, then the page asks for a password (existing account) or a first name and new password (new account).
 
 - **Storage:** a D1 database bound as `DB` (`helloyoulabs-accounts`). `wrangler deploy` creates it on the first deploy (no `database_id` in `wrangler.jsonc`), and the Worker creates its tables on first request.
 - **Passwords:** PBKDF2-SHA256, 100,000 iterations, per-user salt. Plain passwords are never stored or logged.
 - **Sessions:** random 256-bit token in an `HttpOnly`, `SameSite=Lax` cookie (`Secure` over HTTPS), valid 30 days; only its SHA-256 hash is stored. Logout deletes the session.
 - **Abuse limits:** 10 failed sign-ins per email or 30 per network in 15 minutes locks sign-in for that window; 10 new accounts per network per 15 minutes. Cross-origin writes are refused.
-- **Endpoints:** `POST /api/signup`, `POST /api/login`, `POST /api/logout`, `GET /api/me` (`{ user: null }` when signed out), `PUT /api/me` (name, organization).
+- **Endpoints:** `POST /api/lookup` (`{ exists }`; 40 per network per 15 minutes), `POST /api/signup`, `POST /api/login`, `POST /api/logout`, `GET /api/me` (`{ user: null }` when signed out), `PUT /api/me` (name, organization).
 
 Not built yet: password reset by email (needs an email provider — for now the page links to WhatsApp), order history, and invoices. To help someone who is locked out, delete their account so they can sign up again:
 

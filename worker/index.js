@@ -1,5 +1,6 @@
-// Customer accounts API. Everything outside /api/* is served straight from
-// static assets (see run_worker_first in wrangler.jsonc).
+// Customer accounts API (/api/*) and the sign-in gate in front of every page.
+// Requests reach this Worker before static assets (run_worker_first in
+// wrangler.jsonc); public files are passed straight through.
 //
 // Storage: the D1 database bound as DB. Tables are created on first use, so a
 // fresh (auto-provisioned) database needs no manual migration.
@@ -11,6 +12,7 @@ const FAILURE_WINDOW = 15 * 60; // seconds
 const MAX_FAILURES_PER_EMAIL = 10;
 const MAX_FAILURES_PER_IP = 30;
 const MAX_SIGNUPS_PER_IP = 10;
+const MAX_LOOKUPS_PER_IP = 40;
 
 const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS users (
@@ -229,6 +231,20 @@ async function login(request, db, ip) {
   return json({ user: publicUser(user) }, 200, { "Set-Cookie": await startSession(request, db, user.id) });
 }
 
+// Email-first sign-in: tells the page whether to ask for a password or offer
+// account creation. Sign-up already reveals whether an email is registered,
+// so this exposes nothing new; it is rate limited per network all the same.
+async function lookup(request, db, ip) {
+  const body = await readJson(request);
+  const email = body && normalizeEmail(body.email);
+  if (!email) return fail(400, "Please enter a valid email address.");
+  if ((await recentEvents(db, `lookup:${ip}`)) >= MAX_LOOKUPS_PER_IP)
+    return fail(429, "Too many attempts. Please wait 15 minutes and try again.");
+  await recordEvents(db, [`lookup:${ip}`]);
+  const user = await db.prepare("SELECT 1 FROM users WHERE email = ?").bind(email).first();
+  return json({ exists: Boolean(user) });
+}
+
 async function logout(request, db) {
   const token = readCookie(request, SESSION_COOKIE);
   if (token) await db.prepare("DELETE FROM sessions WHERE token_hash = ?").bind(await sha256(token)).run();
@@ -263,6 +279,7 @@ async function handleApi(request, env) {
   if (route === "POST /api/signup") return signup(request, db, ip);
   if (route === "POST /api/login") return login(request, db, ip);
   if (route === "POST /api/logout") return logout(request, db);
+  if (route === "POST /api/lookup") return lookup(request, db, ip);
   if (url.pathname === "/api/me") {
     const user = await currentUser(request, db);
     if (request.method === "GET") return json({ user: user && publicUser(user) });
@@ -273,16 +290,60 @@ async function handleApi(request, env) {
   return fail(404, "Not found.");
 }
 
+// The whole site sits behind sign-in. These stay public so visitors can sign
+// in or apply; static media (images, styles, scripts) is public too, except
+// the catalog data, which carries pricing.
+const PUBLIC_PAGES = new Set(["/login", "/login.html", "/wholesale-apply", "/wholesale-apply.html"]);
+const GATED_FILES = new Set(["/assets/catalog.js"]);
+
+function isPage(pathname) {
+  return !/\.[a-z0-9]+$/i.test(pathname) || pathname.endsWith(".html");
+}
+
+// Only same-site paths are allowed as a post-sign-in destination.
+function safeNext(value) {
+  return typeof value === "string" && value.startsWith("/") && !value.startsWith("//") && !value.startsWith("/\\")
+    ? value
+    : "/";
+}
+
+function redirect(location) {
+  return new Response(null, { status: 302, headers: { Location: location, "Cache-Control": "no-store" } });
+}
+
+async function handlePage(request, env) {
+  const url = new URL(request.url);
+  const path = url.pathname.replace(/\/+$/, "") || "/";
+  const gated = GATED_FILES.has(path) || (isPage(path) && !PUBLIC_PAGES.has(path));
+  const isLogin = path === "/login" || path === "/login.html";
+  if (!gated && !isLogin) return env.ASSETS.fetch(request);
+
+  await ensureSchema(env.DB);
+  const user = await currentUser(request, env.DB);
+  if (isLogin) {
+    if (user) return redirect(safeNext(url.searchParams.get("next")));
+    return env.ASSETS.fetch(request);
+  }
+  if (!user) {
+    if (!isPage(path)) return new Response("Please sign in.", { status: 401, headers: { "Cache-Control": "no-store" } });
+    const next = path === "/" && !url.search ? "" : `?next=${encodeURIComponent(url.pathname + url.search)}`;
+    return redirect(`/login${next}`);
+  }
+  // Signed-in pages must not be served from a shared or back/forward cache after logout.
+  const response = await env.ASSETS.fetch(request);
+  const headers = new Headers(response.headers);
+  headers.set("Cache-Control", "private, no-store");
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 export default {
   async fetch(request, env) {
-    if (new URL(request.url).pathname.startsWith("/api/")) {
-      try {
-        return await handleApi(request, env);
-      } catch (error) {
-        console.error(error);
-        return fail(500, "Something went wrong. Please try again.");
-      }
+    try {
+      if (new URL(request.url).pathname.startsWith("/api/")) return await handleApi(request, env);
+      return await handlePage(request, env);
+    } catch (error) {
+      console.error(error);
+      return fail(500, "Something went wrong. Please try again.");
     }
-    return env.ASSETS.fetch(request);
   },
 };

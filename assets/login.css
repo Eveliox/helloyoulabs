@@ -1,0 +1,148 @@
+/* Sign-in gate. Self-contained: loaded only by login.html. */
+:root {
+  --ink: #0c0b09;
+  --ink-2: #15130f;
+  --line: #ffffff1f;
+  --line-strong: #ffffff38;
+  --text: #f4eee4;
+  --muted: #a69d8f;
+  --faint: #948a7c;
+  --champagne: #dcc6a3;
+  --champagne-hi: #efe0c6;
+  --bronze: #a27650;
+  --field: #1b1915;
+  --danger: #f2b6a6;
+  --gutter: clamp(16px, 4.5vw, 64px);
+  --frame-y: clamp(16px, 6vh, 64px);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body.gate {
+  background: var(--ink);
+  color: var(--text);
+  font: 400 15px/1.55 "DM Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100svh;
+}
+a { color: inherit; }
+button, input { font: inherit; }
+:focus-visible { outline: 2px solid var(--champagne); outline-offset: 3px; }
+[hidden] { display: none !important; }
+
+/* Hairline frame with corner brackets, extending past the content like a print crop. */
+body.gate { position: relative; }
+.gate-frame { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.gate-frame::before, .gate-frame::after { content: ""; position: absolute; border-color: var(--line); border-style: solid; }
+.gate-frame::before { left: 0; right: 0; top: var(--frame-y); bottom: var(--frame-y); border-width: 1px 0; }
+.gate-frame::after { top: 0; bottom: 0; left: var(--gutter); right: var(--gutter); border-width: 0 1px; }
+.corner { position: absolute; width: 18px; height: 18px; border: 0 solid var(--text); }
+.corner.tl { left: var(--gutter); top: var(--frame-y); border-width: 3px 0 0 3px; translate: -1px -1px; }
+.corner.tr { right: var(--gutter); top: var(--frame-y); border-width: 3px 3px 0 0; translate: 1px -1px; }
+.corner.bl { left: var(--gutter); bottom: var(--frame-y); border-width: 0 0 3px 3px; translate: -1px 1px; }
+.corner.br { right: var(--gutter); bottom: var(--frame-y); border-width: 0 3px 3px 0; translate: 1px 1px; }
+
+.gate-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 100svh;
+  padding: var(--frame-y) var(--gutter);
+}
+
+/* Left: generative silk ribbon. */
+.gate-art { position: relative; min-height: 560px; overflow: hidden; }
+#ribbon { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.art-note { position: absolute; max-width: 200px; z-index: 2; text-shadow: 0 1px 14px #0c0b09, 0 0 2px #0c0b09; }
+.art-note h2 { margin: 0 0 10px; font: 500 15px/1.35 "DM Mono", ui-monospace, monospace; letter-spacing: .22em; text-transform: uppercase; color: var(--text); }
+.art-note p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.note-a { top: 14%; left: 68%; }
+.note-b { top: 52%; left: 2%; text-align: right; max-width: 170px; }
+.note-c { bottom: 12%; left: 68%; }
+.art-index { position: absolute; left: 28px; bottom: 22px; margin: 0; display: flex; gap: 18px; font: 11px "DM Mono", monospace; letter-spacing: .16em; color: var(--faint); text-transform: uppercase; }
+
+/* Right: sign-in panel. */
+.gate-panel { align-self: center; width: min(100%, 560px); justify-self: center; padding: 56px clamp(8px, 3vw, 40px); }
+.gate-logo { display: block; width: 168px; height: auto; margin-bottom: 44px; }
+.gate-kicker { margin: 0 0 14px; font: 500 11px "DM Mono", monospace; letter-spacing: .24em; text-transform: uppercase; color: var(--champagne); display: flex; align-items: center; gap: 10px; }
+.gate-kicker::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--champagne); box-shadow: 0 0 0 4px #dcc6a326; }
+.gate-panel h1 { margin: 0 0 30px; font: 500 clamp(26px, 2.3vw, 34px)/1.18 "DM Sans", sans-serif; letter-spacing: -.025em; outline: none; }
+.field { margin-bottom: 16px; }
+.field label { display: block; margin-bottom: 9px; font-size: 14px; color: #d8d0c4; }
+.input-shell { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 16px; background: var(--field); border: 1px solid var(--line-strong); border-radius: 6px; transition: border-color .25s, background .25s, box-shadow .25s; }
+.input-shell:focus-within { border-color: var(--champagne); background: #221f1a; box-shadow: 0 0 0 4px #dcc6a31a; }
+.input-shell svg { flex: none; width: 20px; height: 20px; fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.input-shell input { flex: 1; min-width: 0; height: 58px; border: 0; padding: 0; background: transparent; color: var(--text); font-size: 16px; outline: none; }
+.input-shell input::placeholder { color: var(--faint); }
+.input-shell input[readonly] { color: var(--muted); }
+.change-email, .reveal { flex: none; border: 0; padding: 6px 8px; margin-right: -6px; border-radius: 4px; background: transparent; color: var(--champagne); font-size: 13px; cursor: pointer; }
+.change-email:hover, .reveal:hover { background: #ffffff0d; }
+.field-hint { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+
+.gate-button { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 60px; padding: 0 22px; border-radius: 6px; border: 1px solid transparent; font-size: 16px; font-weight: 500; text-decoration: none; cursor: pointer; transition: background .25s, border-color .25s, transform .25s, box-shadow .25s; }
+.gate-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s; }
+#loginSubmit { margin-top: 8px; color: #1b1712; background: linear-gradient(100deg, var(--champagne) 0%, var(--champagne-hi) 45%, var(--champagne) 100%); background-size: 200% 100%; box-shadow: 0 18px 40px -22px #dcc6a3aa; }
+#loginSubmit:hover { background-position: 100% 0; transform: translateY(-1px); }
+#loginSubmit:hover svg { transform: translateX(3px); }
+#loginSubmit:disabled { opacity: .65; cursor: progress; transform: none; }
+.gate-button.outline { background: transparent; color: var(--text); border-color: var(--champagne); }
+.gate-button.outline:hover { background: #dcc6a314; }
+.gate-button.ghost { background: transparent; color: var(--text); border-color: var(--line-strong); font-size: 15px; min-height: 56px; }
+.gate-button.ghost:hover { border-color: var(--text); }
+.gate-error { margin: 14px 0 0; color: var(--danger); font-size: 14px; }
+.gate-error:empty { display: none; }
+.gate-fine { margin: 16px 0 0; color: var(--muted); font-size: 13px; }
+.gate-fine a { color: var(--champagne); }
+
+.gate-divider { display: flex; align-items: center; gap: 14px; margin: 46px 0 24px; font: 11px "DM Mono", monospace; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); }
+.gate-divider::before, .gate-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.gate-subhead { margin: 0 0 8px; font: 500 24px/1.25 "DM Sans", sans-serif; letter-spacing: -.02em; }
+.gate-copy { margin: 0 0 24px; color: var(--muted); font-size: 15px; }
+.gate-links { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+
+.gate-legal { position: absolute; left: 0; right: 0; bottom: calc(var(--frame-y) - 34px); z-index: 2; margin: 0; padding: 0 var(--gutter); text-align: center; font: 11px "DM Mono", monospace; letter-spacing: .08em; color: var(--faint); }
+
+/* Help bubble, mirroring a chat launcher but routing to WhatsApp. */
+.help-bubble { position: fixed; right: 20px; bottom: 20px; z-index: 5; display: flex; align-items: center; gap: 10px; }
+.help-bubble a { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.help-bubble a span { background: var(--text); color: #17140f; padding: 12px 18px; border-radius: 16px 16px 4px 16px; font-size: 15px; box-shadow: 0 12px 30px -12px #000; }
+.help-bubble a svg { width: 58px; height: 58px; padding: 16px; border-radius: 50%; background: var(--champagne); fill: #17140f; stroke: none; box-shadow: 0 12px 30px -10px #000; }
+.help-close { width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--text); color: #17140f; font-size: 20px; line-height: 1; cursor: pointer; }
+.help-bubble.collapsed a span, .help-bubble.collapsed .help-close { display: none; }
+
+/* Staged entrance. */
+@media (prefers-reduced-motion: no-preference) {
+  .gate-panel > *, .art-note { animation: rise .9s cubic-bezier(.2, .8, .2, 1) both; }
+  .gate-panel > :nth-child(2) { animation-delay: .06s; }
+  .gate-panel > :nth-child(3) { animation-delay: .12s; }
+  .gate-panel > :nth-child(n+4) { animation-delay: .18s; }
+  .note-a { animation-delay: .5s; } .note-b { animation-delay: .7s; } .note-c { animation-delay: .9s; }
+  .gate-step.swap { animation: swap .45s cubic-bezier(.2, .8, .2, 1); }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+@keyframes swap { from { opacity: .3; transform: translateX(10px); } }
+
+@media (max-width: 1100px) {
+  .note-a, .note-c { left: 64%; }
+  .art-note { max-width: 150px; }
+}
+@media (max-width: 900px) {
+  .gate-frame::after { display: none; }
+  .gate-frame::before { border-width: 1px 0 0; }
+  .corner.bl, .corner.br { display: none; }
+  .gate-grid { grid-template-columns: minmax(0, 1fr); padding-bottom: 72px; }
+  .gate-legal { bottom: 24px; }
+  .gate-art { min-height: 0; height: 240px; margin: 0 calc(var(--gutter) * -1); }
+  .art-note, .art-index { display: none; }
+  .gate-panel { padding: 8px 0 24px; }
+  .gate-logo { width: 140px; margin: 28px 0 32px; }
+  .gate-links { grid-template-columns: 1fr; }
+  .help-bubble { right: 14px; bottom: 14px; }
+  .help-bubble a svg { width: 50px; height: 50px; padding: 14px; }
+  .help-bubble a span, .help-close { display: none; }
+}
+
+/* While creating an account, the sign-up pitch below the form is redundant. */
+.gate-panel:has([data-step="signup"]) .signup-pitch { display: none; }

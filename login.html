@@ -1,1 +1,87 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in · Hello You Labs</title><link rel="icon" href="assets/favicon.svg"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;550;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/portal.css"><script src="assets/account.js" defer></script><link rel="stylesheet" href="assets/modern.css"><script src="assets/motion.js" defer></script><link rel="stylesheet" href="assets/warm.css"></head><body class="portal login-page"><div class="portal-shell"><header class="portal-nav"><a class="portal-brand" href="index.html">hello you<span style="color:#443b31">.</span> <small>LABS</small></a><nav aria-label="Main navigation"><a href="index.html#catalog">Shop all</a><a href="standards.html">Our standards</a><a href="wholesale-apply.html">Wholesale</a><a href="documentation.html">COAs</a><a href="index.html#faq">FAQs</a><a class="nav-square" href="account.html" aria-label="Your account">Account</a><a class="nav-square" href="index.html?cart=open" aria-label="Open shopping cart">Bag ↗</a></nav></header><main class="portal-main" id="main"><div class="login-grid"><div class="login-art" aria-hidden="true"><div class="login-sculpture" aria-hidden="true"><div class="sculpture-ring ring-a"></div><div class="sculpture-ring ring-b"></div><div class="sculpture-core"></div><div class="sculpture-axis"></div><span class="sculpture-index">HYL — RESEARCH IN MOTION</span></div><div class="art-caption one">RESEARCH FIRST<span>Materials for your next discovery.</span></div><div class="art-caption two">HELLO, POSSIBILITY.<span>A more personal approach to research supply.</span></div><div class="art-caption three">KNOW YOUR LOT<span>Request documentation. Make informed decisions.</span></div></div><section class="login-form"><span class="portal-brand">hy.</span><h1>Your research.<br>One place to move it forward.</h1><p id="loginIntro">Sign in to your Hello You account.</p><div class="auth-switch" role="group" aria-label="Sign in or create an account"><button type="button" class="auth-tab" data-auth-mode="login" aria-pressed="true">Sign in</button><button type="button" class="auth-tab" data-auth-mode="signup" aria-pressed="false">Create account</button></div><form id="loginForm" novalidate><div class="signup-only" hidden><label for="signupName">First name</label><input id="signupName" name="name" autocomplete="given-name" maxlength="50"></div><label for="loginEmail">Email</label><input id="loginEmail" name="email" type="email" autocomplete="email" maxlength="254" required><label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" maxlength="200" required aria-describedby="passwordHint"><p class="field-hint signup-only" id="passwordHint" hidden>Use at least 8 characters.</p><button class="btn" type="submit" id="loginSubmit"><span class="submit-label">Sign in</span> <span aria-hidden="true">→</span></button><p id="loginError" role="alert"></p></form><p class="minor-note">Forgot your password? <a href="https://wa.me/17867803626?text=Hi%20Hello%20You%20Labs%2C%20I%20need%20help%20resetting%20my%20account%20password.%20My%20account%20email%20is%3A%20" target="_blank" rel="noopener">Message our team ↗</a></p><hr><h2>Buying for a business?</h2><p>Tell us about your business to apply for wholesale access.</p><a class="btn outline" href="wholesale-apply.html">Apply for wholesale ↗</a><div class="minor-links"><a href="https://wa.me/17867803626">Questions? Contact us ↗</a><a href="index.html#catalog">View catalog ↗</a></div></section></div></main></div><footer class="portal-footer"><div class="footer-grid"><div><div class="portal-brand">hello you. <small>LABS</small></div><p>Research, with confidence.<br>Real people behind every order.</p></div><div><h3>ORDERING & SHIPPING</h3><p>Confirm availability, shipping and payment<br>with our team before placing your order.</p><a href="index.html#ordering">How ordering works ↗</a><a href="wholesale-apply.html">Apply for wholesale access ↗</a></div><div><h3>LET’S CONNECT</h3><a href="https://wa.me/17867803626" target="_blank" rel="noopener">WhatsApp · +1 (786) 780-3626 ↗</a><a href="documentation.html">Certificates of analysis</a><a href="index.html#faq">Frequently asked questions</a></div></div><p class="legal-note">For in-vitro laboratory research and development only. Not for human or veterinary use. Product imagery is illustrative. Confirm the selected vial option and current lot documentation with our team.</p><p class="copyright">© 2026 Hello You Labs. Research first. Always.</p></footer><a class="support-fab" href="https://wa.me/17867803626" target="_blank" rel="noopener" aria-label="Contact Hello You Labs on WhatsApp">Let’s talk ↗</a></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Sign in · Hello You Labs</title>
+  <meta name="description" content="Sign in to Hello You Labs to explore the research collection.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Libre+Caslon+Text:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/login.css">
+  <script src="assets/account.js" defer></script>
+  <script src="assets/login-art.js" defer></script>
+</head>
+<body class="gate">
+  <div class="gate-frame" aria-hidden="true"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></div>
+
+  <main class="gate-grid" id="main">
+    <section class="gate-art" aria-label="Hello You Labs">
+      <canvas id="ribbon" aria-hidden="true"></canvas>
+      <div class="art-note note-a"><h2>Research first</h2><p>Thoughtfully sourced for the lab, never for the shelf.</p></div>
+      <div class="art-note note-b"><h2>Know your lot</h2><p>Lot-specific documentation, on request, before you order.</p></div>
+      <div class="art-note note-c"><h2>Real people</h2><p>A real person confirms every order with you.</p></div>
+      <p class="art-index" aria-hidden="true"><span>HYL</span><span id="artCoord">01 — Silk study</span></p>
+    </section>
+
+    <section class="gate-panel">
+      <img class="gate-logo" src="assets/images/logo-light.webp" alt="Hello You Labs" width="250" height="58">
+
+      <div class="gate-step" id="loginStepper" data-step="email">
+        <p class="gate-kicker" id="gateKicker">Members only</p>
+        <h1 id="loginTitle" tabindex="-1">Sign in to explore the research collection.</h1>
+
+        <form id="loginForm" novalidate>
+          <div class="field email-field">
+            <label for="loginEmail">Email</label>
+            <div class="input-shell">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
+              <input id="loginEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder="you@yourlab.com" required>
+              <button class="change-email" type="button" id="changeEmail" hidden>Change</button>
+            </div>
+          </div>
+
+          <div class="field step-signup" hidden>
+            <label for="signupName">First name</label>
+            <div class="input-shell"><input id="signupName" name="name" autocomplete="given-name" maxlength="50"></div>
+          </div>
+
+          <div class="field step-password" hidden>
+            <label for="loginPassword">Password</label>
+            <div class="input-shell">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+              <input id="loginPassword" name="password" type="password" autocomplete="current-password" maxlength="200" aria-describedby="passwordHint">
+              <button class="reveal" type="button" id="revealPassword" aria-pressed="false" aria-label="Show password">Show</button>
+            </div>
+            <p class="field-hint step-signup" id="passwordHint" hidden>At least 8 characters.</p>
+          </div>
+
+          <button class="gate-button" type="submit" id="loginSubmit"><span class="submit-label">Continue</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p id="loginError" class="gate-error" role="alert"></p>
+          <p class="gate-fine step-password-only" hidden>Forgot your password? <a id="resetLink" href="https://wa.me/17867803626?text=Hi%20Hello%20You%20Labs%2C%20I%20need%20help%20resetting%20my%20account%20password." target="_blank" rel="noopener">Message our team ↗</a></p>
+        </form>
+      </div>
+
+      <div class="signup-pitch">
+        <div class="gate-divider"><span>New to Hello You?</span></div>
+        <h2 class="gate-subhead">Open an account with us.</h2>
+        <p class="gate-copy">Create your account in under a minute. Buying for a business? Apply for wholesale access and we’ll reply within one business day.</p>
+        <button class="gate-button outline" type="button" id="startSignup">Create an account</button>
+      </div>
+      <div class="gate-links">
+        <a class="gate-button ghost" href="https://wa.me/17867803626" target="_blank" rel="noopener">Questions? Message us</a>
+        <a class="gate-button ghost" href="wholesale-apply.html">Wholesale access <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <p class="gate-legal">For in-vitro laboratory research only. Not for human or veterinary use.</p>
+
+  <aside class="help-bubble" id="helpBubble">
+    <button type="button" class="help-close" id="helpClose" aria-label="Dismiss help message">×</button>
+    <a href="https://wa.me/17867803626" target="_blank" rel="noopener" aria-label="Need any help? Message us on WhatsApp"><span aria-hidden="true">Hi. Need any help?</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5z"/></svg></a>
+  </aside>
+</body>
+</html>

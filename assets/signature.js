@@ -134,7 +134,9 @@
     const ih = (source.naturalHeight || 1250) * scale;
     lens.style.left = `${x - radius}px`; lens.style.top = `${y - radius}px`;
     lens.style.backgroundSize = `${iw * 2}px ${ih * 2}px`;
-    lens.style.backgroundPosition = `${radius - (x + (iw - w) / 2) * 2}px ${radius - (y + (ih - h) / 2) * 2}px`;
+    // Follow the image's object-position so the lens magnifies what is actually under it.
+    const [px, py] = getComputedStyle(source).objectPosition.split(' ').map((v) => parseFloat(v) / 100);
+    lens.style.backgroundPosition = `${radius - (x + (iw - w) * (Number.isFinite(px) ? px : .5)) * 2}px ${radius - (y + (ih - h) * (Number.isFinite(py) ? py : .5)) * 2}px`;
   }
   function setActive(value) {
     active = value;

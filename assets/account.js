@@ -6,6 +6,13 @@
   };
   // Remove the name saved by the old local-only account preview.
   try { localStorage.removeItem('hyl_account_preview_v1'); } catch {}
+  // The storefront greets members by name and pre-fills the invoice email from these.
+  const rememberUser = (user) => {
+    try {
+      localStorage.setItem('hyl_account_name', user.name);
+      localStorage.setItem('hyl_invoice_email', user.email);
+    } catch {}
+  };
   async function api(path, method = 'GET', body) {
     let response;
     try {
@@ -22,37 +29,87 @@
     return response.ok ? { ok: true, ...data } : { ok: false, status: response.status, error: data.error || 'Sign-in is unavailable right now. Please try again later.' };
   }
   if ($('loginForm')) {
-    let mode = 'login';
-    const setMode = (next) => {
-      mode = next;
-      const signup = mode === 'signup';
-      document.querySelectorAll('[data-auth-mode]').forEach((tab) => tab.setAttribute('aria-pressed', String(tab.dataset.authMode === mode)));
-      document.querySelectorAll('.signup-only').forEach((el) => { el.hidden = !signup; });
-      $('signupName').required = signup;
-      $('loginPassword').autocomplete = signup ? 'new-password' : 'current-password';
-      $('loginIntro').textContent = signup ? 'Create your Hello You account.' : 'Sign in to your Hello You account.';
-      $('loginSubmit').querySelector('.submit-label').textContent = signup ? 'Create account' : 'Sign in';
-      $('loginError').textContent = '';
+    const params = new URLSearchParams(location.search);
+    const requested = params.get('next') || '';
+    // Same-site paths only, matching the Worker's check.
+    const next = /^\/(?![\/\\])/.test(requested) ? requested : '/';
+    const copy = {
+      email: ['Members only', 'Sign in to explore the research collection.', 'Continue'],
+      password: ['Welcome back', 'Enter your password to continue.', 'Sign in'],
+      signup: ['New account', 'Create your Hello You account.', 'Create account'],
     };
-    document.querySelectorAll('[data-auth-mode]').forEach((tab) => tab.addEventListener('click', () => setMode(tab.dataset.authMode)));
-    if (new URLSearchParams(location.search).get('mode') === 'signup') setMode('signup');
+    let step = 'email';
+    let wantsSignup = false;
+    const error = (message) => { $('loginError').textContent = message; };
+    const setStep = (nextStep, { focus = true } = {}) => {
+      step = nextStep;
+      const [kicker, title, label] = nextStep === 'email' && wantsSignup ? ['New account', 'Create your Hello You account.', 'Continue'] : copy[nextStep];
+      $('gateKicker').textContent = kicker;
+      $('loginTitle').textContent = title;
+      $('loginSubmit').querySelector('.submit-label').textContent = label;
+      $('loginEmail').readOnly = nextStep !== 'email';
+      $('changeEmail').hidden = nextStep === 'email';
+      document.querySelectorAll('.step-password').forEach((el) => { el.hidden = nextStep === 'email'; });
+      document.querySelectorAll('.step-signup').forEach((el) => { el.hidden = nextStep !== 'signup'; });
+      document.querySelectorAll('.step-password-only').forEach((el) => { el.hidden = nextStep !== 'password'; });
+      $('loginPassword').autocomplete = nextStep === 'signup' ? 'new-password' : 'current-password';
+      $('loginPassword').value = '';
+      error('');
+      const stepper = $('loginStepper');
+      stepper.dataset.step = nextStep;
+      stepper.classList.remove('swap'); void stepper.offsetWidth; stepper.classList.add('swap');
+      if (focus) ({ email: $('loginEmail'), password: $('loginPassword'), signup: $('signupName') })[nextStep].focus();
+    };
+    $('changeEmail').addEventListener('click', () => setStep('email'));
+    $('startSignup').addEventListener('click', () => {
+      wantsSignup = true;
+      if (step === 'signup') { $('signupName').focus(); return; }
+      if ($('loginEmail').value.trim() && $('loginEmail').checkValidity()) setStep('signup');
+      else setStep('email');
+      $('loginForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    $('revealPassword').addEventListener('click', (event) => {
+      const show = $('loginPassword').type === 'password';
+      $('loginPassword').type = show ? 'text' : 'password';
+      event.currentTarget.textContent = show ? 'Hide' : 'Show';
+      event.currentTarget.setAttribute('aria-pressed', String(show));
+      event.currentTarget.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    });
     $('loginForm').addEventListener('submit', async (event) => {
       event.preventDefault();
-      const name = $('signupName').value.trim();
       const email = $('loginEmail').value.trim();
       const password = $('loginPassword').value;
-      const error = (message) => { $('loginError').textContent = message; };
-      if (mode === 'signup' && !name) return error('Please enter your first name.');
-      if (!$('loginEmail').checkValidity() || !email) return error('Please enter a valid email address.');
-      if (!password) return error('Please enter your password.');
-      if (mode === 'signup' && password.length < 8) return error('Use at least 8 characters for your password.');
+      const name = $('signupName').value.trim();
+      if (!email || !$('loginEmail').checkValidity()) return error('Please enter a valid email address.');
+      if (step === 'password' && !password) return error('Please enter your password.');
+      if (step === 'signup' && !name) return error('Please enter your first name.');
+      if (step === 'signup' && password.length < 8) return error('Use at least 8 characters for your password.');
       error('');
       $('loginSubmit').disabled = true;
-      const result = await api(mode === 'signup' ? '/api/signup' : '/api/login', 'POST', mode === 'signup' ? { name, email, password } : { email, password });
+      const result = step === 'email'
+        ? await api('/api/lookup', 'POST', { email })
+        : await api(step === 'signup' ? '/api/signup' : '/api/login', 'POST', step === 'signup' ? { name, email, password } : { email, password });
       $('loginSubmit').disabled = false;
-      if (result.ok) location.href = 'account.html';
-      else { error(result.error); $('loginPassword').value = ''; }
+      if (!result.ok) {
+        error(result.error);
+        $('loginPassword').value = '';
+        return;
+      }
+      if (step !== 'email') {
+        rememberUser(result.user);
+        location.replace(next);
+        return;
+      }
+      setStep(result.exists ? 'password' : 'signup');
+      if (result.exists && wantsSignup) error('You already have an account with this email. Sign in below.');
     });
+    const bubble = $('helpBubble');
+    try { if (sessionStorage.getItem('hyl_help_dismissed')) bubble.classList.add('collapsed'); } catch {}
+    $('helpClose').addEventListener('click', () => {
+      bubble.classList.add('collapsed');
+      try { sessionStorage.setItem('hyl_help_dismissed', '1'); } catch {}
+    });
+    if (params.get('mode') === 'signup') { wantsSignup = true; setStep('email', { focus: false }); }
   }
   if ($('accountName')) {
     const showUser = (user) => {
@@ -60,8 +117,7 @@
       $('profileEmail').value = user.email;
       $('profileName').value = user.name;
       $('profileOrganization').value = user.organization;
-      // Pre-fills the cart's invoice email field.
-      try { localStorage.setItem('hyl_invoice_email', user.email); } catch {}
+      rememberUser(user);
     };
     const requireUser = async () => {
       const result = await api('/api/me');
@@ -72,6 +128,7 @@
     requireUser();
     $('signOut').addEventListener('click', async () => {
       await api('/api/logout', 'POST');
+      try { localStorage.removeItem('hyl_account_name'); } catch {}
       location.replace('login.html');
     });
     $('profileForm').addEventListener('submit', async (event) => {
