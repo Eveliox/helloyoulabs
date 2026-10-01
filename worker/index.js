@@ -5,6 +5,8 @@
 // Storage: the D1 database bound as DB. Tables are created on first use, so a
 // fresh (auto-provisioned) database needs no manual migration.
 
+import catalog from "../assets/catalog.js";
+
 const SESSION_COOKIE = "hyl_session";
 const SESSION_TTL = 30 * 24 * 60 * 60; // seconds
 const PBKDF2_ITERATIONS = 100000; // Workers' maximum for PBKDF2
@@ -13,6 +15,19 @@ const MAX_FAILURES_PER_EMAIL = 10;
 const MAX_FAILURES_PER_IP = 30;
 const MAX_SIGNUPS_PER_IP = 10;
 const MAX_LOOKUPS_PER_IP = 40;
+const MAX_ORDERS_PER_USER = 20; // per FAILURE_WINDOW
+const MAX_CLAIM_ATTEMPTS = 5; // per FAILURE_WINDOW
+const ORDER_STATUSES = ["new", "invoiced", "paid", "shipped", "cancelled"];
+
+// Priced variants keyed the same way the storefront keys its cart items.
+const VARIANTS = new Map(
+  catalog.PRODUCTS.flatMap((product) =>
+    product.variants.map((variant) => [
+      `${product.id}-${String(variant.mgLabel || variant.mg).replace(/\s/g, "").replace(/\+/g, "x")}-${variant.ml}ml`,
+      { name: product.name, label: variant.label || `${variant.mg} mg · ${variant.ml} mL`, price: variant.price },
+    ]),
+  ),
+);
 
 const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS users (
@@ -31,11 +46,39 @@ const SCHEMA = [
   `CREATE INDEX IF NOT EXISTS sessions_user ON sessions(user_id)`,
   `CREATE TABLE IF NOT EXISTS auth_events (key TEXT NOT NULL, at INTEGER NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS auth_events_key ON auth_events(key, at)`,
+  `CREATE TABLE IF NOT EXISTS orders (
+    id INTEGER PRIMARY KEY,
+    reference TEXT NOT NULL UNIQUE,
+    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    invoice_email TEXT NOT NULL,
+    items TEXT NOT NULL,
+    subtotal INTEGER NOT NULL,
+    status TEXT NOT NULL DEFAULT 'new',
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS orders_user ON orders(user_id, created_at)`,
+];
+// Columns added after launch. SQLite has no ADD COLUMN IF NOT EXISTS, so a
+// "duplicate column" error means the column is already there.
+const ADDED_COLUMNS = [
+  `ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'customer'`,
+  `ALTER TABLE users ADD COLUMN notes TEXT NOT NULL DEFAULT ''`,
+  `ALTER TABLE users ADD COLUMN last_login_at INTEGER`,
 ];
 
 let schemaReady;
 function ensureSchema(db) {
-  schemaReady ??= db.batch(SCHEMA.map((sql) => db.prepare(sql))).catch((error) => {
+  schemaReady ??= (async () => {
+    await db.batch(SCHEMA.map((sql) => db.prepare(sql)));
+    for (const sql of ADDED_COLUMNS) {
+      try {
+        await db.prepare(sql).run();
+      } catch (error) {
+        if (!/duplicate column/i.test(String(error?.message))) throw error;
+      }
+    }
+  })().catch((error) => {
     schemaReady = undefined;
     throw error;
   });
@@ -87,6 +130,10 @@ let dummyHash;
 
 async function sha256(text) {
   return toBase64Url(await crypto.subtle.digest("SHA-256", encoder.encode(text)));
+}
+async function sha256Hex(text) {
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", encoder.encode(text)));
+  return [...digest].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 function json(body, status = 200, headers = {}) {
@@ -159,6 +206,7 @@ async function startSession(request, db, userId) {
   const token = toBase64Url(crypto.getRandomValues(new Uint8Array(32)));
   await db.batch([
     db.prepare("DELETE FROM sessions WHERE user_id = ? AND expires_at <= ?").bind(userId, now()),
+    db.prepare("UPDATE users SET last_login_at = ? WHERE id = ?").bind(now(), userId),
     db
       .prepare("INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, ?)")
       .bind(await sha256(token), userId, now() + SESSION_TTL),
@@ -171,7 +219,7 @@ async function currentUser(request, db) {
   if (!token) return null;
   return db
     .prepare(
-      `SELECT u.id, u.email, u.name, u.organization FROM sessions s
+      `SELECT u.id, u.email, u.name, u.organization, u.role FROM sessions s
        JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ?`,
     )
     .bind(await sha256(token), now())
@@ -265,6 +313,198 @@ async function updateProfile(request, db, user) {
   return json({ user: publicUser(updated) });
 }
 
+// ─── Orders ───
+// Checkout records the order here (prices recomputed from the catalog) and
+// hands the same reference to WhatsApp, so the team can match the two.
+const parseOrder = (row) => ({
+  id: row.id,
+  reference: row.reference,
+  invoiceEmail: row.invoice_email,
+  items: JSON.parse(row.items),
+  subtotal: row.subtotal,
+  status: row.status,
+  createdAt: row.created_at,
+  updatedAt: row.updated_at,
+  ...(row.customer_name !== undefined && { customer: { id: row.user_id, name: row.customer_name, email: row.customer_email } }),
+});
+
+async function createOrder(request, db, user) {
+  const body = await readJson(request);
+  if (!body) return fail(400, "Invalid request.");
+  const reference = text(body.reference);
+  const invoiceEmail = normalizeEmail(body.invoiceEmail);
+  if (!/^HY-[A-Z0-9]{6}$/.test(reference)) return fail(400, "Invalid order reference.");
+  if (!invoiceEmail) return fail(400, "Please enter a valid invoice email.");
+  if (!Array.isArray(body.items) || !body.items.length || body.items.length > 50) return fail(400, "Your cart is empty.");
+  const items = [];
+  for (const item of body.items) {
+    const variant = VARIANTS.get(item?.variantId);
+    if (!variant || !Number.isSafeInteger(item.qty) || item.qty < 1 || item.qty > 99) return fail(400, "Your cart has an item we couldn’t price.");
+    items.push({ variantId: item.variantId, name: variant.name, label: variant.label, qty: item.qty, unitPrice: variant.price });
+  }
+  const key = `order:${user.id}`;
+  if ((await recentEvents(db, key)) >= MAX_ORDERS_PER_USER) return fail(429, "Too many orders in a short time. Please message our team.");
+  const subtotal = items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
+  const at = now();
+  const row = await db
+    .prepare(
+      `INSERT INTO orders (reference, user_id, invoice_email, items, subtotal, status, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, 'new', ?, ?) ON CONFLICT(reference) DO NOTHING RETURNING *`,
+    )
+    .bind(reference, user.id, invoiceEmail, JSON.stringify(items), subtotal, at, at)
+    .first();
+  if (!row) return fail(409, "This order was already recorded.");
+  await recordEvents(db, [key]);
+  return json({ order: parseOrder(row) }, 201);
+}
+
+async function listOwnOrders(db, user) {
+  const { results } = await db
+    .prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT 50")
+    .bind(user.id)
+    .all();
+  return json({ orders: results.map(parseOrder) });
+}
+
+// ─── Admin (mini CRM) ───
+// The admin is the account whose email is ADMIN_EMAIL, after it proves itself
+// once with the setup code (only its SHA-256 is in config). Sign-up does not
+// verify email ownership, so the email alone must never grant access.
+const isAdminEmail = (env, user) => Boolean(env.ADMIN_EMAIL) && user.email === env.ADMIN_EMAIL.toLowerCase();
+const isAdmin = (env, user) => user.role === "admin" && isAdminEmail(env, user);
+
+async function claimAdmin(request, env, db, user) {
+  if (!isAdminEmail(env, user) || !env.ADMIN_CLAIM_SHA256) return fail(403, "This account can’t be an administrator.");
+  const key = `claim:${user.id}`;
+  if ((await recentEvents(db, key)) >= MAX_CLAIM_ATTEMPTS) return fail(429, "Too many attempts. Please wait 15 minutes.");
+  const body = await readJson(request);
+  const code = text(body?.code).toUpperCase();
+  const digest = encoder.encode(await sha256Hex(code));
+  if (!code || !constantTimeEqual(digest, encoder.encode(env.ADMIN_CLAIM_SHA256.toLowerCase()))) {
+    await recordEvents(db, [key]);
+    return fail(403, "That setup code isn’t right.");
+  }
+  await db.prepare("UPDATE users SET role = 'admin' WHERE id = ?").bind(user.id).run();
+  return json({ admin: true });
+}
+
+const customerRow = (row) => ({
+  id: row.id,
+  name: row.name,
+  email: row.email,
+  organization: row.organization,
+  role: row.role,
+  notes: row.notes,
+  createdAt: row.created_at,
+  lastLoginAt: row.last_login_at,
+  orderCount: row.order_count ?? 0,
+  orderTotal: row.order_total ?? 0,
+  lastOrderAt: row.last_order_at ?? null,
+});
+
+const CUSTOMER_SELECT = `SELECT u.id, u.name, u.email, u.organization, u.role, u.notes, u.created_at, u.last_login_at,
+  COUNT(o.id) AS order_count,
+  COALESCE(SUM(CASE WHEN o.status != 'cancelled' THEN o.subtotal END), 0) AS order_total,
+  MAX(o.created_at) AS last_order_at
+  FROM users u LEFT JOIN orders o ON o.user_id = u.id`;
+
+async function handleAdmin(request, env, db, user, url) {
+  const parts = url.pathname.split("/").slice(3); // after /api/admin
+  const method = request.method;
+  if (parts[0] === "status" && method === "GET")
+    return json({ admin: isAdmin(env, user), canClaim: isAdminEmail(env, user) && !isAdmin(env, user) });
+  if (parts[0] === "claim" && method === "POST") return claimAdmin(request, env, db, user);
+  if (!isAdmin(env, user)) return fail(403, "Administrators only.");
+
+  if (parts[0] === "summary" && method === "GET") {
+    const weekAgo = now() - 7 * 24 * 60 * 60;
+    const [customers, orders] = await db.batch([
+      db.prepare("SELECT COUNT(*) AS total, SUM(created_at > ?) AS this_week, SUM(last_login_at > ?) AS active_week FROM users").bind(weekAgo, weekAgo),
+      db.prepare(
+        `SELECT COUNT(*) AS total, SUM(status = 'new') AS awaiting_invoice,
+          COALESCE(SUM(CASE WHEN status = 'invoiced' THEN subtotal END), 0) AS invoiced_unpaid,
+          COALESCE(SUM(CASE WHEN status IN ('paid', 'shipped') THEN subtotal END), 0) AS paid_total
+         FROM orders`,
+      ),
+    ]);
+    const c = customers.results[0], o = orders.results[0];
+    return json({
+      customers: { total: c.total, thisWeek: c.this_week ?? 0, activeThisWeek: c.active_week ?? 0 },
+      orders: { total: o.total, awaitingInvoice: o.awaiting_invoice ?? 0, invoicedUnpaid: o.invoiced_unpaid, paidTotal: o.paid_total },
+    });
+  }
+
+  if (parts[0] === "customers") {
+    const id = Number(parts[1]);
+    if (!parts[1] && method === "GET") {
+      const { results } = await db.prepare(`${CUSTOMER_SELECT} GROUP BY u.id ORDER BY u.created_at DESC LIMIT 2000`).all();
+      return json({ customers: results.map(customerRow) });
+    }
+    if (!Number.isSafeInteger(id)) return fail(404, "Not found.");
+    const row = await db.prepare(`${CUSTOMER_SELECT} WHERE u.id = ? GROUP BY u.id`).bind(id).first();
+    if (!row) return fail(404, "Customer not found.");
+    if (!parts[2] && method === "GET") {
+      const { results } = await db.prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC").bind(id).all();
+      return json({ customer: customerRow(row), orders: results.map(parseOrder) });
+    }
+    if (!parts[2] && method === "PUT") {
+      const body = await readJson(request);
+      if (!body) return fail(400, "Invalid request.");
+      const notes = typeof body.notes === "string" ? body.notes.slice(0, 5000) : row.notes;
+      const name = body.name === undefined ? row.name : text(body.name);
+      const organization = body.organization === undefined ? row.organization : text(body.organization);
+      if (!name || name.length > 50 || organization.length > 100) return fail(400, "Check the name and organization lengths.");
+      await db.prepare("UPDATE users SET notes = ?, name = ?, organization = ? WHERE id = ?").bind(notes, name, organization, id).run();
+      return json({ customer: customerRow({ ...row, notes, name, organization }) });
+    }
+    if (parts[2] === "password" && method === "POST") {
+      // A readable one-time password the admin passes on; it signs the customer out everywhere.
+      const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+      const bytes = crypto.getRandomValues(new Uint8Array(14));
+      const password = [...bytes].map((b) => alphabet[b % alphabet.length]).join("").replace(/(.{7})/, "$1-");
+      await db.batch([
+        db.prepare("UPDATE users SET password_hash = ? WHERE id = ?").bind(await hashPassword(password), id),
+        db.prepare("DELETE FROM sessions WHERE user_id = ?").bind(id),
+      ]);
+      return json({ password });
+    }
+    if (!parts[2] && method === "DELETE") {
+      if (id === user.id) return fail(400, "You can’t delete your own account here.");
+      await db.batch([
+        db.prepare("DELETE FROM sessions WHERE user_id = ?").bind(id),
+        db.prepare("UPDATE orders SET user_id = NULL WHERE user_id = ?").bind(id),
+        db.prepare("DELETE FROM users WHERE id = ?").bind(id),
+      ]);
+      return json({ ok: true });
+    }
+  }
+
+  if (parts[0] === "orders") {
+    if (!parts[1] && method === "GET") {
+      const status = url.searchParams.get("status");
+      const filter = ORDER_STATUSES.includes(status) ? "WHERE o.status = ?" : "";
+      const statement = db.prepare(
+        `SELECT o.*, u.name AS customer_name, u.email AS customer_email FROM orders o
+         LEFT JOIN users u ON u.id = o.user_id ${filter} ORDER BY o.created_at DESC LIMIT 1000`,
+      );
+      const { results } = await (filter ? statement.bind(status) : statement).all();
+      return json({ orders: results.map(parseOrder) });
+    }
+    const id = Number(parts[1]);
+    if (Number.isSafeInteger(id) && !parts[2] && method === "PUT") {
+      const body = await readJson(request);
+      if (!ORDER_STATUSES.includes(body?.status)) return fail(400, "Unknown status.");
+      const row = await db
+        .prepare("UPDATE orders SET status = ?, updated_at = ? WHERE id = ? RETURNING *")
+        .bind(body.status, now(), id)
+        .first();
+      if (!row) return fail(404, "Order not found.");
+      return json({ order: parseOrder(row) });
+    }
+  }
+  return fail(404, "Not found.");
+}
+
 async function handleApi(request, env) {
   const url = new URL(request.url);
   const origin = request.headers.get("Origin");
@@ -282,9 +522,17 @@ async function handleApi(request, env) {
   if (route === "POST /api/lookup") return lookup(request, db, ip);
   if (url.pathname === "/api/me") {
     const user = await currentUser(request, db);
-    if (request.method === "GET") return json({ user: user && publicUser(user) });
+    if (request.method === "GET") return json({ user: user && { ...publicUser(user), admin: isAdmin(env, user), canClaimAdmin: isAdminEmail(env, user) && !isAdmin(env, user) } });
     if (!user) return fail(401, "Please sign in.");
     if (request.method === "PUT") return updateProfile(request, db, user);
+    return fail(405, "Method not allowed.");
+  }
+  if (url.pathname === "/api/orders" || url.pathname.startsWith("/api/admin/")) {
+    const user = await currentUser(request, db);
+    if (!user) return fail(401, "Please sign in.");
+    if (url.pathname.startsWith("/api/admin/")) return handleAdmin(request, env, db, user, url);
+    if (request.method === "POST") return createOrder(request, db, user);
+    if (request.method === "GET") return listOwnOrders(db, user);
     return fail(405, "Method not allowed.");
   }
   return fail(404, "Not found.");
@@ -324,6 +572,7 @@ async function handlePage(request, env) {
     if (user) return redirect(safeNext(url.searchParams.get("next")));
     return env.ASSETS.fetch(request);
   }
+  if (user && (path === "/admin" || path === "/admin.html") && !isAdminEmail(env, user)) return redirect("/");
   if (!user) {
     if (!isPage(path)) return new Response("Please sign in.", { status: 401, headers: { "Cache-Control": "no-store" } });
     const next = path === "/" && !url.search ? "" : `?next=${encodeURIComponent(url.pathname + url.search)}`;

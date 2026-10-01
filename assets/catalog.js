@@ -258,3 +258,4 @@ const PRODUCTS = [
     ],
   },
 ];
+if (typeof module !== "undefined") module.exports = { PRODUCTS };

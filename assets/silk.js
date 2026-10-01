@@ -1,13 +1,19 @@
-// Generative "silk study" for the sign-in page: an iridescent ribbon and a
-// glass orb, drawn on a 2D canvas with film grain. It leans toward the pointer,
-// renders a single still frame for reduced motion, and pauses when hidden.
+// Generative "silk study" shared by the sign-in page and the homepage hero: an
+// iridescent ribbon and a glass orb, drawn on a 2D canvas with film grain. It
+// leans toward the pointer, renders a single still frame for reduced motion or
+// when the site's motion toggle is off, and pauses when hidden or offscreen.
+// Optional data attributes on the canvas tune placement: data-center and
+// data-amplitude (fractions of the canvas width) and data-width (ribbon width).
 (() => {
   'use strict';
   const canvas = document.getElementById('ribbon');
   const ctx = canvas?.getContext('2d');
   if (!ctx) return;
 
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const reducedQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = { get matches() { return reducedQuery.matches || document.documentElement.classList.contains('motion-off'); } };
+  const option = (name, fallback) => (Number.isFinite(parseFloat(canvas.dataset[name])) ? parseFloat(canvas.dataset[name]) : fallback);
+  const CENTER = option('center', .42), AMPLITUDE = option('amplitude', .13), WIDTH = option('width', .15);
   const SEGMENTS = 150;
   // Thin-film palette: pearl → champagne → bronze → umber → smoke teal → steel → lilac.
   const PALETTE = [
@@ -59,7 +65,7 @@
   function centre(s, t) {
     const narrow = width < 520;
     const y = height * (-.12 + 1.24 * s);
-    let x = width * ((narrow ? .5 : .42) + (narrow ? .17 : .13) * Math.sin(s * Math.PI * 2.1 - .9 + t * .23) + .04 * Math.sin(s * 5.3 + t * .41));
+    let x = width * ((narrow ? .5 : CENTER) + (narrow ? .17 : AMPLITUDE) * Math.sin(s * Math.PI * 2.1 - .9 + t * .23) + .3 * AMPLITUDE * Math.sin(s * 5.3 + t * .41));
     const pull = Math.exp(-Math.pow((y / height - pointer.y) / .26, 2));
     x += pointer.x * width * .06 * pull;
     return [x, y];
@@ -81,7 +87,7 @@
 
     // Ribbon geometry: centreline, normal, and a slow twist that narrows and widens the band.
     const left = [], right = [], meta = [];
-    const baseWidth = Math.min(width * .15, 150);
+    const baseWidth = Math.min(width * WIDTH, 150);
     for (let i = 0; i <= SEGMENTS; i++) {
       const s = i / SEGMENTS;
       const [x, y] = centre(s, t);
@@ -194,7 +200,9 @@
   if ('IntersectionObserver' in window)
     new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; start(); }).observe(canvas);
   document.addEventListener('visibilitychange', start);
-  reduced.addEventListener('change', start);
+  reducedQuery.addEventListener('change', start);
+  // Follow the storefront's "Pause motion" toggle (motion.js sets these classes).
+  new MutationObserver(start).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   resize();
   start();
 })();

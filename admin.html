@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin · Hello You Labs</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Libre+Caslon+Text:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/admin.css">
+  <script src="assets/admin.js" defer></script>
+</head>
+<body class="admin" data-state="loading">
+  <aside class="admin-side">
+    <a class="side-logo" href="/"><img src="assets/images/logo-light.webp" alt="Hello You Labs storefront" width="140" height="32"></a>
+    <p class="side-label">Admin</p>
+    <nav aria-label="Admin sections">
+      <a href="#overview" data-view-link="overview">Overview</a>
+      <a href="#customers" data-view-link="customers">Customers <span id="navCustomers"></span></a>
+      <a href="#orders" data-view-link="orders">Orders <span id="navOrders"></span></a>
+    </nav>
+    <div class="side-foot">
+      <a href="/">View storefront ↗</a>
+      <button type="button" id="adminSignOut">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="admin-main" id="main">
+    <section class="admin-gate" id="claimView" hidden>
+      <p class="kicker">One-time setup</p>
+      <h1>Confirm you’re the administrator.</h1>
+      <p>Enter the admin setup code you were given. You only need to do this once.</p>
+      <form id="claimForm">
+        <label for="claimCode">Setup code</label>
+        <input id="claimCode" autocomplete="one-time-code" spellcheck="false" placeholder="XXXXXX-XXXXXX-XXXXXX-XXXXXX" required>
+        <button class="btn" type="submit">Unlock admin</button>
+        <p class="form-error" id="claimError" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="admin-gate" id="deniedView" hidden>
+      <h1>Administrators only.</h1>
+      <p><a href="/">Return to the storefront</a></p>
+    </section>
+
+    <section class="admin-view" id="overview" data-view="overview" hidden>
+      <header class="view-head">
+        <div><p class="kicker" id="today"></p><h1 id="greeting">Overview</h1></div>
+        <button class="btn ghost" type="button" data-refresh>Refresh</button>
+      </header>
+      <div class="stat-row" id="stats"></div>
+      <div class="split">
+        <section class="card">
+          <div class="card-head"><h2>Needs an invoice</h2><a href="#orders" data-filter-link="new">All new orders →</a></div>
+          <div id="queue"></div>
+        </section>
+        <section class="card">
+          <div class="card-head"><h2>Newest customers</h2><a href="#customers">All customers →</a></div>
+          <div id="newest"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="admin-view" id="customers" data-view="customers" hidden>
+      <header class="view-head">
+        <div><p class="kicker">CRM</p><h1>Customers</h1></div>
+        <div class="tools">
+          <label class="search"><span class="sr-only">Search customers</span><input type="search" id="customerSearch" placeholder="Search name, email, organization"></label>
+          <button class="btn ghost" type="button" id="exportCustomers">Export CSV</button>
+        </div>
+      </header>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th scope="col">Customer</th><th scope="col">Organization</th><th scope="col">Joined</th><th scope="col">Last sign-in</th><th scope="col" class="num">Orders</th><th scope="col" class="num">Total</th></tr></thead>
+          <tbody id="customerRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="admin-view" id="orders" data-view="orders" hidden>
+      <header class="view-head">
+        <div><p class="kicker">Pipeline</p><h1>Orders</h1></div>
+        <div class="chips" role="group" aria-label="Filter orders by status" id="statusChips"></div>
+      </header>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th scope="col">Order</th><th scope="col">Placed</th><th scope="col">Customer</th><th scope="col">Items</th><th scope="col" class="num">Subtotal</th><th scope="col">Status</th></tr></thead>
+          <tbody id="orderRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="drawer" id="customerDrawer" aria-labelledby="drawerName">
+    <div class="drawer-head">
+      <div><p class="kicker">Customer</p><h2 id="drawerName"></h2><a id="drawerEmail" href="#"></a></div>
+      <button type="button" class="close" data-close aria-label="Close">×</button>
+    </div>
+    <div class="drawer-body">
+      <dl class="facts" id="drawerFacts"></dl>
+      <form id="drawerForm" class="drawer-form">
+        <label>Name<input id="drawerNameInput" maxlength="50" required></label>
+        <label>Organization<input id="drawerOrg" maxlength="100"></label>
+        <label class="wide">Private notes, only admins see these<textarea id="drawerNotes" rows="5" maxlength="5000" placeholder="Preferences, follow-ups, how they found you…"></textarea></label>
+        <div class="wide row"><button class="btn" type="submit">Save</button><span id="drawerStatus" role="status"></span></div>
+      </form>
+      <h3>Orders</h3>
+      <div id="drawerOrders"></div>
+      <h3>Account</h3>
+      <div class="danger-zone">
+        <div><strong>Temporary password</strong><p>Signs them out everywhere and creates a one-time password for you to send them.</p><button class="btn ghost" type="button" id="resetPassword">Create temporary password</button><output id="tempPassword"></output></div>
+        <div><strong>Delete customer</strong><p>Removes the account. Their orders stay in the order list.</p><button class="btn danger" type="button" id="deleteCustomer">Delete customer</button></div>
+      </div>
+    </div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

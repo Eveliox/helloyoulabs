@@ -7,13 +7,21 @@ const os = require("node:os");
 const path = require("node:path");
 const { chromium } = require("playwright");
 const { default: AxeBuilder } = require("@axe-core/playwright");
+const crypto = require("node:crypto");
 const { unstable_startWorker } = require("wrangler");
+
+// The real admin setup code is never in the repo; tests swap in their own.
+const ADMIN_EMAIL = "helloyouwellnessclinic@gmail.com";
+const TEST_ADMIN_CODE = "TEST01-TEST02-TEST03-TEST04";
 
 let worker, browser, baseURL, persistDir;
 before(async () => {
   persistDir = fs.mkdtempSync(path.join(os.tmpdir(), "hyl-accounts-"));
   worker = await unstable_startWorker({
     config: path.resolve(__dirname, "../wrangler.jsonc"),
+    bindings: {
+      ADMIN_CLAIM_SHA256: { type: "plain_text", value: crypto.createHash("sha256").update(TEST_ADMIN_CODE).digest("hex") },
+    },
     dev: {
       server: { hostname: "127.0.0.1", port: 0 },
       inspector: false,
@@ -171,4 +179,77 @@ test("the sign-in page fits small screens and passes automated accessibility che
     await page.locator("#signupName").waitFor();
     await check("sign-up step");
   }
+});
+
+test("checkout records orders the customer and the admin can see; admin needs the setup code", async (t) => {
+  const session = async (name, email) => {
+    const response = await post("/api/signup", { name, email, password: `${name} password` });
+    return response.headers.get("set-cookie").split(";")[0];
+  };
+  const as = (cookie) => (route, method = "GET", body) =>
+    fetch(`${baseURL}${route}`, { method, headers: { Cookie: cookie, ...(body ? { "Content-Type": "application/json" } : {}) }, body: body && JSON.stringify(body) });
+
+  // A customer checks out in the browser; the order is recorded with catalog prices.
+  const page = await newPage(t);
+  await page.goto(`${baseURL}/login`);
+  await page.locator("#loginEmail").fill("orders@example.com");
+  await page.locator("#loginSubmit").click();
+  await page.locator("#signupName").fill("Olive");
+  await page.locator("#loginPassword").fill("olive password");
+  await page.locator("#loginSubmit").click();
+  await page.waitForURL((url) => url.pathname === "/");
+  await page.evaluate(() => { window.open = (url) => { window.testCheckout = url; }; });
+  await page.locator('[data-add="sema"]').click();
+  await page.locator("[data-cart-open]").click();
+  assert.equal(await page.locator("#invoiceEmail").inputValue(), "orders@example.com", "Invoice email is pre-filled");
+  await page.locator("#researchConfirm").check();
+  const recorded = page.waitForResponse((r) => r.url().endsWith("/api/orders") && r.request().method() === "POST");
+  await page.locator("#cartCheckout").click();
+  assert.equal((await recorded).status(), 201);
+  const reference = await page.locator("#orderConfirmationReference").textContent();
+  assert.match(reference, /^HY-[A-Z0-9]{6}$/);
+  assert.ok(decodeURIComponent(await page.evaluate(() => window.testCheckout)).includes(reference), "WhatsApp message carries the reference");
+  await page.goto(`${baseURL}/account.html`);
+  await page.locator(".order-row", { hasText: reference }).waitFor();
+  assert.equal(await page.locator("#accountOrderCount").textContent(), "1");
+
+  // Tampered prices or unknown items are rejected by the server.
+  const customer = as(await session("Mallory", "mallory@example.com"));
+  assert.equal((await customer("/api/orders", "POST", { reference: "HY-AAAAAA", invoiceEmail: "m@example.com", items: [{ variantId: "nope", qty: 1 }] })).status, 400);
+  assert.equal((await customer("/api/admin/customers")).status, 403, "Customers can’t read the CRM");
+  assert.equal((await customer("/api/admin/claim", "POST", { code: TEST_ADMIN_CODE })).status, 403, "Only the admin email may claim");
+  assert.equal((await fetch(`${baseURL}/admin`, { redirect: "manual", headers: { Cookie: (await session("Eve", "eve2@example.com")) } })).status, 302);
+
+  // The admin email alone is not enough; the setup code unlocks the CRM once.
+  const admin = as(await session("Clinic", ADMIN_EMAIL));
+  assert.deepEqual(await (await admin("/api/admin/status")).json(), { admin: false, canClaim: true });
+  assert.equal((await admin("/api/admin/customers")).status, 403);
+  assert.equal((await admin("/api/admin/claim", "POST", { code: "WRONG" })).status, 403);
+  assert.equal((await admin("/api/admin/claim", "POST", { code: TEST_ADMIN_CODE.toLowerCase() })).status, 200);
+
+  const { customers } = await (await admin("/api/admin/customers")).json();
+  const olive = customers.find((c) => c.email === "orders@example.com");
+  assert.equal(olive.orderCount, 1);
+  assert.equal(olive.orderTotal, 77);
+  const { orders } = await (await admin("/api/admin/orders?status=new")).json();
+  const order = orders.find((o) => o.reference === reference);
+  assert.equal(order.customer.name, "Olive");
+  assert.equal((await admin(`/api/admin/orders/${order.id}`, "PUT", { status: "invoiced" })).status, 200);
+  assert.equal((await (await admin("/api/admin/summary")).json()).orders.invoicedUnpaid, 77);
+  assert.equal((await admin(`/api/admin/customers/${olive.id}`, "PUT", { notes: "Prefers 10 mg vials." })).status, 200);
+
+  // Temporary password: works, and signs the customer out everywhere.
+  const { password } = await (await admin(`/api/admin/customers/${olive.id}/password`, "POST")).json();
+  assert.equal((await post("/api/login", { email: "orders@example.com", password })).status, 200);
+
+  // The admin page renders the CRM for the admin.
+  const adminPage = await newPage(t);
+  await adminPage.context().addCookies([{ name: "hyl_session", value: (await (await post("/api/login", { email: ADMIN_EMAIL, password: "Clinic password" })).headers.get("set-cookie")).split(";")[0].split("=")[1], url: baseURL }]);
+  await adminPage.goto(`${baseURL}/admin#customers`);
+  await adminPage.locator("#customerRows tr", { hasText: "Olive" }).waitFor();
+  await adminPage.locator("#customerRows button", { hasText: "Olive" }).click();
+  await adminPage.locator("#customerDrawer[open]").waitFor();
+  assert.equal(await adminPage.locator("#drawerNotes").inputValue(), "Prefers 10 mg vials.");
+  const axe = await new AxeBuilder({ page: adminPage }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+  assert.deepEqual(axe.violations.map(({ id, nodes }) => ({ id, targets: nodes.map((n) => n.target) })), []);
 });

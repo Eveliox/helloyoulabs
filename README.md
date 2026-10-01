@@ -11,7 +11,7 @@ The storefront now uses a warm ivory, charcoal and muted-bronze visual direction
 - `assets/signature.css`, `assets/signature.js` — interactive 2× product-detail lens and procedural canvas artwork. The material study switches among three real catalog products; its curves are abstract artwork, not molecular structures. Canvas rendering is capped near 30 fps, pauses offscreen/in hidden tabs, and follows the shared motion preference. The lens supports mouse movement, a keyboard/touch range control, and Escape.
 - `assets/modern.css`, `assets/motion.js` — product compositions, animated login artwork, scroll reveals, pointer depth, hover transitions and reading progress. A persistent motion toggle pauses decorative animation; device reduced-motion preferences take priority. CSS scenes pause offscreen and when the tab is hidden. No animation library is required.
 - `assets/secondary.css` — dark companion theme for existing wholesale/application/guide pages.
-- `login.html`, `assets/login.css`, `assets/login-art.js` — the sign-in gate: email-first sign-in/sign-up beside a generative “silk study” canvas (iridescent ribbon, glass orb, film grain; follows the pointer, renders one still frame for reduced motion, pauses when hidden).
+- `login.html`, `assets/login.css`, `assets/silk.js` — the sign-in gate: email-first sign-in/sign-up beside a generative “silk study” canvas (iridescent ribbon, glass orb, film grain; follows the pointer, renders one still frame for reduced motion, pauses when hidden).
 - `account.html` — signed-in dashboard: saved cart summary, profile (name, organization), support and wholesale links.
 - `standards.html` — research and documentation information.
 - `documentation.html` — product-specific COA requests via WhatsApp.
@@ -30,7 +30,16 @@ Sign-in is email-first: the email is checked with `/api/lookup`, then the page a
 - **Abuse limits:** 10 failed sign-ins per email or 30 per network in 15 minutes locks sign-in for that window; 10 new accounts per network per 15 minutes. Cross-origin writes are refused.
 - **Endpoints:** `POST /api/lookup` (`{ exists }`; 40 per network per 15 minutes), `POST /api/signup`, `POST /api/login`, `POST /api/logout`, `GET /api/me` (`{ user: null }` when signed out), `PUT /api/me` (name, organization).
 
-Not built yet: password reset by email (needs an email provider — for now the page links to WhatsApp), order history, and invoices. To help someone who is locked out, delete their account so they can sign up again:
+## Admin (mini CRM)
+
+`/admin` is the CRM for **helloyouwellnessclinic@gmail.com** (`ADMIN_EMAIL` in `wrangler.jsonc`): an overview (customers, weekly activity, orders awaiting invoice, invoiced-unpaid and paid totals), a searchable customer list with CSV export, a customer drawer (edit name/organization, private notes, order history, create a temporary password, delete), and the order pipeline (New → Invoice sent → Paid → Shipped / Cancelled).
+
+- **Becoming admin:** sign up or sign in with the admin email, open `/admin`, and enter the setup code once. Sign-up does not verify email ownership, so the email alone grants nothing; only the code's SHA-256 (`ADMIN_CLAIM_SHA256`) is in the repo. To rotate the code, put a new code's SHA-256 there (`printf %s 'NEW-CODE' | shasum -a 256`).
+- **Orders:** checkout creates a reference (e.g. `HY-7K3Q9P`), puts it in the WhatsApp message, and records the order via `POST /api/orders`; the Worker re-prices every line from `assets/catalog.js`, so tampered prices are ignored. Customers see their orders and status on `/account`.
+- **Temporary passwords** replace the old "delete the account" workaround for locked-out customers.
+- **Endpoints:** `GET/POST /api/orders`; `/api/admin/status`, `/claim`, `/summary`, `/customers[/:id[/password]]`, `/orders[/:id]` — all admin routes except `status`/`claim` require the claimed admin role.
+
+Not built yet: password reset by email (needs an email provider — for now the page links to WhatsApp), order history, and invoices. To help someone who is locked out, create a temporary password from `/admin`. Or, from the command line, delete their account so they can sign up again:
 
 ```sh
 npx wrangler d1 execute helloyoulabs-accounts --remote --command "DELETE FROM users WHERE email = 'customer@example.com'"

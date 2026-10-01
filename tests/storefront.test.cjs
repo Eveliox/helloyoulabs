@@ -28,7 +28,12 @@ async function visit(t, viewport = { width: 1440, height: 1000 }) {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("response", (response) => {
-    if (response.url().startsWith(baseURL) && response.status() >= 400)
+    // The static preview server has no accounts API; the Worker tests cover it.
+    if (
+      response.url().startsWith(baseURL) &&
+      !response.url().startsWith(`${baseURL}/api/`) &&
+      response.status() >= 400
+    )
       errors.push(response.url());
   });
   t.after(() =>

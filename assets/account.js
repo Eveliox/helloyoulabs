@@ -165,6 +165,33 @@
     }
     renderBag();
     window.addEventListener('storage', renderBag);
+    const STATUS = { new: 'Awaiting invoice', invoiced: 'Invoice sent', paid: 'Paid', shipped: 'Shipped', cancelled: 'Cancelled' };
+    api('/api/orders').then((result) => {
+      if (!result.ok) return;
+      $('accountOrderCount').textContent = result.orders.length;
+      if (!result.orders.length) return;
+      $('accountOrders').replaceChildren(...result.orders.map((order) => {
+        const row = document.createElement('div'); row.className = 'order-row';
+        const head = document.createElement('div');
+        const ref = document.createElement('strong'); ref.textContent = order.reference;
+        const date = document.createElement('span'); date.textContent = new Date(order.createdAt * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        head.append(ref, date);
+        const items = document.createElement('p'); items.textContent = order.items.map((item) => `${item.name} · ${item.label} × ${item.qty}`).join(', ');
+        const total = document.createElement('span'); total.className = 'order-total'; total.textContent = `$${order.subtotal.toLocaleString()}`;
+        const status = document.createElement('span'); status.className = `status-pill status-${order.status}`; status.textContent = STATUS[order.status] || order.status;
+        row.append(head, items, total, status);
+        return row;
+      }));
+    });
+    // The admin gets a shortcut to the CRM from their account page.
+    api('/api/me').then((result) => {
+      if (!result.ok || !result.user) return;
+      const nav = document.querySelector('.portal-nav nav');
+      if (result.user.admin || result.user.canClaimAdmin) {
+        const link = document.createElement('a'); link.href = 'admin.html'; link.textContent = 'Admin';
+        nav?.prepend(link);
+      }
+    });
     // Re-check after back/forward navigation in case the visitor signed out in another tab.
     window.addEventListener('pageshow', (event) => { if (event.persisted) requireUser(); });
   }

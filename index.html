@@ -34,7 +34,7 @@
     <script src="assets/catalog.js" defer></script>
     <script src="assets/site.js" defer></script>
   <link rel="stylesheet" href="assets/portal.css" />
-<link rel="stylesheet" href="assets/modern.css"><script src="assets/motion.js" defer></script><link rel="stylesheet" href="assets/warm.css"><link rel="stylesheet" href="assets/signature.css"><script src="assets/signature.js" defer></script></head>
+<link rel="stylesheet" href="assets/modern.css"><script src="assets/motion.js" defer></script><link rel="stylesheet" href="assets/warm.css"><link rel="stylesheet" href="assets/signature.css"><script src="assets/signature.js" defer></script><script src="assets/silk.js" defer></script></head>
   <body id="top" class="modern-site">
     <a class="skip-link" href="#main">Skip to content</a>
     <svg
@@ -126,6 +126,7 @@
     <main id="main">
       <section class="hero editorial-hero" aria-labelledby="hero-title">
         <div class="container hero-inner">
+          <canvas id="ribbon" class="hero-ribbon" aria-hidden="true" data-center=".545" data-amplitude=".04" data-width=".075"></canvas>
           <div class="hero-copy">
             <p class="eyebrow" id="heroEyebrow">HELLO YOU LABS / RESEARCH COLLECTION</p>
             <h1 id="hero-title">A considered<br>approach to<br><span>discovery.</span></h1>
@@ -919,7 +920,7 @@
         </p>
       </div>
       <div class="order-confirmation" id="orderConfirmation" hidden>
-        <p class="eyebrow">Order sent</p>
+        <p class="eyebrow">Order <span id="orderConfirmationReference"></span> sent</p>
         <h3 id="orderConfirmationTitle" tabindex="-1">Thank you for your order.</h3>
         <p>
           You’ll receive an email shortly at

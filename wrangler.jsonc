@@ -3,6 +3,13 @@
   "name": "helloyoulabs",
   "main": "worker/index.js",
   "compatibility_date": "2025-09-01",
+  // Admin (mini CRM): the account with this email, after entering the setup
+  // code once. Only the code's SHA-256 is stored here; the code is shared
+  // privately with the owner.
+  "vars": {
+    "ADMIN_EMAIL": "helloyouwellnessclinic@gmail.com",
+    "ADMIN_CLAIM_SHA256": "51a523dfe2c5c1a783591a019c3ec67d4a4c50e8a331470614d804d27569d64a"
+  },
   "observability": {
     "enabled": true
   },

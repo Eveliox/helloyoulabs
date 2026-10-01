@@ -287,14 +287,31 @@
     if (!cart.length || !$("#researchConfirm").checked || !hasInvoiceEmail())
       return;
     const email = invoiceEmail.value.trim();
+    // Shared by the WhatsApp message and the order record, so the team can match them.
+    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const reference = `HY-${Array.from(crypto.getRandomValues(new Uint8Array(6)), (b) => alphabet[b % alphabet.length]).join("")}`;
     const lines = cart.map((item) => {
       const variant = variants.get(item.variantId);
       const product = productMap.get(variant.productId);
       return `• ${product.name} — ${variant.label} × ${item.qty} — ${money(variant.price * item.qty)}`;
     });
-    const message = `Hi Hello You Labs, I'd like to place this research order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(total())} USD (before shipping)\nPlease email my invoice to: ${email}\n\nI confirm that I am at least 21, a qualified researcher, and these materials are for laboratory research only. Please confirm availability, current lot documentation, shipping, and payment options. Thank you!`;
+    const message = `Hi Hello You Labs, I'd like to place research order ${reference}:\n\n${lines.join("\n")}\n\nSubtotal: ${money(total())} USD (before shipping)\nPlease email my invoice to: ${email}\n\nI confirm that I am at least 21, a qualified researcher, and these materials are for laboratory research only. Please confirm availability, current lot documentation, shipping, and payment options. Thank you!`;
     window.open(whatsapp(message), "_blank", "noopener,noreferrer");
+    // Record the order for the customer's account and the admin CRM. WhatsApp
+    // stays the source of truth, so a failed save never blocks checkout.
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      keepalive: true,
+      body: JSON.stringify({
+        reference,
+        invoiceEmail: email,
+        items: cart.map(({ variantId, qty }) => ({ variantId, qty })),
+      }),
+    }).catch(() => {});
     $("#orderResend").href = whatsapp(message);
+    $("#orderConfirmationReference").textContent = reference;
     $("#orderConfirmationEmail").textContent = email;
     cart = [];
     persist();
