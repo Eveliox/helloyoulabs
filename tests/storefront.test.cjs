@@ -61,7 +61,7 @@ test("original catalog, filters, variant pricing, and horizontal navigation", as
   await page.locator('[data-product-select="sema"]').selectOption({ index: 1 });
   assert.equal(
     await page.locator('[data-product="sema"] [data-card-price]').textContent(),
-    "$189",
+    "$96",
   );
 });
 
@@ -71,10 +71,10 @@ test("cart arithmetic, persistence, research acknowledgment, and WhatsApp payloa
   await page.locator('[data-product-select="sema"]').selectOption({ index: 1 });
   await page.locator('[data-add="sema"]').click();
   await page.locator("[data-cart-open]").click();
-  assert.equal(await page.locator("#cartSubtotal").textContent(), "$189.00");
+  assert.equal(await page.locator("#cartSubtotal").textContent(), "$96.00");
   assert.equal(await page.locator("#cartCheckout").isDisabled(), true);
   await page.locator('[data-cart-action="plus"]').click();
-  assert.equal(await page.locator("#cartSubtotal").textContent(), "$378.00");
+  assert.equal(await page.locator("#cartSubtotal").textContent(), "$192.00");
   await page.locator("#researchConfirm").check();
   assert.equal(await page.locator("#cartCheckout").isDisabled(), true, "Invoice email is required");
   await page.locator("#invoiceEmail").fill("not-an-email");
@@ -94,7 +94,7 @@ test("cart arithmetic, persistence, research acknowledgment, and WhatsApp payloa
     "https://wa.me/17867803626",
     "Semaglutide",
     "10 mg",
-    "378",
+    "192",
     "laboratory research only",
     "Please email my invoice to: buyer@example.com",
   ])
@@ -123,7 +123,7 @@ test("cart arithmetic, persistence, research acknowledgment, and WhatsApp payloa
   assert.equal(await page.locator("#invoiceEmail").inputValue(), "buyer@example.com");
   assert.equal(await page.locator("#cartCheckout").isDisabled(), true);
   await page.locator('[data-cart-action="minus"]').click();
-  assert.equal(await page.locator("#cartSubtotal").textContent(), "$149.00");
+  assert.equal(await page.locator("#cartSubtotal").textContent(), "$77.00");
   await page.locator('[data-cart-action="remove"]').click();
   assert.equal(await page.locator("#cartCount").textContent(), "0");
   assert.equal(await page.locator(".cart-empty").isVisible(), true);
@@ -140,7 +140,7 @@ test("product details and accessible tab and FAQ interactions", async (t) => {
     "BPC-157",
   );
   await page.locator("#detailVariant").selectOption({ index: 1 });
-  assert.equal(await page.locator("#detailPrice").textContent(), "$115");
+  assert.equal(await page.locator("#detailPrice").textContent(), "$59");
   const coaURL = await page.locator("#productDetails a").getAttribute("href");
   assert.ok(decodeURIComponent(coaURL).includes("BPC-157"));
   await page.locator("[data-from-details]").click();
@@ -148,7 +148,7 @@ test("product details and accessible tab and FAQ interactions", async (t) => {
     await page.locator("#cartDialog").evaluate((dialog) => dialog.open),
     true,
   );
-  assert.equal(await page.locator("#cartSubtotal").textContent(), "$115.00");
+  assert.equal(await page.locator("#cartSubtotal").textContent(), "$59.00");
   await page.keyboard.press("Escape");
   await page.locator("#tab-support").click();
   assert.equal(await page.locator("#panel-support").isVisible(), true);
@@ -279,7 +279,7 @@ test("decorative motion can be paused, persists, and respects reduced motion", a
   assert.equal(await page.locator('.hero-editorial img').evaluate(el => getComputedStyle(el).animationName), 'none');
   await page.locator('[data-add="sema"]').click();
   await page.locator('[data-cart-open]').click();
-  assert.equal(await page.locator('#cartSubtotal').textContent(), '$149.00');
+  assert.equal(await page.locator('#cartSubtotal').textContent(), '$77.00');
 });
 
 test("detail inspection and material study support keyboard and real catalog data", async (t) => {
@@ -295,7 +295,7 @@ test("detail inspection and material study support keyboard and real catalog dat
   assert.equal(await page.locator('#inspectionTools').isVisible(), false);
   await page.locator('[data-study="ghk"]').click();
   assert.equal(await page.locator('#studyName').textContent(), 'GHK-Cu');
-  assert.equal(await page.locator('#studyPrice').textContent(), 'From $79 / vial');
+  assert.equal(await page.locator('#studyPrice').textContent(), 'From $41 / vial');
   await page.locator('#studyDetails').click();
   assert.equal(await page.locator('#productDialogTitle').textContent(), 'GHK-Cu');
   await page.keyboard.press('Escape');
