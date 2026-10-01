@@ -11,7 +11,7 @@ const crypto = require("node:crypto");
 const { unstable_startWorker } = require("wrangler");
 
 // The real admin setup code is never in the repo; tests swap in their own.
-const ADMIN_EMAIL = "helloyouwellnessclinic@gmail.com";
+const ADMIN_EMAIL = "yanelysfundora2@yahoo.com";
 const TEST_ADMIN_CODE = "TEST01-TEST02-TEST03-TEST04";
 
 let worker, browser, baseURL, persistDir;

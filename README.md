@@ -33,7 +33,7 @@ Sign-in is email-first: the email is checked with `/api/lookup`, then the page a
 
 ## Admin (mini CRM)
 
-`/admin` is the CRM for **helloyouwellnessclinic@gmail.com** (`ADMIN_EMAIL` in `wrangler.jsonc`): an overview (customers, weekly activity, orders awaiting invoice, invoiced-unpaid and paid totals), a searchable customer list with CSV export, a customer drawer (edit name/organization, private notes, order history, create a temporary password, delete), and the order pipeline (New → Invoice sent → Paid → Shipped / Cancelled).
+`/admin` is the CRM for **yanelysfundora2@yahoo.com** (`ADMIN_EMAIL` in `wrangler.jsonc`): an overview (customers, weekly activity, orders awaiting invoice, invoiced-unpaid and paid totals), a searchable customer list with CSV export, a customer drawer (edit name/organization, private notes, order history, create a temporary password, delete), and the order pipeline (New → Invoice sent → Paid → Shipped / Cancelled).
 
 - **Becoming admin:** sign up or sign in with the admin email, open `/admin`, and enter the setup code once. Sign-up does not verify email ownership, so the email alone grants nothing; only the code's SHA-256 (`ADMIN_CLAIM_SHA256`) is in the repo. To rotate the code, put a new code's SHA-256 there (`printf %s 'NEW-CODE' | shasum -a 256`).
 - **Orders:** checkout creates a reference (e.g. `HY-7K3Q9P`), puts it in the WhatsApp message, and records the order via `POST /api/orders`; the Worker re-prices every line from `assets/catalog.js`, so tampered prices are ignored. Customers see their orders and status on `/account`.
