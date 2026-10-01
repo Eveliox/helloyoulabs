@@ -1580,6 +1580,46 @@ dialog::backdrop {
   height: 16px;
   margin: 2px 0 0;
 }
+.invoice-email {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 18px 0 6px;
+}
+#invoiceEmail {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 14px;
+  background: #fff;
+  color: inherit;
+}
+.order-confirmation {
+  padding: 32px 28px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+.order-confirmation h3 {
+  font-size: 22px;
+  margin: 6px 0 10px;
+}
+.order-confirmation p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.order-confirmation strong {
+  overflow-wrap: anywhere;
+}
+.order-confirmation .checkout-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 12px 0 20px;
+}
+.order-confirmation .button {
+  width: 100%;
+}
 .checkout-button {
   width: 100%;
   justify-content: space-between;

@@ -1,13 +1,25 @@
 {
   "$schema": "https://unpkg.com/wrangler/config-schema.json",
   "name": "helloyoulabs",
+  "main": "worker/index.js",
   "compatibility_date": "2025-09-01",
   "observability": {
     "enabled": true
   },
   "assets": {
     "directory": "./",
+    "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "none"
-  }
+    "not_found_handling": "none",
+    // Only the accounts API runs the Worker; every other path is a static file.
+    "run_worker_first": ["/api/*"]
+  },
+  // Customer accounts. No database_id: `wrangler deploy` creates the database
+  // on first deploy, and the Worker creates its tables on first request.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "helloyoulabs-accounts"
+    }
+  ]
 }

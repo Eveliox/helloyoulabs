@@ -33,8 +33,9 @@
     <link rel="stylesheet" href="assets/site.css" />
     <script src="assets/catalog.js" defer></script>
     <script src="assets/site.js" defer></script>
-  </head>
-  <body id="top">
+  <link rel="stylesheet" href="assets/portal.css" />
+<link rel="stylesheet" href="assets/modern.css"><script src="assets/motion.js" defer></script><link rel="stylesheet" href="assets/warm.css"><link rel="stylesheet" href="assets/signature.css"><script src="assets/signature.js" defer></script></head>
+  <body id="top" class="modern-site">
     <a class="skip-link" href="#main">Skip to content</a>
     <svg
       class="svg-definitions"
@@ -85,11 +86,11 @@
           /><span>LABS</span></a
         >
         <nav class="desktop-nav" aria-label="Main navigation">
-          <a href="#catalog">Research peptides</a
-          ><a href="#about">Our approach</a><a href="#ordering">How it works</a
+          <a href="#catalog">Shop all</a
+          ><a href="standards.html">Our standards</a><a href="documentation.html">COAs</a
           ><a href="#faq">FAQs</a>
         </nav>
-        <div class="nav-actions">
+        <div class="nav-actions"><a class="account-link" href="account.html" aria-label="Your account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></a>
           <button class="cart-toggle" data-cart-open aria-label="Open cart">
             <svg class="icon"><use href="#i-bag" /></svg
             ><span id="cartCount">0</span>
@@ -123,73 +124,26 @@
     </header>
 
     <main id="main">
-      <section class="hero" aria-labelledby="hero-title">
-        <picture class="hero-image">
-          <source
-            media="(max-width: 640px)"
-            srcset="
-              assets/images/studio/hero-mobile-600.webp 600w,
-              assets/images/studio/hero-mobile.webp     900w
-            "
-            sizes="100vw"
-            width="900"
-            height="1440"
-          />
-          <img
-            src="assets/images/studio/hero-desktop.webp"
-            srcset="
-              assets/images/studio/hero-desktop-1200.webp 1200w,
-              assets/images/studio/hero-desktop.webp      1800w
-            "
-            sizes="100vw"
-            alt="Hello You research vials composed on a pale architectural surface against deep teal; illustrative product artwork"
-            width="1800"
-            height="960"
-            fetchpriority="high"
-          />
-        </picture>
-        <div class="hero-shade"></div>
+      <section class="hero editorial-hero" aria-labelledby="hero-title">
         <div class="container hero-inner">
           <div class="hero-copy">
-            <p class="eyebrow">
-              <span class="status-dot"></span> A new standard in research supply
-            </p>
-            <h1 id="hero-title">
-              Research,<br />with <span>confidence.</span>
-            </h1>
-            <p class="hero-description">
-              Thoughtfully sourced peptides. Clear documentation.<br
-                class="desktop-break"
-              />
-              Real people behind every order.
-            </p>
-            <a class="button button-light" href="#catalog"
-              >Find your research peptide
-              <svg class="icon"><use href="#i-arrow" /></svg
-            ></a>
-            <a class="hero-secondary" href="#about"
-              >Get to know Hello You <span>↗</span></a
-            >
-            <p class="hero-note">Made for the lab. Supported by people.</p>
+            <p class="eyebrow">HELLO YOU LABS / RESEARCH COLLECTION</p>
+            <h1 id="hero-title">A considered<br>approach to<br><span>discovery.</span></h1>
+            <p class="hero-description">Exceptional research starts with the details.<br class="desktop-break"> Explore our peptides, request documentation,<br class="desktop-break"> and meet the people behind your next order.</p>
+            <div class="editorial-actions"><a class="button" href="#catalog">Explore the collection <svg class="icon"><use href="#i-arrow" /></svg></a><a class="hero-secondary" href="standards.html">Our standards <span>↗</span></a></div>
+            <div class="editorial-note"><span>01 —</span><p>Made for the lab.<br>Supported by people.</p></div>
           </div>
-          <a class="hero-feature" href="#catalog">
-            <img
-              src="assets/images/studio/catalog/tirzepatide-10mg-400.webp"
-              width="400"
-              height="400"
-              decoding="async"
-              alt="Hello You Labs branded peptide vial"
-            />
-            <span
-              ><span class="eyebrow">The Hello You collection</span
-              ><strong>Small vials. Serious standards.</strong
-              ><span class="feature-link"
-                >Explore our peptides <span>↗</span></span
-              ></span
-            >
-          </a>
-          <span class="hero-index">01 / THE HELLO YOU DIFFERENCE</span>
+          <figure class="hero-editorial">
+            <img src="assets/images/studio/quality-macro.webp" alt="Illustrative close-up of Hello You Labs vial cap, glass and label" width="1000" height="1250" fetchpriority="high">
+            <div class="editorial-image-shade"></div>
+            <button class="inspect-toggle" type="button" aria-pressed="false" aria-controls="inspectionTools">Inspect the detail <span>＋</span></button>
+            <div class="inspection-lens" aria-hidden="true"></div>
+            <div class="inspection-tools" id="inspectionTools" hidden><label for="inspectionPosition">Move the lens</label><input id="inspectionPosition" type="range" min="0" max="100" value="50"><span>2× DETAIL</span></div>
+            <span class="editorial-image-label">THE ART OF ATTENTION</span>
+            <figcaption><span>Small details.<br><em>Serious purpose.</em></span><a href="#catalog" aria-label="Explore research products">↗</a></figcaption>
+          </figure>
         </div>
+        <div class="editorial-baseline"><span>THOUGHTFULLY SOURCED. CLEARLY DOCUMENTED.</span><a href="#catalog">DISCOVER THE COLLECTION ↓</a></div>
       </section>
 
       <div class="trust-strip">
@@ -212,6 +166,19 @@
           </div>
         </div>
       </div>
+
+      <section class="material-study" aria-labelledby="studyTitle">
+        <div class="study-topline"><span>HELLO YOU / THE MATERIAL STUDY</span><span>01 — 03</span></div>
+        <div class="study-layout container">
+          <div class="study-art"><canvas id="materialCanvas" aria-hidden="true"></canvas><div class="study-cross cross-one" aria-hidden="true">+</div><div class="study-cross cross-two" aria-hidden="true">+</div><span class="study-art-note">AN ABSTRACT STUDY OF CONNECTION</span></div>
+          <div class="study-content"><p class="eyebrow">A CLOSER LOOK AT THE COLLECTION</p><h2 id="studyTitle">Small scale.<br><em>Infinite curiosity.</em></h2><p class="study-intro">Every discovery begins with a question.<br>Find the compound behind your next one.</p>
+            <div class="study-choices" role="group" aria-label="Explore featured compounds"><button type="button" data-study="bpc" aria-pressed="true">01 <span>BPC-157</span></button><button type="button" data-study="tirz" aria-pressed="false">02 <span>Tirzepatide</span></button><button type="button" data-study="ghk" aria-pressed="false">03 <span>GHK-Cu</span></button></div>
+            <div class="study-product" aria-live="polite"><img id="studyImage" src="assets/images/studio/catalog/bpc157-5mg-400.webp" alt="Hello You BPC-157 research vial" width="110" height="110" loading="lazy"><div><span class="study-product-label">RESEARCH COLLECTION</span><h3 id="studyName">BPC-157</h3><p id="studyPrice">From $95 / vial</p></div><button type="button" id="studyDetails" data-details="bpc" aria-label="View BPC-157 details">↗</button></div>
+            <p class="study-disclaimer">For laboratory research only. Artwork is illustrative.</p>
+          </div>
+        </div>
+        <div class="study-bottomline"><span>PRECISION IS A PRACTICE.</span><span>SCROLL TO FIND YOUR COMPOUND ↓</span></div>
+      </section>
 
       <section
         class="catalog section"
@@ -925,20 +892,45 @@
           <span>Subtotal</span><strong id="cartSubtotal">$0.00</strong>
         </div>
         <p>USD · Shipping confirmed with our team.</p>
+        <label class="invoice-email" for="invoiceEmail"
+          >Email for your invoice</label
+        ><input
+          id="invoiceEmail"
+          type="email"
+          autocomplete="email"
+          maxlength="254"
+          placeholder="you@example.com"
+        />
         <label class="research-confirm"
           ><input type="checkbox" id="researchConfirm" /><span
             >I am at least 21, a qualified researcher, and understand these
             products are for laboratory research only.</span
           ></label
         ><button class="button checkout-button" id="cartCheckout" disabled>
-          Continue on WhatsApp <svg class="icon"><use href="#i-arrow" /></svg>
+          Place order on WhatsApp
+          <svg class="icon"><use href="#i-arrow" /></svg>
         </button>
         <p class="checkout-note">
-          Review availability and payment with our team.<br />No payment is
-          collected on this website.
+          We’ll email your invoice once our team confirms your order.<br />No
+          payment is collected on this website.
         </p>
+      </div>
+      <div class="order-confirmation" id="orderConfirmation" hidden>
+        <p class="eyebrow">Order sent</p>
+        <h3 id="orderConfirmationTitle" tabindex="-1">Thank you for your order.</h3>
+        <p>
+          You’ll receive an email shortly at
+          <strong id="orderConfirmationEmail"></strong> with your invoice.
+        </p>
+        <p class="checkout-note">
+          WhatsApp didn’t open?
+          <a id="orderResend" href="#" target="_blank" rel="noopener"
+            >Send your order again ↗</a
+          >
+        </p>
+        <button class="button" data-close-dialog>Continue browsing</button>
       </div>
     </dialog>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  </body>
+  <a class="support-fab" href="https://wa.me/17867803626" target="_blank" rel="noopener">Let’s talk ↗</a></body>
 </html>

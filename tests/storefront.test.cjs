@@ -76,6 +76,10 @@ test("cart arithmetic, persistence, research acknowledgment, and WhatsApp payloa
   await page.locator('[data-cart-action="plus"]').click();
   assert.equal(await page.locator("#cartSubtotal").textContent(), "$378.00");
   await page.locator("#researchConfirm").check();
+  assert.equal(await page.locator("#cartCheckout").isDisabled(), true, "Invoice email is required");
+  await page.locator("#invoiceEmail").fill("not-an-email");
+  assert.equal(await page.locator("#cartCheckout").isDisabled(), true);
+  await page.locator("#invoiceEmail").fill("buyer@example.com");
   assert.equal(await page.locator("#cartCheckout").isEnabled(), true);
   await page.evaluate(() => {
     window.open = (url) => {
@@ -92,8 +96,15 @@ test("cart arithmetic, persistence, research acknowledgment, and WhatsApp payloa
     "10 mg",
     "378",
     "laboratory research only",
+    "Please email my invoice to: buyer@example.com",
   ])
     assert.ok(message.includes(expected));
+  assert.equal(await page.locator("#orderConfirmation").isVisible(), true);
+  assert.match(
+    await page.locator("#orderConfirmation").textContent(),
+    /You’ll receive an email shortly at\s+buyer@example\.com\s+with your invoice/,
+  );
+  assert.equal(await page.locator("#cartCount").textContent(), "0");
   await page.keyboard.press("Escape");
   assert.equal(
     await page.locator("#cartDialog").evaluate((dialog) => dialog.open),
@@ -104,11 +115,15 @@ test("cart arithmetic, persistence, research acknowledgment, and WhatsApp payloa
     "GLP-1 research",
   );
   await page.reload({ waitUntil: "networkidle" });
-  assert.equal(await page.locator("#cartCount").textContent(), "2");
+  assert.equal(await page.locator("#cartCount").textContent(), "0");
+  await page.locator('[data-add="sema"]').click();
+  await page.locator('[data-add="sema"]').click();
   await page.locator("[data-cart-open]").click();
+  assert.equal(await page.locator("#orderConfirmation").isVisible(), false);
+  assert.equal(await page.locator("#invoiceEmail").inputValue(), "buyer@example.com");
   assert.equal(await page.locator("#cartCheckout").isDisabled(), true);
   await page.locator('[data-cart-action="minus"]').click();
-  assert.equal(await page.locator("#cartSubtotal").textContent(), "$189.00");
+  assert.equal(await page.locator("#cartSubtotal").textContent(), "$149.00");
   await page.locator('[data-cart-action="remove"]').click();
   assert.equal(await page.locator("#cartCount").textContent(), "0");
   assert.equal(await page.locator(".cart-empty").isVisible(), true);
@@ -226,4 +241,72 @@ test("automated WCAG A/AA checks for the homepage, details, and cart", async (t)
   await page.locator('.product-card [data-add="sema"]').click();
   await page.locator("[data-cart-open]").click();
   await check();
+});
+
+test("documentation page requests a COA for every catalog product", async (t) => {
+  const page = await visit(t);
+  await page.goto(`${baseURL}/documentation.html`);
+  assert.equal(await page.locator('#coaProducts a').count(), 13);
+  assert.ok(decodeURIComponent(await page.locator('#coaProducts a').first().getAttribute('href')).includes('Semaglutide'));
+});
+
+test("new pages fit mobile screens and pass automated accessibility checks", async (t) => {
+  const page = await visit(t);
+  for (const route of ['standards.html', 'documentation.html']) {
+    await page.goto(`${baseURL}/${route}`);
+    await page.setViewportSize({ width: 320, height: 900 });
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${route} fits mobile`);
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    assert.deepEqual(results.violations.map(({ id, nodes }) => ({ id, targets: nodes.map(n => n.target) })), [], route);
+  }
+});
+
+test("decorative motion can be paused, persists, and respects reduced motion", async (t) => {
+  const page = await visit(t);
+  const toggle = page.locator('.motion-toggle');
+  assert.equal(await toggle.getAttribute('aria-pressed'), 'true');
+  await toggle.click();
+  assert.equal(await toggle.getAttribute('aria-pressed'), 'false');
+  assert.equal(await page.locator('.hero-editorial img').evaluate(el => getComputedStyle(el).animationName), 'none');
+  await page.reload({ waitUntil: 'networkidle' });
+  assert.equal(await toggle.getAttribute('aria-pressed'), 'false');
+  await toggle.click();
+  assert.equal(await toggle.getAttribute('aria-pressed'), 'true');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.waitForFunction(() => document.querySelector('.motion-toggle').disabled);
+  assert.equal(await toggle.isDisabled(), true);
+  assert.equal(await toggle.getAttribute('aria-pressed'), 'false');
+  assert.equal(await page.locator('.hero-editorial img').evaluate(el => getComputedStyle(el).animationName), 'none');
+  await page.locator('[data-add="sema"]').click();
+  await page.locator('[data-cart-open]').click();
+  assert.equal(await page.locator('#cartSubtotal').textContent(), '$149.00');
+});
+
+test("detail inspection and material study support keyboard and real catalog data", async (t) => {
+  const page = await visit(t);
+  await page.locator('.inspect-toggle').click();
+  assert.equal(await page.locator('#inspectionTools').isVisible(), true);
+  await page.locator('#inspectionPosition').focus();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await page.locator('#inspectionPosition').inputValue(), '51');
+  const lensAxe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  assert.deepEqual(lensAxe.violations.map(v => v.id), []);
+  await page.keyboard.press('Escape');
+  assert.equal(await page.locator('#inspectionTools').isVisible(), false);
+  await page.locator('[data-study="ghk"]').click();
+  assert.equal(await page.locator('#studyName').textContent(), 'GHK-Cu');
+  assert.equal(await page.locator('#studyPrice').textContent(), 'From $79 / vial');
+  await page.locator('#studyDetails').click();
+  assert.equal(await page.locator('#productDialogTitle').textContent(), 'GHK-Cu');
+  await page.keyboard.press('Escape');
+  await page.locator('#materialCanvas').scrollIntoViewIfNeeded();
+  await page.locator('.motion-toggle').click();
+  const isStill = await page.evaluate(async () => {
+    const canvas = document.querySelector('#materialCanvas');
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    const before = canvas.toDataURL();
+    for (let i = 0; i < 6; i++) await new Promise(resolve => requestAnimationFrame(resolve));
+    return before === canvas.toDataURL();
+  });
+  assert.equal(isStill, true, 'Pausing motion freezes the procedural artwork');
 });

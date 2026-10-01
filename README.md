@@ -2,6 +2,40 @@
 
 A static, responsive storefront. No framework, build step, or production Node server is required.
 
+## Account interface and visual direction
+
+The storefront now uses a warm ivory, charcoal and muted-bronze visual direction, with an editorial homepage and restrained animated details. Hello You branding, catalog pricing, retail WhatsApp handoff and existing wholesale submissions are retained.
+
+- `assets/portal.css` — shared storefront theme and responsive account layouts.
+- `assets/warm.css` — current warm palette, serif homepage and full-height product detail image.
+- `assets/signature.css`, `assets/signature.js` — interactive 2× product-detail lens and procedural canvas artwork. The material study switches among three real catalog products; its curves are abstract artwork, not molecular structures. Canvas rendering is capped near 30 fps, pauses offscreen/in hidden tabs, and follows the shared motion preference. The lens supports mouse movement, a keyboard/touch range control, and Escape.
+- `assets/modern.css`, `assets/motion.js` — product compositions, animated login artwork, scroll reveals, pointer depth, hover transitions and reading progress. A persistent motion toggle pauses decorative animation; device reduced-motion preferences take priority. CSS scenes pause offscreen and when the tab is hidden. No animation library is required.
+- `assets/secondary.css` — dark companion theme for existing wholesale/application/guide pages.
+- `login.html` — customer sign-in and account creation (email + password).
+- `account.html` — signed-in dashboard: saved cart summary, profile (name, organization), support and wholesale links.
+- `standards.html` — research and documentation information.
+- `documentation.html` — product-specific COA requests via WhatsApp.
+- `assets/account.js` — sign-in/sign-up forms, account dashboard and catalog-based COA links; talks to the accounts API.
+- `worker/index.js` — the accounts API (Cloudflare Worker + D1).
+
+## Customer accounts
+
+Customers create an account with first name, email and password at `/login`, then land on `/account`. The API lives in `worker/index.js` and only runs for `/api/*`; every other path is still served as a static file.
+
+- **Storage:** a D1 database bound as `DB` (`helloyoulabs-accounts`). `wrangler deploy` creates it on the first deploy (no `database_id` in `wrangler.jsonc`), and the Worker creates its tables on first request.
+- **Passwords:** PBKDF2-SHA256, 100,000 iterations, per-user salt. Plain passwords are never stored or logged.
+- **Sessions:** random 256-bit token in an `HttpOnly`, `SameSite=Lax` cookie (`Secure` over HTTPS), valid 30 days; only its SHA-256 hash is stored. Logout deletes the session.
+- **Abuse limits:** 10 failed sign-ins per email or 30 per network in 15 minutes locks sign-in for that window; 10 new accounts per network per 15 minutes. Cross-origin writes are refused.
+- **Endpoints:** `POST /api/signup`, `POST /api/login`, `POST /api/logout`, `GET /api/me` (`{ user: null }` when signed out), `PUT /api/me` (name, organization).
+
+Not built yet: password reset by email (needs an email provider — for now the page links to WhatsApp), order history, and invoices. To help someone who is locked out, delete their account so they can sign up again:
+
+```sh
+npx wrangler d1 execute helloyoulabs-accounts --remote --command "DELETE FROM users WHERE email = 'customer@example.com'"
+```
+
+The cart is still stored in the browser (`hyl_cart_v2`), and checkout still hands off to WhatsApp. The older wholesale password gate is client-side and separate from customer accounts; it does not provide server-side access control.
+
 ## Preview
 
 ```sh
@@ -9,6 +43,8 @@ npm run dev
 ```
 
 Open **http://127.0.0.1:4173**. The preview server uses only Node's built-in modules; installing dependencies is unnecessary for previewing. Set `PORT` to use another port.
+
+`npm run dev` serves static files only, so sign-in won't work there. To try accounts locally, run `npm run preview` (wrangler dev with a local D1 database) and open the URL it prints.
 
 ## Files
 
@@ -23,7 +59,7 @@ Open **http://127.0.0.1:4173**. The preview server uses only Node's built-in mod
 
 ## Ordering and content
 
-The storefront does **not** process payments. It sends selected products, vial options, quantities, and subtotal to the existing WhatsApp number (`17867803626`). Availability, shipping, payment, and current-lot documentation are confirmed with the team. The cart is stored locally under the existing `hyl_cart_v2` key. Research-use acknowledgment is required before the WhatsApp handoff.
+The storefront does **not** process payments. It sends selected products, vial options, quantities, and subtotal to the existing WhatsApp number (`17867803626`). Availability, shipping, payment, and current-lot documentation are confirmed with the team. The cart is stored locally under the existing `hyl_cart_v2` key. Research-use acknowledgment and an invoice email are required before the WhatsApp handoff. The email is included in the WhatsApp message (and pre-filled for signed-in customers); after the handoff the cart is cleared and the customer is told they'll receive an email shortly with their invoice. **The team sends that invoice email manually** — the site does not send email.
 
 COA links request documentation; they do not display fabricated certificates. No prescription, medical-care, pharmacy, or treatment services were added. Product imagery is illustrative and may not show the selected vial option.
 

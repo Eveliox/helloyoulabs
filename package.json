@@ -5,7 +5,7 @@
   "description": "Hello You Labs static research storefront",
   "scripts": {
     "dev": "node scripts/serve.cjs",
-    "test": "node --test tests/storefront.test.cjs",
+    "test": "node --test tests/storefront.test.cjs tests/accounts.test.cjs",
     "deploy": "wrangler deploy",
     "preview": "wrangler dev"
   },

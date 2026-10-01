@@ -27,6 +27,7 @@
   const whatsapp = (message) =>
     `https://wa.me/17867803626?text=${encodeURIComponent(message)}`;
   const CART_KEY = "hyl_cart_v2";
+  const INVOICE_EMAIL_KEY = "hyl_invoice_email";
   const variants = new Map();
   const selections = new Map();
   const productMap = new Map(PRODUCTS.map((product) => [product.id, product]));
@@ -190,9 +191,22 @@
       0,
     );
   }
+  const invoiceEmail = $("#invoiceEmail");
+  try {
+    invoiceEmail.value = localStorage.getItem(INVOICE_EMAIL_KEY) || "";
+  } catch {
+    /* Customers can still type their email. */
+  }
+  const hasInvoiceEmail = () =>
+    invoiceEmail.value.trim() !== "" && invoiceEmail.checkValidity();
   function updateCheckout() {
     $("#cartCheckout").disabled =
-      !cart.length || !$("#researchConfirm").checked;
+      !cart.length || !$("#researchConfirm").checked || !hasInvoiceEmail();
+  }
+  function showOrderConfirmation(shown) {
+    $("#orderConfirmation").hidden = !shown;
+    $(".cart-footer", cartDialog).hidden = shown;
+    $("#cartItems").hidden = shown;
   }
   function renderCart() {
     const active = document.activeElement;
@@ -247,20 +261,38 @@
     return true;
   }
   function openCart() {
+    showOrderConfirmation(false);
     if (productDialog.open) productDialog.close();
     closeMenu();
     cartDialog.showModal();
   }
   $("#researchConfirm").addEventListener("change", updateCheckout);
+  invoiceEmail.addEventListener("input", () => {
+    updateCheckout();
+    try {
+      localStorage.setItem(INVOICE_EMAIL_KEY, invoiceEmail.value.trim());
+    } catch {
+      /* Not remembered when browser storage is blocked. */
+    }
+  });
   $("#cartCheckout").addEventListener("click", () => {
-    if (!cart.length || !$("#researchConfirm").checked) return;
+    if (!cart.length || !$("#researchConfirm").checked || !hasInvoiceEmail())
+      return;
+    const email = invoiceEmail.value.trim();
     const lines = cart.map((item) => {
       const variant = variants.get(item.variantId);
       const product = productMap.get(variant.productId);
       return `• ${product.name} — ${variant.label} × ${item.qty} — ${money(variant.price * item.qty)}`;
     });
-    const message = `Hi Hello You Labs, I'd like to inquire about this research order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(total())} USD (before shipping)\n\nI confirm that I am at least 21, a qualified researcher, and these materials are for laboratory research only. Please confirm availability, current lot documentation, shipping, and payment options. Thank you!`;
+    const message = `Hi Hello You Labs, I'd like to place this research order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(total())} USD (before shipping)\nPlease email my invoice to: ${email}\n\nI confirm that I am at least 21, a qualified researcher, and these materials are for laboratory research only. Please confirm availability, current lot documentation, shipping, and payment options. Thank you!`;
     window.open(whatsapp(message), "_blank", "noopener,noreferrer");
+    $("#orderResend").href = whatsapp(message);
+    $("#orderConfirmationEmail").textContent = email;
+    cart = [];
+    persist();
+    renderCart();
+    showOrderConfirmation(true);
+    $("#orderConfirmationTitle").focus();
   });
 
   document.addEventListener("click", (event) => {
@@ -414,4 +446,5 @@
   $("#year").textContent = new Date().getFullYear();
   renderProducts();
   renderCart();
+  if (new URLSearchParams(location.search).get("cart") === "open") openCart();
 })();
