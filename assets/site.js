@@ -71,6 +71,7 @@
   }
   let cart = loadCart();
   let filter = "All";
+  let query = "";
   let toastTimer;
   const grid = $("#productGrid");
   const cartDialog = $("#cartDialog");
@@ -102,26 +103,34 @@
       .join("");
   }
   function renderProducts() {
+    const words = query.toLowerCase().split(/\s+/).filter(Boolean);
     const products = PRODUCTS.filter(
       (product) =>
-        filter === "All" ||
-        (filter === "Single"
-          ? ["Repair", "GHS"].includes(product.catFilter)
-          : product.catFilter === filter),
+        (filter === "All" ||
+          (filter === "Single"
+            ? !["GLP-1", "Blends", "Supplies"].includes(product.catFilter)
+            : product.catFilter === filter)) &&
+        words.every((word) =>
+          `${product.name} ${product.molecule} ${product.cat}`
+            .toLowerCase()
+            .includes(word),
+        ),
     );
-    grid.innerHTML = products
+    grid.innerHTML = products.length
+      ? products
       .map((product) => {
         const variant = selectedVariant(product);
         return `<article class="product-card" data-product="${product.id}">
-        <button class="product-image" data-details="${product.id}" aria-label="View ${escapeHTML(product.name)} details"><img src="${product.img}" alt="Hello You Labs ${escapeHTML(product.name)} research vial" width="650" height="650" loading="lazy"><span class="product-tag">RESEARCH ONLY</span><span class="product-mark" aria-hidden="true">Hy.</span></button>
+        <button class="product-image" data-details="${product.id}" aria-label="View ${escapeHTML(product.name)} details"><img src="${product.img}" alt="${product.placeholder ? `${escapeHTML(product.name)}: image coming soon` : `Hello You Labs ${escapeHTML(product.name)} research vial`}" width="650" height="650" loading="lazy"><span class="product-tag">RESEARCH ONLY</span><span class="product-mark" aria-hidden="true">Hy.</span></button>
         <div class="product-info"><div class="product-title-row"><h3>${escapeHTML(product.name)}</h3><div class="price"><span data-card-price>${money(variant.price)}</span><small>per vial</small></div></div>
         <select class="variant-select" data-product-select="${product.id}" aria-label="Select vial option for ${escapeHTML(product.name)}">${optionHTML(product)}</select>
         <div class="product-actions"><button class="add-button" data-add="${product.id}" aria-label="Add ${escapeHTML(product.name)} to cart">+</button><button class="details-button" data-details="${product.id}">Details ${arrow}</button></div></div>
       </article>`;
-      })
-      .join("");
+          })
+          .join("")
+      : `<p class="catalog-empty">No products match “${escapeHTML(query.trim())}”${filter === "All" ? "" : " in this filter"}. <button type="button" data-clear-search>Show all products</button></p>`;
     $("#catalogCount").textContent =
-      `${products.length} compound${products.length === 1 ? "" : "s"}`;
+      `${products.length} product${products.length === 1 ? "" : "s"}`;
     grid.scrollLeft = 0;
     requestAnimationFrame(updateCarousel);
   }
@@ -140,6 +149,19 @@
       behavior: reducedMotion.matches ? "instant" : "smooth",
     });
   }
+  $(".catalog .section-heading")?.setAttribute("data-count", PRODUCTS.length);
+  $("#catalogSearch").placeholder = `Search ${PRODUCTS.length} products, e.g. TB-500, NAD+, Selank`;
+  $("#catalogSearch").addEventListener("input", (event) => {
+    query = event.target.value;
+    renderProducts();
+  });
+  grid.addEventListener("click", (event) => {
+    if (!event.target.closest("[data-clear-search]")) return;
+    query = "";
+    $("#catalogSearch").value = "";
+    $(".filter[data-filter='All']").click();
+    $("#catalogSearch").focus();
+  });
   $("#productsPrev").addEventListener("click", () => scrollProducts(-1));
   $("#productsNext").addEventListener("click", () => scrollProducts(1));
   grid.addEventListener("scroll", updateCarousel, { passive: true });
@@ -161,9 +183,9 @@
     if (!product) return;
     const variant = selectedVariant(product);
     $("#productDetails").innerHTML = `<div class="product-detail-grid">
-      <div class="detail-image"><img src="${product.img}" width="650" height="650" alt="Hello You Labs ${escapeHTML(product.name)} research vial"></div>
+      <div class="detail-image"><img src="${product.img}" width="650" height="650" alt="${product.placeholder ? `${escapeHTML(product.name)}: image coming soon` : `Hello You Labs ${escapeHTML(product.name)} research vial`}"></div>
       <div class="detail-content"><p class="eyebrow">The research collection · Laboratory use only</p><h2 id="productDialogTitle">${escapeHTML(product.name)}</h2><p class="detail-molecule">${escapeHTML(product.molecule)}</p>
-      <div class="detail-spec"><span>Format</span><strong>Lyophilized research material</strong></div>
+      <div class="detail-spec"><span>Format</span><strong>${escapeHTML(product.format || "Lyophilized research material")}</strong></div>
       <label for="detailVariant">Select your vial option</label><select id="detailVariant" data-product-select="${id}">${optionHTML(product)}</select>
       <p class="detail-price"><strong id="detailPrice">${money(variant.price)}</strong> <span>per vial · USD</span></p>
       <button class="button" data-add="${id}" data-from-details>Add to cart ${arrow}</button>

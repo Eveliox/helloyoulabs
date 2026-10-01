@@ -49,16 +49,17 @@ async function visit(t, viewport = { width: 1440, height: 1000 }) {
 
 test("original catalog, filters, variant pricing, and horizontal navigation", async (t) => {
   const page = await visit(t);
-  assert.equal(await page.locator(".product-card").count(), 13);
+  assert.equal(await page.locator(".product-card").count(), 66);
   await page.locator("#productsNext").click();
   await page.waitForFunction(
     () => document.querySelector("#productGrid").scrollLeft > 0,
   );
   for (const [filter, count] of [
-    ["GLP-1", 3],
-    ["Single", 7],
-    ["Blends", 3],
-    ["All", 13],
+    ["GLP-1", 8],
+    ["Single", 43],
+    ["Blends", 14],
+    ["Supplies", 1],
+    ["All", 66],
   ]) {
     await page.locator(`[data-filter="${filter}"]`).click();
     assert.equal(await page.locator(".product-card").count(), count);
@@ -251,7 +252,7 @@ test("automated WCAG A/AA checks for the homepage, details, and cart", async (t)
 test("documentation page requests a COA for every catalog product", async (t) => {
   const page = await visit(t);
   await page.goto(`${baseURL}/documentation.html`);
-  assert.equal(await page.locator('#coaProducts a').count(), 13);
+  assert.equal(await page.locator('#coaProducts a').count(), 66);
   assert.ok(decodeURIComponent(await page.locator('#coaProducts a').first().getAttribute('href')).includes('Semaglutide'));
 });
 
@@ -345,4 +346,26 @@ test("phone layout: 16px fields (no iOS zoom), finger-sized controls, floating h
   assert.ok(fab.left >= 0 && fab.right <= 390 && fab.bottom <= 844, "WhatsApp button floats inside the screen");
   const toggle = await page.locator(".motion-toggle").boundingBox();
   assert.ok(toggle.width >= 44 && toggle.height >= 44, "Motion toggle is a 44px target");
+});
+
+test("full price-sheet catalog: search, placeholders, and server pricing for new products", async (t) => {
+  const page = await visit(t);
+  assert.equal(await page.locator("#catalogCount").textContent(), "66 products");
+  await page.locator("#catalogSearch").fill("tb-500");
+  // Matches TB-500 itself plus the blends that contain it.
+  const names = await page.locator(".product-card h3").allTextContents();
+  assert.ok(names.includes("TB-500"));
+  assert.ok(names.every((name) => /TB-500|GLOW|KLOW|Wolverine/.test(name)), names.join());
+  const card = page.locator('[data-product="tb500"]');
+  assert.equal(await card.locator("img").getAttribute("alt"), "TB-500: image coming soon");
+  assert.equal(await card.locator("[data-card-price]").textContent(), "$50");
+  await page.locator("#catalogSearch").fill("no such peptide");
+  assert.equal(await page.locator(".product-card").count(), 0);
+  await page.locator("[data-clear-search]").click();
+  assert.equal(await page.locator(".product-card").count(), 66);
+  // A new product goes through the cart like the original thirteen.
+  await page.locator("#catalogSearch").fill("NAD+");
+  await page.locator('[data-add="nad"]').click();
+  await page.locator("[data-cart-open]").click();
+  assert.equal(await page.locator("#cartSubtotal").textContent(), "$60.00");
 });

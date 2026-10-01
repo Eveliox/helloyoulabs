@@ -63,7 +63,9 @@ Open **http://127.0.0.1:4173**. The preview server uses only Node's built-in mod
 - `index.html` — redesigned homepage, research notices, ordering information, and dialogs.
 - `assets/site.css` — responsive teal/ice-blue design system.
 - `assets/site.js` — product filters, carousel, variant selection, product details, saved cart, WhatsApp handoff, mobile navigation, tabs, and video controls.
-- `assets/catalog.js` — original 13-product catalog, prices, and vial options. Edit this file to maintain inventory information.
+- `assets/catalog.js` — the full catalog (66 products, 165 vial options across 11 categories), generated from the supplier price sheet. Retail prices are the single-vial price; don't edit this file by hand.
+- `scripts/build_catalog.cjs`, `scripts/price-sheet.json` — the catalog build. The JSON is the price sheet parsed to `SKU → { "1", "10", "25" }` prices. The script maps every SKU to a product (stopping if one is unmapped), writes `assets/catalog.js` and the wholesale portal's tiered `PRODUCTS` block in `wholesale.html`, keeps existing products' photos, purity, lots and option order, and flags tiers where the volume price goes up. To import a new sheet: replace the JSON, add any new SKU prefixes to the script's product list, and run `node scripts/build_catalog.cjs`.
+- `assets/images/studio/catalog/placeholder.svg` — "image coming soon" vial drawing used by products without photography yet (`placeholder: true`). Products without supplied purity or lot data show none; the wholesale portal says "Lot confirmed at order".
 - `assets/images/` — logo derivatives and the brand-film poster.
 - `assets/images/studio/` — approved homepage imagery (hero, brand story, product selection, quality macro, label detail) and the 13 catalog images. Regenerate with `python scripts/build_imagery.py` (needs Pillow, NumPy, OpenCV). `provenance.json` records how each image was made.
 - `design-review/imagery-v1/` — the approval board (contact sheet, concepts, production brief) that these images were promoted from.

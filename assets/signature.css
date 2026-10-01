@@ -27,7 +27,7 @@
 .study-product-label{font:8px monospace;color:#bbaa92;letter-spacing:1.2px}.study-product h3{font-size:22px;font-weight:400;letter-spacing:-.5px;margin:7px 0}.study-product p{font-size:12px;color:#d4c6b1;margin:0}
 .study-product button{margin-left:auto;width:45px;height:45px;flex-shrink:0;border:1px solid #bda17e7a;border-radius:50%;background:transparent;color:#f0ddc2;font-size:25px;cursor:pointer;transition:background .25s,transform .25s}.study-product button:hover{background:#ccb38c1a;transform:rotate(10deg)}
 .study-disclaimer{font-size:10px;color:#b9b0a1;margin:0}
-.modern-site .catalog .section-heading{position:relative}.modern-site .catalog .section-heading::after{content:'COLLECTION / 13';position:absolute;right:0;top:-32px;color:#766854;font:8px monospace;letter-spacing:2px}
+.modern-site .catalog .section-heading{position:relative}.modern-site .catalog .section-heading::after{content:'COLLECTION / ' attr(data-count);position:absolute;right:0;top:-32px;color:#766854;font:8px monospace;letter-spacing:2px}
 .modern-site .product-image::after{content:'↗';position:absolute;right:18px;bottom:18px;border:1px solid #9f90784d;width:32px;height:32px;display:grid;place-items:center;color:#695b49;border-radius:50%;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none}
 .modern-site .product-image:hover::after,.modern-site .product-image:focus-visible::after{opacity:1;transform:translateY(0)}
 @media(max-width:1050px){.study-layout{gap:35px}.study-art{height:490px}.study-content h2{font-size:44px}}

@@ -138,3 +138,14 @@
   .motion-toggle:disabled { display: none; }
   .support-fab { bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important; right: 14px !important; min-height: 44px; display: inline-flex; align-items: center; }
 }
+
+/* Catalog search (66 products) and empty result */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.catalog-search{display:flex;align-items:center;gap:10px;max-width:440px;margin:0 0 18px;padding:0 14px;min-height:46px;border:1px solid #cfc5b5;background:#fffdf9;transition:border-color .2s,box-shadow .2s}
+.catalog-search:focus-within{border-color:#443b31;box-shadow:0 0 0 4px #443b310f}
+.catalog-search svg{flex:none;width:18px;height:18px;fill:none;stroke:#6f6352;stroke-width:1.6;stroke-linecap:round}
+.catalog-search input{flex:1;min-width:0;height:44px;border:0;background:transparent;font:inherit;font-size:15px;color:#2a251f;outline:none}
+.catalog-search input::placeholder{color:#857a6b}
+.catalog-empty{flex:1;margin:0;padding:48px 8px;color:#5f564a;font-size:15px}
+.catalog-empty button{border:0;background:none;padding:8px 0;color:#443b31;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+@media(max-width:760px){.catalog-search{max-width:none}}

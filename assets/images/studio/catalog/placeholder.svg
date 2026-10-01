@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 650" width="650" height="650" role="img" aria-label="Product image coming soon">
+  <g fill="none" stroke="#a8977c" stroke-width="3" stroke-linejoin="round">
+    <!-- cap -->
+    <rect x="252" y="118" width="146" height="58" rx="10"/>
+    <path d="M262 147h126" stroke-opacity=".45"/>
+    <!-- neck -->
+    <path d="M272 176v26c0 8-24 18-24 34v232c0 22 18 40 40 40h74c22 0 40-18 40-40V236c0-16-24-26-24-34v-26"/>
+    <!-- label -->
+    <rect x="248" y="300" width="154" height="128" fill="#a8977c" fill-opacity=".09"/>
+    <path d="M276 340h98M276 360h70" stroke-opacity=".5"/>
+  </g>
+  <text x="325" y="566" text-anchor="middle" fill="#8f806a" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="17" letter-spacing="4">IMAGE COMING SOON</text>
+</svg>
