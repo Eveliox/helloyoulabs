@@ -152,3 +152,24 @@ select.status-select { min-height: 34px; padding: 0 10px; border: 1px solid var(
   .facts { grid-template-columns: 1fr 1fr; }
   .drawer-form { grid-template-columns: 1fr; }
 }
+
+/* ── Phones: tables become stacked cards; fields stay at 16px so iOS doesn't zoom. ── */
+@media (max-width: 760px) {
+  input, select, textarea, .search input { font-size: 16px; }
+  .side-foot a, .side-foot button { padding-block: 10px; }
+  .card-head a { padding-block: 10px; }
+  .who button { padding-block: 4px; }
+  .table-wrap { background: none; border: 0; overflow: visible; }
+  table.data { min-width: 0; }
+  .data thead { display: none; }
+  .data, .data tbody, .data tr, .data td { display: block; }
+  .data tbody tr { margin-bottom: 10px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+  .data td { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 6px 0; border: 0; text-align: right; }
+  .data td::before { content: attr(data-label); flex: none; color: var(--muted); font-size: 12px; text-align: left; }
+  .data td:first-child { display: block; text-align: left; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 1px solid var(--line); }
+  .data td:first-child::before { content: none; }
+  .data td.num { text-align: right; }
+  .data td.items { max-width: none; }
+  .data td.empty { display: block; text-align: left; }
+  .data td.empty::before { content: none; }
+}

@@ -324,3 +324,25 @@ test("sequence strand and material study support keyboard and real catalog data"
   await page.locator('.motion-toggle').click();
   assert.equal(await canvasIsStill(page, '#materialCanvas'), true, 'Pausing motion freezes the procedural artwork');
 });
+
+test("phone layout: 16px fields (no iOS zoom), finger-sized controls, floating help stays on screen", async (t) => {
+  const page = await visit(t, { width: 390, height: 844 });
+  const smallFields = () => page.evaluate(() =>
+    [...document.querySelectorAll("input:not([type=checkbox]):not([type=radio]):not([type=range]), select, textarea")]
+      .filter((el) => el.getBoundingClientRect().width && parseFloat(getComputedStyle(el).fontSize) < 16)
+      .map((el) => el.id || el.className));
+  assert.deepEqual(await smallFields(), [], "Catalog fields are at least 16px");
+  await page.locator("[data-cart-open]").click();
+  assert.deepEqual(await smallFields(), [], "Cart fields are at least 16px");
+  await page.keyboard.press("Escape");
+  const letter = await page.locator("#strandSeq button").first().boundingBox();
+  assert.ok(letter.width >= 30 && letter.height >= 34, "Sequence letters are finger-sized");
+  const fab = await page.locator(".support-fab").evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    return { position: getComputedStyle(el).position, left: r.left, right: r.right, bottom: r.bottom };
+  });
+  assert.equal(fab.position, "fixed");
+  assert.ok(fab.left >= 0 && fab.right <= 390 && fab.bottom <= 844, "WhatsApp button floats inside the screen");
+  const toggle = await page.locator(".motion-toggle").boundingBox();
+  assert.ok(toggle.width >= 44 && toggle.height >= 44, "Motion toggle is a 44px target");
+});

@@ -93,11 +93,11 @@
     $('navCustomers').textContent = state.customers.length;
     $('customerRows').replaceChildren(...(rows.length ? rows.map((c) => h('tr', { 'data-id': c.id, onclick: (e) => { if (!e.target.closest('button')) openCustomer(c.id); } },
       h('td', {}, h('div', { class: 'who' }, h('button', { type: 'button', onclick: () => openCustomer(c.id) }, c.name, c.role === 'admin' ? h('span', { class: 'role' }, 'Admin') : null), h('small', {}, c.email))),
-      h('td', {}, c.organization || '—'),
-      h('td', {}, date(c.createdAt)),
-      h('td', {}, ago(c.lastLoginAt)),
-      h('td', { class: 'num' }, c.orderCount),
-      h('td', { class: 'num' }, money(c.orderTotal)),
+      h('td', { 'data-label': 'Organization' }, c.organization || '—'),
+      h('td', { 'data-label': 'Joined' }, date(c.createdAt)),
+      h('td', { 'data-label': 'Last sign-in' }, ago(c.lastLoginAt)),
+      h('td', { class: 'num', 'data-label': 'Orders' }, c.orderCount),
+      h('td', { class: 'num', 'data-label': 'Total' }, money(c.orderTotal)),
     )) : [h('tr', {}, h('td', { colspan: 6, class: 'empty' }, q ? 'No customers match that search.' : 'No customers yet.'))]));
   }
 
@@ -112,13 +112,13 @@
     const rows = state.orders.filter((o) => state.filter === 'all' || o.status === state.filter);
     $('orderRows').replaceChildren(...(rows.length ? rows.map((order) => h('tr', {},
       h('td', { class: 'mono' }, order.reference),
-      h('td', {}, date(order.createdAt)),
-      h('td', {}, order.customer?.id
+      h('td', { 'data-label': 'Placed' }, date(order.createdAt)),
+      h('td', { 'data-label': 'Customer' }, order.customer?.id
         ? h('div', { class: 'who' }, h('button', { type: 'button', onclick: () => openCustomer(order.customer.id) }, order.customer.name), h('small', {}, `Invoice to ${order.invoiceEmail}`))
         : h('div', { class: 'who' }, h('span', {}, 'Deleted customer'), h('small', {}, `Invoice to ${order.invoiceEmail}`))),
-      h('td', { class: 'items' }, itemsText(order)),
-      h('td', { class: 'num' }, money(order.subtotal)),
-      h('td', {}, statusSelect(order)),
+      h('td', { class: 'items', 'data-label': 'Items' }, itemsText(order)),
+      h('td', { class: 'num', 'data-label': 'Subtotal' }, money(order.subtotal)),
+      h('td', { 'data-label': 'Status' }, statusSelect(order)),
     )) : [h('tr', {}, h('td', { colspan: 6, class: 'empty' }, 'No orders here yet.'))]));
   }
 

@@ -86,4 +86,6 @@
   .strand-legend { display: flex; flex-wrap: wrap; }
   .strand-note { position: static; grid-row: 4; margin-top: 14px; }
   .strand-focus { min-height: 0; }
+  .strand-seq { gap: 4px; }
+  .strand-seq button { min-width: 30px; height: 34px; font-size: 14px; }
 }
