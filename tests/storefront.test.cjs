@@ -266,13 +266,21 @@ test("new pages fit mobile screens and pass automated accessibility checks", asy
   }
 });
 
+const canvasIsStill = (page, selector) => page.evaluate(async (selector) => {
+  const canvas = document.querySelector(selector);
+  await new Promise(resolve => requestAnimationFrame(resolve));
+  const before = canvas.toDataURL();
+  for (let i = 0; i < 6; i++) await new Promise(resolve => requestAnimationFrame(resolve));
+  return before === canvas.toDataURL();
+}, selector);
+
 test("decorative motion can be paused, persists, and respects reduced motion", async (t) => {
   const page = await visit(t);
   const toggle = page.locator('.motion-toggle');
   assert.equal(await toggle.getAttribute('aria-pressed'), 'true');
   await toggle.click();
   assert.equal(await toggle.getAttribute('aria-pressed'), 'false');
-  assert.equal(await page.locator('.hero-editorial img').evaluate(el => getComputedStyle(el).animationName), 'none');
+  assert.equal(await canvasIsStill(page, '#strandCanvas'), true, 'Pausing motion stops the sequence strand');
   await page.reload({ waitUntil: 'networkidle' });
   assert.equal(await toggle.getAttribute('aria-pressed'), 'false');
   await toggle.click();
@@ -281,23 +289,31 @@ test("decorative motion can be paused, persists, and respects reduced motion", a
   await page.waitForFunction(() => document.querySelector('.motion-toggle').disabled);
   assert.equal(await toggle.isDisabled(), true);
   assert.equal(await toggle.getAttribute('aria-pressed'), 'false');
-  assert.equal(await page.locator('.hero-editorial img').evaluate(el => getComputedStyle(el).animationName), 'none');
+  assert.equal(await canvasIsStill(page, '#strandCanvas'), true, 'Reduced motion keeps the strand still');
   await page.locator('[data-add="sema"]').click();
   await page.locator('[data-cart-open]').click();
   assert.equal(await page.locator('#cartSubtotal').textContent(), '$77.00');
 });
 
-test("detail inspection and material study support keyboard and real catalog data", async (t) => {
+test("sequence strand and material study support keyboard and real catalog data", async (t) => {
   const page = await visit(t);
-  await page.locator('.inspect-toggle').click();
-  assert.equal(await page.locator('#inspectionTools').isVisible(), true);
-  await page.locator('#inspectionPosition').focus();
-  await page.keyboard.press('ArrowRight');
-  assert.equal(await page.locator('#inspectionPosition').inputValue(), '51');
-  const lensAxe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
-  assert.deepEqual(lensAxe.violations.map(v => v.id), []);
+  assert.equal(await page.locator('#strandSeq button').count(), 15);
+  assert.equal(await page.locator('#strandSeq').textContent(), 'GEPPPGKPADDAGLV');
+  await page.locator('#strandSeq button').nth(6).focus();
+  assert.match(await page.locator('#strandFocus').textContent(), /07 \/ 15 · Lys · Lysine/);
+  await page.keyboard.press('Tab');
+  assert.match(await page.locator('#strandFocus').textContent(), /08 \/ 15 · Pro · Proline/);
+  await page.locator('[data-seq="ser"]').click();
+  assert.equal(await page.locator('[data-seq="ser"]').getAttribute('aria-pressed'), 'true');
+  assert.equal(await page.locator('#strandName').textContent(), 'Sermorelin');
+  assert.equal(await page.locator('#strandSeq button').count(), 29);
+  await page.locator('#strandDetails').click();
+  assert.equal(await page.locator('#productDialogTitle').textContent(), 'Sermorelin');
   await page.keyboard.press('Escape');
-  assert.equal(await page.locator('#inspectionTools').isVisible(), false);
+  await page.locator('[data-seq="ghk"]').click();
+  assert.equal(await page.locator('#strandSeq').textContent(), 'GHKCu');
+  const heroAxe = await new AxeBuilder({ page }).include('.editorial-hero').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  assert.deepEqual(heroAxe.violations.map(v => v.id), []);
   await page.locator('[data-study="ghk"]').click();
   assert.equal(await page.locator('#studyName').textContent(), 'GHK-Cu');
   assert.equal(await page.locator('#studyPrice').textContent(), 'From $41 / vial');
@@ -306,12 +322,5 @@ test("detail inspection and material study support keyboard and real catalog dat
   await page.keyboard.press('Escape');
   await page.locator('#materialCanvas').scrollIntoViewIfNeeded();
   await page.locator('.motion-toggle').click();
-  const isStill = await page.evaluate(async () => {
-    const canvas = document.querySelector('#materialCanvas');
-    await new Promise(resolve => requestAnimationFrame(resolve));
-    const before = canvas.toDataURL();
-    for (let i = 0; i < 6; i++) await new Promise(resolve => requestAnimationFrame(resolve));
-    return before === canvas.toDataURL();
-  });
-  assert.equal(isStill, true, 'Pausing motion freezes the procedural artwork');
+  assert.equal(await canvasIsStill(page, '#materialCanvas'), true, 'Pausing motion freezes the procedural artwork');
 });

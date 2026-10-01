@@ -34,8 +34,8 @@
     <script src="assets/catalog.js" defer></script>
     <script src="assets/site.js" defer></script>
   <link rel="stylesheet" href="assets/portal.css" />
-<link rel="stylesheet" href="assets/modern.css"><script src="assets/motion.js" defer></script><link rel="stylesheet" href="assets/warm.css"><link rel="stylesheet" href="assets/signature.css"><script src="assets/signature.js" defer></script><script src="assets/silk.js" defer></script></head>
-  <body id="top" class="modern-site">
+<link rel="stylesheet" href="assets/modern.css"><script src="assets/motion.js" defer></script><link rel="stylesheet" href="assets/warm.css"><link rel="stylesheet" href="assets/signature.css"><script src="assets/signature.js" defer></script><link rel="stylesheet" href="assets/hero.css"><script src="assets/sequence.js" defer></script></head>
+  <body id="top" class="modern-site hero-dark">
     <a class="skip-link" href="#main">Skip to content</a>
     <svg
       class="svg-definitions"
@@ -126,7 +126,6 @@
     <main id="main">
       <section class="hero editorial-hero" aria-labelledby="hero-title">
         <div class="container hero-inner">
-          <canvas id="ribbon" class="hero-ribbon" aria-hidden="true" data-center=".545" data-amplitude=".04" data-width=".075"></canvas>
           <div class="hero-copy">
             <p class="eyebrow" id="heroEyebrow">HELLO YOU LABS / RESEARCH COLLECTION</p>
             <h1 id="hero-title">A considered<br>approach to<br><span>discovery.</span></h1>
@@ -134,18 +133,26 @@
             <div class="editorial-actions"><a class="button" href="#catalog">Explore the collection <svg class="icon"><use href="#i-arrow" /></svg></a><a class="hero-secondary" href="standards.html">Our standards <span>↗</span></a></div>
             <div class="editorial-note"><span>01 —</span><p>Made for the lab.<br>Supported by people.</p></div>
           </div>
-          <figure class="hero-editorial">
-            <img src="assets/images/studio/quality-macro.webp" alt="Illustrative close-up of Hello You Labs vial cap, glass and label" width="1000" height="1250" fetchpriority="high">
-            <div class="editorial-image-shade"></div>
-            <button class="inspect-toggle" type="button" aria-pressed="false" aria-controls="inspectionTools">Inspect the detail <span>＋</span></button>
-            <div class="inspection-lens" aria-hidden="true"></div>
-            <div class="inspection-tools" id="inspectionTools" hidden><label for="inspectionPosition">Move the lens</label><input id="inspectionPosition" type="range" min="0" max="100" value="50"><span>2× DETAIL</span></div>
-          </figure>
-          <div class="hero-plate">
-            <p class="plate-index"><span>No. 02</span><span>Tirzepatide</span></p>
-            <p class="plate-line">Small details.<br><em>Serious purpose.</em></p>
-            <a href="#catalog" aria-label="Explore research products">↗</a>
-          </div>
+          <section class="strand" aria-labelledby="strandName">
+            <canvas id="strandCanvas" aria-hidden="true"></canvas>
+            <div class="strand-readout">
+              <p class="strand-kicker">Sequence study</p>
+              <h2 id="strandName">BPC-157</h2>
+              <p class="strand-meta" id="strandMeta">15 amino acids</p>
+              <p class="strand-seq" id="strandSeq"></p>
+              <p class="strand-focus" id="strandFocus" aria-live="polite">Point at a bead or tab through the sequence.</p>
+            </div>
+            <div class="strand-foot">
+              <div class="strand-tabs" role="group" aria-label="Choose a peptide">
+                <button type="button" data-seq="bpc" aria-pressed="true">BPC-157</button><button type="button" data-seq="ser" aria-pressed="false">Sermorelin</button><button type="button" data-seq="ghk" aria-pressed="false">GHK-Cu</button>
+              </div>
+              <ul class="strand-legend" aria-label="Bead colours">
+                <li data-kind="nonpolar">Nonpolar</li><li data-kind="polar">Polar</li><li data-kind="positive">Positive</li><li data-kind="negative">Negative</li>
+              </ul>
+              <button type="button" class="strand-details" data-details="bpc" id="strandDetails">View BPC-157 <span aria-hidden="true">↗</span></button>
+            </div>
+            <p class="strand-note">Stylised strand, one bead per amino acid. Not a structural model.</p>
+          </section>
         </div>
         <div class="editorial-baseline"><span>THOUGHTFULLY SOURCED. CLEARLY DOCUMENTED.</span><a href="#catalog">DISCOVER THE COLLECTION ↓</a></div>
       </section>
